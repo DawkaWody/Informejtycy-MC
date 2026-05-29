@@ -2,7 +2,7 @@ package daw.ka.informejtycy.client.anticheat;
 
 import com.google.gson.Gson;
 import daw.ka.informejtycy.Informejtycy;
-import daw.ka.informejtycy.anticheat.server.AnticheatServer;
+import daw.ka.informejtycy.anticheat.server.InformejtycyAnticheatServer;
 import daw.ka.informejtycy.anticheat.server.payload.ModVerificationPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -34,10 +34,10 @@ public class InformejtycyAnticheatClient {
             CLIENT_HASHES = hashMods();
         }, "Informejtycy-Anticheat").start();
 
-        PayloadTypeRegistry.playS2C().register(AnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
-        PayloadTypeRegistry.playC2S().register(AnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
+        PayloadTypeRegistry.playS2C().register(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
+        PayloadTypeRegistry.playC2S().register(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
 
-        ClientPlayNetworking.registerGlobalReceiver(AnticheatServer.HANDSHAKE_CHANNEL, (payload, context) -> {
+        ClientPlayNetworking.registerGlobalReceiver(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, (payload, context) -> {
             Map<String, String> clientHashes = CLIENT_HASHES;
             if (clientHashes == null) clientHashes = new HashMap<>();
             String json = GSON.toJson(clientHashes);

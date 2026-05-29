@@ -21,6 +21,9 @@
     ],
     "main": [
       "daw.ka.informejtycy.Informejtycy"
+    ],
+    "server": [
+      "daw.ka.informejtycy.anticheat.server.InformejtycyAnticheatServer"
     ]
   },
   "mixins": [

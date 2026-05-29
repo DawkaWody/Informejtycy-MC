@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class AnticheatServer implements DedicatedServerModInitializer {
+public class InformejtycyAnticheatServer implements DedicatedServerModInitializer {
     public static final boolean FORCE_MODLIST = false;
     public static final Identifier HANDSHAKE_ID = InformejtycyRegistry.id("handshake");
     public static final CustomPayload.Id<ModVerificationPayload> HANDSHAKE_CHANNEL = new CustomPayload.Id<>(HANDSHAKE_ID);
@@ -67,6 +67,7 @@ public class AnticheatServer implements DedicatedServerModInitializer {
                     }
                 } else {
                     modList.append(modId);
+                    modList.append(',');
                 }
             }
 

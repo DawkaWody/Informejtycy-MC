@@ -13,7 +13,7 @@ public class CustomEffects {
 
 	public static void registerAll() {
 		AURA = InformejtycyRegistry.registerStatusEffect("aura",
-				new AuraEffect(StatusEffectCategory.HARMFUL, 0x3bd3f7));
+				new AuraEffect(StatusEffectCategory.BENEFICIAL, 0x3bd3f7));
 		SNEAKINESS = InformejtycyRegistry.registerStatusEffect("sneakiness",
 				new SneakinessEffect(StatusEffectCategory.BENEFICIAL, 0x02386d));
 	}
