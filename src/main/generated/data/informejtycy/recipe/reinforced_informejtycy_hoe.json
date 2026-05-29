@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "informejtycy:golden_wolf",
+  "base": "informejtycy:informejtycy_hoe",
+  "result": {
+    "id": "informejtycy:reinforced_informejtycy_hoe"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

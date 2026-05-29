@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_balls_under_magnifier": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:balls_under_magnifier"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:pitch_contest_trophy"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_balls_under_magnifier"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:pitch_contest_trophy"
+    ]
+  }
+}

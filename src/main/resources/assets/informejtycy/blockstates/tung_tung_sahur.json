@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "informejtycy:block/tung_tung_sahur" },
+    "facing=south": { "model": "informejtycy:block/tung_tung_sahur", "y": 180 },
+    "facing=west": { "model": "informejtycy:block/tung_tung_sahur", "y": 270 },
+    "facing=east": { "model": "informejtycy:block/tung_tung_sahur", "y": 90 }
+  }
+}

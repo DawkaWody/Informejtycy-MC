@@ -1,0 +1,15 @@
+{
+  "name": "informejtycy:zmysio_fortress/9",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "informejtycy:zmysio_fortress/zmysio_fortress_9",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

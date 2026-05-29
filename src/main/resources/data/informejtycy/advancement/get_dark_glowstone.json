@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:nether/obtain_ancient_debris",
+  "criteria": {
+    "dark_glowstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:dark_glowstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.get_dark_glowstone.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:dark_glowstone"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.get_dark_glowstone.title"
+    }
+  },
+  "requirements": [
+    [
+      "dark_glowstone"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

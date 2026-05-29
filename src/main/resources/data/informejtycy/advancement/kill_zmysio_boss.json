@@ -1,0 +1,38 @@
+{
+  "parent": "informejtycy:find_zmysio_fortress",
+  "criteria": {
+    "zmysio_boss": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "informejtycy:zmysio_boss"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "frame": "challenge",
+    "description": {
+      "translate": "advancements.informejtycy.kill_zmysio_boss.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:plus"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.kill_zmysio_boss.title"
+    }
+  },
+  "requirements": [
+    [
+      "zmysio_boss"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

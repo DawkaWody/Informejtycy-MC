@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "minecraft:cookie",
+    "G": "informejtycy:concentrated_zarzyk_gel_bottle",
+    "H": "informejtycy:reinforced_informejtycy_helmet"
+  },
+  "pattern": [
+    "GCG",
+    "GHG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:president_helmet"
+  }
+}

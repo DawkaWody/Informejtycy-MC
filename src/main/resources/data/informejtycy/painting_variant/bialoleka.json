@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:bialoleka",
+  "width": 4,
+  "height": 4,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.bialoleka.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.bialoleka.author"
+  }
+}

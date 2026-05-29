@@ -1,0 +1,15 @@
+// 1.21.11	-999999999-01-01T00:00:00	Informejtycy/Tags for minecraft:item
+43401accd9c00de89cc1d1f627422dbdc6dd31dc data/informejtycy/tags/item/informejtycy_repair.json
+affda0763456a5178910afca5c7f16c770edf390 data/informejtycy/tags/item/reinforced_informejtycy_repair.json
+16feccd338c1439e6eca57e7f4868896e2847331 data/informejtycy/tags/item/zmysio_repair.json
+d910ab50b9b8c2edf6e6fcc101f2a2f677f1de1c data/minecraft/tags/item/axes.json
+f4198c2272d44ffffda1d3f4e6c7049e99711f3e data/minecraft/tags/item/enchantable/chest_armor.json
+56fef3d7a4da37d885643effe7a827eabc90a3ff data/minecraft/tags/item/enchantable/durability.json
+64d58e3f407cf6b6c9782c483bee4667fa628525 data/minecraft/tags/item/enchantable/foot_armor.json
+89765aec18837efa5f614c3d6cc48c3446b30728 data/minecraft/tags/item/enchantable/head_armor.json
+b4b77cd38f65549edbff604c4b083e36b2c79ffd data/minecraft/tags/item/enchantable/leg_armor.json
+f7e1c1b68ab5c3d84f5d00a94f9e6468670f5d53 data/minecraft/tags/item/hoes.json
+c1dd153e9b4ae53a2682eba6f463e08722cccf25 data/minecraft/tags/item/pickaxes.json
+0bea719c5ab5e4506e49889b3629093128219875 data/minecraft/tags/item/shovels.json
+3041a2c111d878e4705b1a6de47f1507c081540e data/minecraft/tags/item/swords.json
+56fef3d7a4da37d885643effe7a827eabc90a3ff data/minecraft/tags/item/trimmable_armor.json

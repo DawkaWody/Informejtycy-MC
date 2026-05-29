@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_informejtycy_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:informejtycy_pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:reinforced_informejtycy_pickaxe"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_informejtycy_pickaxe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:reinforced_informejtycy_pickaxe"
+    ]
+  }
+}

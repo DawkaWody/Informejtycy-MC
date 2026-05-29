@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "informejtycy:item/zmysio_milk_bucket"
+  }
+}

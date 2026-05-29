@@ -1,0 +1,57 @@
+§4Gdy siedem miesięcy temu przyszliśmy tutaj – do XIV Liceum Ogólnokształcącego im. Stanisława Staszica w Warszawie – w ogóle się nie znaliśmy, ale chcieliśmy się zintegrować i zrobić razem coś dla innych. Właśnie dlatego powstał projekt Informejtycy, organizowany w ramach olimpiady Zwolnieni z Teorii.
+
+§2Projekt Informejtycy zdecydowaliśmy się zrealizować, aby udostępnić uczniom klas siódmych i ósmych darmową platformę do nauki C++.
+
+§9Informejtycy w liczbach to: - 9 osób
+
+§c5 miesięcy pracy
+
+§9100 zadań
+
+§c10 tysięcy odwiedzin
+
+§91500 użytkowników
+
+§c12 patronatów
+
+§921 wzmianek medialnych
+
+§ci 5683 zł budżetu
+
+§4Napisaliśmy 26 artykułów i 100 zadań, które podzieliliśmy na "dla początkujących" i "dla zaawansowanych", aby z naszej strony mogli korzystać zarówno Ci, którzy dopiero rozpoczynają swoją przygodę z programowaniem, jak i ci, którzy chcą doskonalić swoje umiejętności.
+
+§7Oferujemy nie tylko klasyczne zadania, ale również takie polegające na znajdowaniu i usuwaniu błędów w istniejących już kodach. To zaś kształci bardzo ważną umiejętność przy pracy w zespołach. Strona również automatycznie sprawdza kody napisane przez uczniów.
+
+§cJednym z naszych głównych celów było zdobycie patronatów. Nie było to łatwe, ale się udało – możemy pochwalić się aż 12. Naszą inicjatywę wsparł Prezydent Miasta Stołecznego Warszawy, a także prestiżowe instytucje techniczne i informatyczne, szkoły, portale edukacyjne i media.
+
+§9Naszym następnym celem, który udało nam się osiągnąć, było 21 różnych wzmianek medialnych. Dzięki nim udało nam się dotrzeć do uczniów, nauczycieli i rodziców. Oprócz wzmianek na stronach internetowych i w gazecie, wystąpiliśmy w programie "Dobrego Dnia" w TVP3 oraz Radio Dla Ciebie.
+
+§4Do naszych beneficjentów staraliśmy się dotrzeć także na inne sposoby. Założyliśmy konta w mediach społecznościowych, na których dzieliliśmy się naszymi sukcesami i publikowaliśmy filmiki o programowaniu. Zakupiliśmy 1000 ołówków i 5000 ulotek, które rozdawaliśmy na warsztatach.
+
+§9Warsztaty prowadziliśmy w szkołach podstawowych w Nowej Iwicznej i w Mysiadle. W sumie przez 14 godzin uczyliśmy uczniów podstawowych zagadnień z programowania i algorytmiki. Dzięki tym uzyskaliśmy około 300 nowych użytkowników naszej strony.
+
+§4A to wszystko się udało dzięki naszym darczyńcom, którzy wspierali nas na platformie Pomagam.pl.
+
+§9A co nam dała ta olimpiada? Przede wszystkim nauczyliśmy się pracować w grupie i otworzyliśmy się na siebie. Nauczyliśmy się także zarządzać projektem i jak zdobywać wzmianki medialne i patronaty, co też jest bardzo ważne.
+
+§4I właśnie dlatego nie chcemy kończyć naszej przygody z projektem Informejtycy. Mamy zamiar rozwijać naszą stronę, dodając kolejne artykuły i zadania. Chcemy także organizować warsztaty, bo mamy już zaproszenia od kolejnych szkół.
+
+§cWłaśnie na te wydarzenia zakupiliśmy już 550 zestawów karteczek samoprzylepnych oraz około 150 toreb materiałowych z naszym logiem.
+
+§4Bo projekt Informejtycy to my: Krysia,
+
+§9Zuzia,
+
+§cPatryk,
+
+§4Adam,
+
+§9Antek,
+
+§cBartek,
+
+§4Dawid,
+
+§9Eryk
+
+§ci Szymon.

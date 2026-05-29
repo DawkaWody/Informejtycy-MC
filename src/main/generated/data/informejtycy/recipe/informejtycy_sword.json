@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "minecraft:stick",
+    "T": "informejtycy:silver_wolf"
+  },
+  "pattern": [
+    " T ",
+    " T ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:informejtycy_sword"
+  }
+}

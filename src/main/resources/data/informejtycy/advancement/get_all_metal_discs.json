@@ -1,0 +1,76 @@
+{
+  "parent": "informejtycy:obtain_holy_wars_disc",
+  "criteria": {
+    "disc1": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_ride_the_lightning"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "disc2": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_holy_wars"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "disc3": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_you_must_burn"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "disc4": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_no_more_tears"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.get_all_custom_discs.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 4,
+      "id": "minecraft:jukebox"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.get_all_custom_discs.title"
+    }
+  },
+  "requirements": [
+    [
+      "disc1"
+    ],
+    [
+      "disc2"
+    ],
+    [
+      "disc3"
+    ],
+    [
+      "disc4"
+    ]
+  ],
+  "rewards": {
+    "experience": 250
+  },
+  "sends_telemetry_event": true
+}

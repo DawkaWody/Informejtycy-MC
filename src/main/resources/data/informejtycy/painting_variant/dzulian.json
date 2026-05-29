@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:dzulian",
+  "width": 2,
+  "height": 5,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.dzulian.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.dzulian.author"
+  }
+}

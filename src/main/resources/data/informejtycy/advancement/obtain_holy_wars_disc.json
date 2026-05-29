@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/play_jukebox_in_meadows",
+  "criteria": {
+    "disc": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_holy_wars"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.obtain_holy_wars_disc.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:music_disc_holy_wars"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.obtain_holy_wars_disc.title"
+    }
+  },
+  "requirements": [
+      [
+      "disc"
+      ]
+  ],
+  "sends_telemetry_event": true
+}

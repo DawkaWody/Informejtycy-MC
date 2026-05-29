@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_plus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:plus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:zmysio_sword"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_plus"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:zmysio_sword"
+    ]
+  }
+}

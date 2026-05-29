@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "informejtycy:zarzyk_island",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spread_type": "triangular",
+    "separation": 10,
+    "spacing": 36,
+    "salt": 213767420
+  }
+}

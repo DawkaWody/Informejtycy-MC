@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:husbandry/plant_seed",
+  "criteria": {
+    "light_food": {
+      "conditions": {
+        "item": {
+          "items": [
+            "informejtycy:light_food"
+          ]
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.eat_light_food.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:feather"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.eat_light_food.title"
+    }
+  },
+  "requirements": [
+    [
+      "light_food"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

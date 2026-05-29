@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:rotten_flesh",
+          "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:constant", "value": 16 } } ] }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:bone",
+          "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:constant", "value": 8 } } ] }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:cobweb",
+          "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:constant", "value": 2 } } ] }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:string",
+          "functions": [ { "function": "minecraft:set_count", "count": { "type": "minecraft:constant", "value": 9 } } ] }
+      ]
+    },
+    { "rolls": 1, "entries": [ { "type": "minecraft:item", "name": "minecraft:spider_eye" } ] },
+    {
+      "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:golden_apple" },
+        { "type": "minecraft:item", "name": "minecraft:diamond" }
+      ]
+    }
+  ]
+}

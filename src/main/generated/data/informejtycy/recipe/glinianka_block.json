@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": "minecraft:clay",
+    "S": "informejtycy:silver_wolf_block"
+  },
+  "pattern": [
+    "CS",
+    "SC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:glinianka_block"
+  }
+}

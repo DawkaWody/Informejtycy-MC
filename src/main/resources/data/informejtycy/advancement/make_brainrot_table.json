@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "brainrot_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:brainrot_table_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.make_brainrot_table.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:tung_tung_sahur"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.make_brainrot_table.title"
+    }
+  },
+  "requirements": [
+    [
+      "brainrot_table"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

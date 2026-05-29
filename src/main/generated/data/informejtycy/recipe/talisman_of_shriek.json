@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "G": "informejtycy:dark_glowstone",
+    "S": "minecraft:sculk_shrieker"
+  },
+  "pattern": [
+    " G ",
+    "GAG",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:talisman_of_shriek"
+  }
+}

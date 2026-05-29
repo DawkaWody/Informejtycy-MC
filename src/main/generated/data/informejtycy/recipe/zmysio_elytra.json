@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "minecraft:elytra",
+    "P": "informejtycy:plus",
+    "S": "minecraft:armadillo_scute"
+  },
+  "pattern": [
+    "S S",
+    "PEP",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:zmysio_elytra"
+  }
+}

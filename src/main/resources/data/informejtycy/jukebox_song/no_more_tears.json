@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.informejtycy.music_disc_no_more_tears.description"
+  },
+  "length_in_seconds": 445.0,
+  "sound_event": "informejtycy:no_more_tears"
+}

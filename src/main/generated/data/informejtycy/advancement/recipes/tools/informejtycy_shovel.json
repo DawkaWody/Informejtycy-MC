@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_silver_wolf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:silver_wolf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:informejtycy_shovel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_silver_wolf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:informejtycy_shovel"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "informejtycy:theory_forge",
+  "ingredient1": "informejtycy:light_food",
+  "ingredient2": "informejtycy:light_food",
+  "result": {
+    "id": "informejtycy:light_food",
+    "count": 4
+  }
+}

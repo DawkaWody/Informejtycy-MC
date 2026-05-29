@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "informejtycy:item/music_disc_no_more_tears"
+  }
+}

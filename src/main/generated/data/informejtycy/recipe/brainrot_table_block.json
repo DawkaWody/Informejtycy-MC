@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "informejtycy:dark_glowstone",
+    "P": "#minecraft:planks"
+  },
+  "pattern": [
+    "GG",
+    "PP",
+    "PP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:brainrot_table_block"
+  }
+}

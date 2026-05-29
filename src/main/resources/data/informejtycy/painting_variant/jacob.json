@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:jacob",
+  "width": 3,
+  "height": 4,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.jacob.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.jacob.author"
+  }
+}

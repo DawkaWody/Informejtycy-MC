@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "minecraft:blackstone",
+    "C": "minecraft:magenta_concrete",
+    "G": "informejtycy:dark_glowstone",
+    "S": "minecraft:blast_furnace"
+  },
+  "pattern": [
+    "GCG",
+    "CSC",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:theory_forge_block"
+  }
+}

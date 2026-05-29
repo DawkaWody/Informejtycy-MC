@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "T": "informejtycy:silver_wolf"
+  },
+  "pattern": [
+    "TTT",
+    "T T"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:informejtycy_helmet"
+  }
+}

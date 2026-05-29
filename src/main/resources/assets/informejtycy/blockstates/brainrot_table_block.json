@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "informejtycy:block/brainrot_table_block" },
+    "facing=south": { "model": "informejtycy:block/brainrot_table_block", "y": 180 },
+    "facing=west": { "model": "informejtycy:block/brainrot_table_block", "y": 270 },
+    "facing=east": { "model": "informejtycy:block/brainrot_table_block", "y": 90 }
+  }
+}

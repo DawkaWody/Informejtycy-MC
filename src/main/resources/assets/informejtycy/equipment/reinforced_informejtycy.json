@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "informejtycy:reinforced_informejtycy"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "informejtycy:reinforced_informejtycy"
+      }
+    ]
+  }
+}

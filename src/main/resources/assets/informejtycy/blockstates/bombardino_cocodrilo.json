@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "informejtycy:block/bombardino_cocodrilo" },
+		"facing=south": { "model": "informejtycy:block/bombardino_cocodrilo", "y": 180 },
+		"facing=west": { "model": "informejtycy:block/bombardino_cocodrilo", "y": 270 },
+		"facing=east": { "model": "informejtycy:block/bombardino_cocodrilo", "y": 90 }
+	}
+}

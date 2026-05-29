@@ -1,0 +1,8 @@
+{
+  "type": "informejtycy:brainrot_table",
+  "ingredient": "informejtycy:light_food",
+  "result": {
+    "id": "minecraft:painting",
+    "count": 1
+  }
+}

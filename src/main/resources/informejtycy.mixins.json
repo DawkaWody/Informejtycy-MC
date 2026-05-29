@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "daw.ka.informejtycy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinLightningproofItemEntity",
+    "MixinShriekPrevent",
+    "MixinVillagerSound",
+    "MixinElytraBuff"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

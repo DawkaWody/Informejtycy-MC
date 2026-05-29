@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "informejtycy:block/tralalero_tralala" },
+    "facing=south": { "model": "informejtycy:block/tralalero_tralala", "y": 180 },
+    "facing=west": { "model": "informejtycy:block/tralalero_tralala", "y": 270 },
+    "facing=east": { "model": "informejtycy:block/tralalero_tralala", "y": 90 }
+  }
+}

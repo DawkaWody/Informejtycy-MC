@@ -1,0 +1,9 @@
+{
+  "type": "informejtycy:theory_forge",
+  "ingredient1": "informejtycy:pitch_contest_trophy",
+  "ingredient2": "informejtycy:silver_wolf",
+  "result": {
+    "id": "informejtycy:golden_wolf",
+    "count": 1
+  }
+}

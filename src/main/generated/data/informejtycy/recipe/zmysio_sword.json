@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "informejtycy:zmysio_milk_bucket",
+    "P": "informejtycy:plus",
+    "S": "informejtycy:reinforced_informejtycy_sword",
+    "T": "minecraft:ghast_tear"
+  },
+  "pattern": [
+    " P ",
+    "MSM",
+    " T "
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:zmysio_sword"
+  }
+}

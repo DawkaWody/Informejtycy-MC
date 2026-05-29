@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "informejtycy:balls_under_magnifier",
+    "G": "minecraft:gold_block"
+  },
+  "pattern": [
+    "BGB",
+    "GBG",
+    "BGB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:pitch_contest_trophy"
+  }
+}

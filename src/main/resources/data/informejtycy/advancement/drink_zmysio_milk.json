@@ -1,0 +1,33 @@
+{
+  "parent": "informejtycy:kill_zmysio_boss",
+  "criteria": {
+    "milk": {
+      "conditions": {
+        "item": {
+          "items": [
+            "informejtycy:zmysio_milk_bucket"
+          ]
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.drink_zmysio_milk.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:zmysio_milk_bucket"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.drink_zmysio_milk.title"
+    }
+  },
+  "requirements": [
+    [
+      "milk"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

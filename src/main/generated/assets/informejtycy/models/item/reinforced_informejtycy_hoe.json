@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "informejtycy:item/reinforced_informejtycy_hoe"
+  }
+}

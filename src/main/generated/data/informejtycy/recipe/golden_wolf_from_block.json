@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "informejtycy:golden_wolf_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "informejtycy:golden_wolf"
+  }
+}

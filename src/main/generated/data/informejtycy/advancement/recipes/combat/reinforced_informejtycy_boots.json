@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_informejtycy_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:informejtycy_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:reinforced_informejtycy_boots"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_informejtycy_boots"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:reinforced_informejtycy_boots"
+    ]
+  }
+}

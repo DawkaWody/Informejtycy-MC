@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+    "reinforced_deepslate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:reinforced_deepslate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.mine_reinforced_deepslate.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:reinforced_informejtycy_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.mine_reinforced_deepslate.title"
+    }
+  },
+  "requirements": [
+    [
+      "reinforced_deepslate"
+    ]
+  ],
+  "rewards": {
+    "experience": 50
+  },
+  "sends_telemetry_event": true
+}

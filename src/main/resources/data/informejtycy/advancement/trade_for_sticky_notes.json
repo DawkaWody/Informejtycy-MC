@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/trade",
+  "criteria": {
+    "buy_sticky_notes": {
+      "trigger": "minecraft:villager_trade",
+      "conditions": {
+        "item": {
+          "items": [
+            "informejtycy:sticky_notes"
+          ]
+        }
+      }
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.trade_for_sticky_notes.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:emerald"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.trade_for_sticky_notes.title"
+    }
+  },
+  "requirements": [
+    [
+      "buy_sticky_notes"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

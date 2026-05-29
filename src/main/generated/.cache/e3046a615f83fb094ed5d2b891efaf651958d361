@@ -1,0 +1,6 @@
+// 1.21.11	-999999999-01-01T00:00:00	Informejtycy/Tags for minecraft:block
+a249c46329a41538f49a564e1f14338aaf1be5a0 data/informejtycy/tags/block/needs_informejtycy_tool.json
+a249c46329a41538f49a564e1f14338aaf1be5a0 data/informejtycy/tags/block/needs_reinforced_informejtycy_tool.json
+86c588c0bdf4552abb35099e553efd07a327064a data/minecraft/tags/block/mineable/axe.json
+10792588e16a6f7b5966d85b7b84d2f5c577a10c data/minecraft/tags/block/mineable/pickaxe.json
+341efded0d877b5b68e6fd9008647f2985ed568c data/minecraft/tags/block/needs_diamond_tool.json

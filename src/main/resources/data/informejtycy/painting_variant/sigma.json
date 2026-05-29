@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:sigma",
+  "width": 2,
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.sigma.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.sigma.author"
+  }
+}

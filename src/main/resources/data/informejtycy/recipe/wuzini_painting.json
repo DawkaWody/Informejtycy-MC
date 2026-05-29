@@ -1,0 +1,8 @@
+{
+  "type": "informejtycy:brainrot_table",
+  "ingredient": "minecraft:reinforced_deepslate",
+  "result": {
+    "id": "minecraft:painting",
+    "count": 1
+  }
+}

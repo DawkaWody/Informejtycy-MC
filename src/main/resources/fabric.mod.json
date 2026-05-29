@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "informejtycy",
+  "version": "${version}",
+  "name": "Informejtycy",
+  "description": "Projekt Informejtycy to darmowa platforma online, oferująca edukację informatyczną dla każdego, niezależnie od statusu materialnego, wieku czy doświadczenia. Umożliwia naukę programowania i algorytmiki poprzez zadania i unikalne ćwiczenia, takie jak debugowanie kodu.\n\n AKTUALIZACJA 1.2.0\nNowości:\n - Dodano nową strukturę - wyspę Zarzyka\n - Dodano nowego moba - Zarzyka\n - Dodano nowy przedmiot - żel do włosów, uzyskiwany poprzez przyjęcie ataku Zarzyka\n - Dodano chełm prezydenta\n - Dodano płytę muzyczną \"Czoło stelli jest gargantualne\" (credit: Bartek)\n\nPoprawki:\n - Mleko zmysia jest teraz klasyfikowane jako napój\n - Blok gdynianki wypada po wykopaniu\n - Zmysio dropi itemy jako loot a nie jako equipment\n - Zmniejszono przebicie zbroi przez miecz zmysia do 30%\n - Zwiększono szansę otrzymania płyty Zalewix Beat w skrzynce w dungeonie do 25%\n - Zmieniono id płyt muzycznych\n - Zmieniono typ generacji fortecy zmysia na concentric_rings (taki jak strongholdy)",
+  "authors": ["DawkaWody"],
+  "contributors": ["troublemak3r", "gumabalono2"],
+  "contact": {
+    "homepage": "https://informejtycy.pl"
+  },
+  "license": "MIT",
+  "icon": "assets/informejtycy/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "daw.ka.informejtycy.client.InformejtycyDataGenerator"
+    ],
+    "client": [
+      "daw.ka.informejtycy.client.InformejtycyClient"
+    ],
+    "main": [
+      "daw.ka.informejtycy.Informejtycy"
+    ]
+  },
+  "mixins": [
+    "informejtycy.mixins.json",
+    {
+      "config": "informejtycy.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "recommends": {
+    "fabricloader": ">=${loader_version}"
+  }
+}

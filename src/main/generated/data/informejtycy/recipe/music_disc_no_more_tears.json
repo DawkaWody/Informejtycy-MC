@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "minecraft:music_disc_tears",
+    "E": "minecraft:echo_shard",
+    "G": "informejtycy:dark_glowstone_dust"
+  },
+  "pattern": [
+    " G ",
+    "GDE",
+    " E "
+  ],
+  "result": {
+    "count": 1,
+    "id": "informejtycy:music_disc_no_more_tears"
+  }
+}

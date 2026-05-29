@@ -1,0 +1,9 @@
+{
+  "type": "informejtycy:theory_forge",
+  "ingredient1": "informejtycy:zarzyk_gel_bottle",
+  "ingredient2": "informejtycy:zarzyk_gel_bottle",
+  "result": {
+    "id": "informejtycy:concentrated_zarzyk_gel_bottle",
+    "count": 1
+  }
+}

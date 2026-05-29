@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "informejtycy:block/chimpanzini_bananini" },
+    "facing=south": { "model": "informejtycy:block/chimpanzini_bananini", "y": 180 },
+    "facing=west": { "model": "informejtycy:block/chimpanzini_bananini", "y": 270 },
+    "facing=east": { "model": "informejtycy:block/chimpanzini_bananini", "y": 90 }
+  }
+}

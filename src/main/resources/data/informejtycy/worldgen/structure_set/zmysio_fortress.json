@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "informejtycy:zmysio_fortress",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "spread": 2,
+    "count": 67,
+    "distance": 41,
+    "preferred_biomes": "#informejtycy:has_structure/zmysio_fortress",
+    "salt": 213769420
+  }
+}

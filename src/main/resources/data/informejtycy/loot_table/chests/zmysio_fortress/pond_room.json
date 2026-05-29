@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    { "rolls": 1, "entries": [ { "type": "minecraft:item", "name": "minecraft:fishing_rod" } ] },
+    { "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:emerald",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 7, "max": 20 } }
+          ]
+        }
+      ]
+    },
+    { "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:diamond",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 3 } }
+          ]
+        }
+      ]
+    },
+    { "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:prismarine_shard",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 5 } }
+          ]
+        }
+      ]
+    },
+    { "rolls": 1,
+      "entries": [
+        { "type": "minecraft:item", "name": "minecraft:heart_of_the_sea",
+          "conditions": [ { "condition": "minecraft:random_chance", "chance": 0.1 } ]
+        }
+      ]
+    }
+  ]
+}

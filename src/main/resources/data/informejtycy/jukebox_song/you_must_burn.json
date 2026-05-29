@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.informejtycy.music_disc_you_must_burn.description"
+  },
+  "length_in_seconds": 422.0,
+  "sound_event": "informejtycy:you_must_burn"
+}

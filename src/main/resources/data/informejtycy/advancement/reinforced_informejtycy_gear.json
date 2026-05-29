@@ -1,0 +1,76 @@
+{
+  "parent": "informejtycy:informejtycy_gear",
+  "criteria": {
+    "reinforced_informejtycy_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:reinforced_informejtycy_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "reinforced_informejtycy_chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:reinforced_informejtycy_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "reinforced_informejtycy_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:reinforced_informejtycy_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "reinforced_informejtycy_leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:reinforced_informejtycy_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.reinforced_informejtycy_gear.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:reinforced_informejtycy_chestplate"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.reinforced_informejtycy_gear.title"
+    }
+  },
+  "requirements": [
+    [
+      "reinforced_informejtycy_helmet"
+    ],
+    [
+      "reinforced_informejtycy_chestplate"
+    ],
+    [
+      "reinforced_informejtycy_leggings"
+    ],
+    [
+      "reinforced_informejtycy_boots"
+    ]
+  ],
+  "rewards": {
+    "experience": 150
+  },
+  "sends_telemetry_event": true
+}

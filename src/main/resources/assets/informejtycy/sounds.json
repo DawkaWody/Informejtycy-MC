@@ -1,0 +1,83 @@
+{
+  "menu_audio": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "informejtycy:menu_audio",
+        "stream": true
+      }
+    ]
+  },
+  "zales": {
+    "sounds": [
+      {
+        "name": "informejtycy:zales_bruh",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:zales_hell_nah",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:zales_what_da_shiet",
+        "stream": false
+      }
+    ]
+  },
+  "thunderstruck": {
+    "sounds": [
+      {
+        "name": "informejtycy:thunderstruck",
+        "stream": false
+      }
+    ]
+  },
+  "ride_the_lightning": {
+    "sounds": [
+      {
+        "name": "informejtycy:ride_the_lightning",
+        "stream": true
+      }
+    ]
+  },
+  "holy_wars": {
+    "sounds": [
+      {
+        "name": "informejtycy:holy_wars",
+        "stream": true
+      }
+    ]
+  },
+  "you_must_burn": {
+    "sounds": [
+      {
+        "name": "informejtycy:you_must_burn",
+        "stream": true
+      }
+    ]
+  },
+  "no_more_tears": {
+    "sounds": [
+      {
+        "name": "informejtycy:no_more_tears",
+        "stream": true
+      }
+    ]
+  },
+  "zalewix_beat": {
+    "sounds": [
+      {
+        "name": "informejtycy:zalewix_beat",
+        "stream": true
+      }
+    ]
+  },
+  "stella": {
+    "sounds": [
+      {
+        "name": "informejtycy:stella",
+        "stream": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:zmysio_kulturysta",
+  "width": 2,
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.zmysio_kulturysta.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.zmysio_kulturysta.author"
+  }
+}

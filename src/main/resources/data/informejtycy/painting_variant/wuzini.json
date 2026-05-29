@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:wuzini",
+  "width": 9,
+  "height": 16,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.wuzini.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.wuzini.author"
+  }
+}

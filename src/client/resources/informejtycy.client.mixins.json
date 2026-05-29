@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "daw.ka.informejtycy.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MixinConfirmLinkScreen",
+    "MixinEscapeMenu",
+    "MixinSplashScreen",
+    "MixinTitleScreen",
+    "MixinPaintingRenderer"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:surprise",
+  "width": 3,
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.surprise.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.surprise.author"
+  }
+}

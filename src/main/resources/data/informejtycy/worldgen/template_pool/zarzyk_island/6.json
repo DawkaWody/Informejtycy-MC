@@ -1,0 +1,15 @@
+{
+  "name": "informejtycy:zarzyk_island/6",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "informejtycy:zarzyk_island/zarzyk_island_6",
+        "processors": "minecraft:empty",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

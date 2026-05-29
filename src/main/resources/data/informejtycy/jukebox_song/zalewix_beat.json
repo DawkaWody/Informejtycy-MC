@@ -1,0 +1,8 @@
+{
+  "comparator_output": 15,
+  "description": {
+    "translate": "item.informejtycy.music_disc_zalewix_beat.description"
+  },
+  "length_in_seconds": 48.0,
+  "sound_event": "informejtycy:zalewix_beat"
+}

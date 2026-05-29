@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_informejtycy_chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:informejtycy_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "informejtycy:reinforced_informejtycy_chestplate"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_informejtycy_chestplate"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "informejtycy:reinforced_informejtycy_chestplate"
+    ]
+  }
+}

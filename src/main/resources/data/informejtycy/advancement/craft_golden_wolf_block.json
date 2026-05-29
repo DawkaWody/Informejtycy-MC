@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:nether/obtain_ancient_debris",
+  "criteria": {
+    "golden_wolf_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:golden_wolf_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.craft_golden_wolf_block.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:golden_wolf_block"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.craft_golden_wolf_block.title"
+    }
+  },
+  "requirements": [
+    [
+      "golden_wolf_block"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
