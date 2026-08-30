@@ -2,91 +2,90 @@ package daw.ka.informejtycy.client.anticheat;
 
 import com.google.gson.Gson;
 import daw.ka.informejtycy.Informejtycy;
-import daw.ka.informejtycy.anticheat.server.InformejtycyAnticheatServer;
-import daw.ka.informejtycy.anticheat.server.payload.ModVerificationPayload;
+import daw.ka.informejtycy.anticheat.Attestation;
+import daw.ka.informejtycy.anticheat.Challenge;
+import daw.ka.informejtycy.anticheat.payload.HandshakePayload;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.ModMetadata;
-import net.fabricmc.loader.api.metadata.ModOrigin;
-import net.minecraft.network.codec.PacketCodecs;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.invoke.MethodHandles;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 public class InformejtycyAnticheatClient {
-    public static final int HASH_BUFFER_SIZE = 8192;
-    public static final String HASH_ALGORITHM = "SHA-256";
-    private static Map<String, String> CLIENT_HASHES;
     private static final Gson GSON = new Gson();
+    private static final ExecutorService WORKER =
+            Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "Informejtycy-Anticheat"));
+
+    private static String answeredNonce;
+    private static String answeredEnvelope;
 
     public static void init() {
-        new Thread(() -> {
-            Informejtycy.LOGGER.info("Hashing loaded mods...");
-            CLIENT_HASHES = hashMods();
-        }, "Informejtycy-Anticheat").start();
+        PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(HandshakePayload.ID, HandshakePayload.CODEC);
 
-        PayloadTypeRegistry.playS2C().register(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
-        PayloadTypeRegistry.playC2S().register(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, PacketCodecs.STRING.xmap(ModVerificationPayload::new, ModVerificationPayload::json));
-
-        ClientPlayNetworking.registerGlobalReceiver(InformejtycyAnticheatServer.HANDSHAKE_CHANNEL, (payload, context) -> {
-            Map<String, String> clientHashes = CLIENT_HASHES;
-            if (clientHashes == null) clientHashes = new HashMap<>();
-            String json = GSON.toJson(clientHashes);
-            context.responseSender().sendPacket(new ModVerificationPayload(json));
+        ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
+            PacketSender sender = context.responseSender();
+            WORKER.execute(() -> respond(payload, sender));
         });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> WORKER.execute(() -> {
+            answeredNonce = null;
+            answeredEnvelope = null;
+        }));
     }
 
-    private static Map<String, String> hashMods() {
-        Map<String, String> hashes = new HashMap<>();
-        Collection<ModContainer> mods = FabricLoader.getInstance().getAllMods();
-        Informejtycy.LOGGER.info("Detected {} mods", mods.size());
-
-        for (ModContainer mod : mods) {
-            ModMetadata metadata = mod.getMetadata();
-            String modId = metadata.getId();
-            if (mod.getOrigin().getKind() != ModOrigin.Kind.NESTED) {
-                Path path = mod.getOrigin().getPaths().getFirst();
-                if (Files.isRegularFile(path) && Files.isReadable(path)) {
-                    Informejtycy.LOGGER.info("Hashing mod {} from {}", modId, path);
-                    String hash = hashFile(path);
-                    hashes.put(modId, hash);
-                }
-                else {
-                    Informejtycy.LOGGER.warn("Cannot hash mod {} - not a readable file ({})", modId, path);
-                    hashes.put(modId, null);
-                }
+    private static void respond(HandshakePayload payload, PacketSender sender) {
+        try {
+            Challenge challenge = GSON.fromJson(Attestation.decompress(payload.data()), Challenge.class);
+            if (challenge == null || challenge.nonce == null || challenge.probe == null) {
+                Informejtycy.LOGGER.warn("[Anticheat] Ignoring malformed challenge");
+                return;
             }
+
+            sender.sendPacket(new HandshakePayload(Attestation.compress(answer(challenge))));
+        } catch (Throwable t) {
+            Informejtycy.LOGGER.error("[Anticheat] Failed to answer handshake", t);
+        }
+    }
+
+    private static String answer(Challenge challenge) throws Throwable {
+        if (challenge.nonce.equals(answeredNonce) && answeredEnvelope != null) {
+            Informejtycy.LOGGER.info("[Anticheat] Re-sending answer for the same challenge");
+            return answeredEnvelope;
         }
 
-        return hashes;
+        Function<String, String> probe = define(Attestation.decode(challenge.probe));
+        String envelope = probe.apply(challenge.nonce);
+        answeredNonce = challenge.nonce;
+        answeredEnvelope = envelope;
+
+        Informejtycy.LOGGER.info("[Anticheat] Answered server handshake");
+        return envelope;
     }
 
-    private static String hashFile(Path path) {
-        try (InputStream is = Files.newInputStream(path)) {
-            MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);
-            byte[] buffer = new byte[HASH_BUFFER_SIZE];
-            int read;
-            while ((read = is.read(buffer)) > 0) {
-                digest.update(buffer, 0, read);
-            }
+    @SuppressWarnings("unchecked")
+    private static Function<String, String> define(byte[] bytecode) throws Throwable {
+        try {
+            MethodHandles.Lookup lookup = MethodHandles.lookup().defineHiddenClass(bytecode, true);
+            return (Function<String, String>) lookup.lookupClass().getDeclaredConstructor().newInstance();
+        } catch (Throwable t) {
+            Informejtycy.LOGGER.warn("[Anticheat] Hidden class unavailable, falling back: {}", t.toString());
+            Class<?> defined = new ProbeLoader().define(bytecode);
+            return (Function<String, String>) defined.getDeclaredConstructor().newInstance();
+        }
+    }
 
-            byte[] hashBytes = digest.digest();
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hashBytes) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException | IOException e) {
-            throw new RuntimeException(e);
+    private static final class ProbeLoader extends ClassLoader {
+        private ProbeLoader() {
+            super(InformejtycyAnticheatClient.class.getClassLoader());
+        }
+
+        private Class<?> define(byte[] bytecode) {
+            return defineClass(null, bytecode, 0, bytecode.length);
         }
     }
 }
