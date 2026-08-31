@@ -29,6 +29,7 @@ public class CustomItems {
 	public static Item DARK_GLOWSTONE_DUST;
 	public static Item TALISMAN_OF_SHRIEK;
 	public static Item PLUS;
+	public static Item RECYCLABLE_BOTTLE;
 	// Music discs
 	public static Item RIDE_THE_LIGHTNING_MUSIC_DISC;
 	public static Item HOLY_WARS_MUSIC_DISC;
@@ -36,6 +37,7 @@ public class CustomItems {
 	public static Item NO_MORE_TEARS_MUSIC_DISC;
     public static Item ZALEWIX_BEAT_MUSIC_DISC;
 	public static Item STELLA_MUSIC_DISC;
+	public static Item MEGAMIKSKLASA2_MUSIC_DISC;
 	// Informejtycy toolset
 	public static Item INFORMEJTYCY_SWORD;
 	public static Item INFORMEJTYCY_PICKAXE;
@@ -76,6 +78,7 @@ public class CustomItems {
 	public static final Item.Settings DARK_GLOWSTONE_DUST_SETTINGS = new Item.Settings().maxCount(64);
     public static final Item.Settings TALISMAN_OF_SHRIEK_SETTINGS = new Item.Settings().maxCount(1).fireproof().rarity(Rarity.UNCOMMON);
     public static final Item.Settings PLUS_SETTINGS = new Item.Settings().maxCount(64).fireproof().rarity(Rarity.UNCOMMON);
+	public static final Item.Settings RECYCLABLE_BOTTLE_SETTINGS = new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON);
     // Music discs
 	public static final Item.Settings RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.RIDE_THE_LIGHTNING_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
 	public static final Item.Settings HOLY_WARS_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.HOLY_WARS_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
@@ -83,6 +86,7 @@ public class CustomItems {
 	public static final Item.Settings NO_MORE_TEARS_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.NO_MORE_TEARS_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
 	public static final Item.Settings ZALEWIX_BEAT_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.ZALEWIX_BEAT_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
     public static final Item.Settings STELLA_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.STELLA_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
+	public static final Item.Settings MEGAMIKSKLASA2_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.MEGAMIKSKLASA2_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
 	// Informejtycy toolset
 	public static final Item.Settings INFORMEJTYCY_SWORD_SETTINGS = new Item.Settings().sword(CustomToolMaterials.INFORMEJTYCY, 3, -2.4F);
 	public static final Item.Settings INFORMEJTYCY_PICKAXE_SETTINGS = new Item.Settings().pickaxe(CustomToolMaterials.INFORMEJTYCY, 1, -2.8F);
@@ -132,6 +136,7 @@ public class CustomItems {
         DARK_GLOWSTONE_DUST = InformejtycyRegistry.registerItem("dark_glowstone_dust", DARK_GLOWSTONE_DUST_SETTINGS);
         TALISMAN_OF_SHRIEK = InformejtycyRegistry.registerCustomItem("talisman_of_shriek", TALISMAN_OF_SHRIEK_SETTINGS, ShriekTalismanItem.class);
         PLUS = InformejtycyRegistry.registerItem("plus", PLUS_SETTINGS);
+		RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("recyclable_bottle", RECYCLABLE_BOTTLE_SETTINGS);
         // Music discs
 		RIDE_THE_LIGHTNING_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_ride_the_lightning", RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS);
 		HOLY_WARS_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_holy_wars", HOLY_WARS_MUSIC_DISC_SETTINGS);
@@ -139,6 +144,7 @@ public class CustomItems {
 		NO_MORE_TEARS_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_no_more_tears", NO_MORE_TEARS_MUSIC_DISC_SETTINGS);
 		ZALEWIX_BEAT_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_zalewix_beat", ZALEWIX_BEAT_MUSIC_DISC_SETTINGS);
 		STELLA_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_stella", STELLA_MUSIC_DISC_SETTINGS);
+		MEGAMIKSKLASA2_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_megamiksklasa2", MEGAMIKSKLASA2_MUSIC_DISC_SETTINGS);
         // Informejtycy toolset
 		INFORMEJTYCY_SWORD = InformejtycyRegistry.registerItem("informejtycy_sword", INFORMEJTYCY_SWORD_SETTINGS);
 		INFORMEJTYCY_PICKAXE = InformejtycyRegistry.registerItem("informejtycy_pickaxe", INFORMEJTYCY_PICKAXE_SETTINGS);
@@ -181,6 +187,7 @@ public class CustomItems {
 		InformejtycyRegistry.registerMenuItem(ItemGroups.INGREDIENTS, ZARZYK_GEL);
 		InformejtycyRegistry.registerMenuItem(ItemGroups.INGREDIENTS, CONCENTRATED_ZARZYK_GEL);
 		InformejtycyRegistry.registerMenuItem(ItemGroups.TOOLS, RIDE_THE_LIGHTNING_MUSIC_DISC);
+		InformejtycyRegistry.registerMenuItem(ItemGroups.TOOLS, MEGAMIKSKLASA2_MUSIC_DISC);
 		InformejtycyRegistry.registerMenuItem(ItemGroups.TOOLS, HOLY_WARS_MUSIC_DISC);
 		InformejtycyRegistry.registerMenuItem(ItemGroups.TOOLS, YOU_MUST_BURN_MUSIC_DISC);
 		InformejtycyRegistry.registerMenuItem(ItemGroups.TOOLS, NO_MORE_TEARS_MUSIC_DISC);

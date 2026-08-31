@@ -10,7 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class BrainrotTableScreen extends HandledScreen<BrainrotTableScreenHandler> {
-	private static final Identifier GUI_TEXTURE = InformejtycyRegistry.id("textures/gui/brainrot_table/brainrot_table_gui.png");
+	private static final Identifier GUI_TEXTURE = InformejtycyRegistry.id("textures/gui/brainrot_table/recycler_gui.png");
 	private static final Identifier ARROW_TEXTURE = InformejtycyRegistry.id("textures/gui/brainrot_table/progress_arrow.png");
 
 	public BrainrotTableScreen(BrainrotTableScreenHandler handler, PlayerInventory inventory, Text title) {

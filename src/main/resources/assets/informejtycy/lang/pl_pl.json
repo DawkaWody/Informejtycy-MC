@@ -3,6 +3,7 @@
   "block.informejtycy.dark_glowstone": "Ciemny Jasnogłaz",
   "block.informejtycy.theory_forge": "Kuźnia Teorii",
   "block.informejtycy.brainrot_table": "Stół Brainrotu",
+  "block.informejtycy.recycler": "Kaucjomat",
   "block.informejtycy.glinianka_block": "Blok Glinianki",
   "block.informejtycy.trash_can": "Kosz na Śmieci",
   "block.informejtycy.silver_wolf_block": "Blok Srebrnego Wilka",
@@ -12,10 +13,12 @@
   "item.informejtycy.dark_glowstone": "Ciemny Jasnogłaz",
   "item.informejtycy.theory_forge_block": "Kuźnia Teorii",
   "item.informejtycy.brainrot_table_block": "Stół Brainrotu",
+  "item.informejtycy.recycler_block": "Kaucjomat",
   "item.informejtycy.glinianka_block": "Blok Glinianki",
   "item.informejtycy.trash_can": "Kosz na Śmieci",
   "item.informejtycy.silver_wolf_block": "Blok Srebrnego Wilka",
   "item.informejtycy.golden_wolf_block": "Blok Złotego Wilka",
+
   "item.informejtycy.silver_wolf": "Srebrny Wilk",
   "item.informejtycy.golden_wolf": "Złoty Wilk",
   "item.informejtycy.balls_under_magnifier": "Kulki pod Lupą",
@@ -28,6 +31,7 @@
   "item.informejtycy.dark_glowstone_dust": "Ciemny Jasnopył",
   "item.informejtycy.talisman_of_shriek": "Talizman Krzyku",
   "item.informejtycy.plus": "Plus",
+  "item.informejtycy.recyclable_bottle": "Butelka Kaucyjna",
   "item.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
   "item.informejtycy.tralalero_tralala": "Tralalero Tralala",
   "item.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
@@ -45,6 +49,8 @@
   "item.informejtycy.music_disc_zalewix_beat.description": "Wuzix - Zalewix Beat",
   "item.informejtycy.music_disc_stella": "Music Disc",
   "item.informejtycy.music_disc_stella.description": "Barter - Czoło Stelli jest gargantualne",
+  "item.informejtycy.music_disc_megamiksklasa2": "Music Disc",
+  "item.informejtycy.music_disc_megamiksklasa2.description": "W(x) - Megamiks klasa 2",
 
   "item.informejtycy.informejtycy_helmet": "Hełm Informejtycy",
   "item.informejtycy.informejtycy_chestplate": "Napierśnik Informejtycy",
@@ -100,6 +106,12 @@
   "painting.informejtycy.wuzini.author": "Anonim",
   "painting.informejtycy.bialoleka.title": "Białołęka Core",
   "painting.informejtycy.bialoleka.author": "Jakub Lekki",
+  "painting.informejtycy.zabka.title": "Żabka",
+  "painting.informejtycy.zabka.author": "Frogshop",
+  "painting.informejtycy.hotdog.title": "Hotdog",
+  "painting.informejtycy.hotdog.author": "Frogshop",
+  "painting.informejtycy.kaucjomania.title": "Kaucjomania",
+  "painting.informejtycy.kaucjomania.author": "Frogshop",
 
   "tooltip.informejtycy.silver_wolf_ore": "Sigma alpha srebrny wilk",
   "tooltip.informejtycy.glinianka_block.line1": "Ja na gdyniance to mam",
@@ -124,6 +136,7 @@
   "tooltip.informejtycy.zarzyk_gel_bottle.line1": "Po żel do włosów",
   "tooltip.informejtycy.zarzyk_gel_bottle.line2": "udaj się pod S2",
   "tooltip.informejtycy.talisman_of_shriek": "Znany jako talisman Shreka",
+  "tooltip.informejtycy.recyclable_bottle": "🎶 Kaucyjnyy michał otwórz drzwii 🎶",
 
   "itemgroup.informejtycy.informejtycy": "Informejtycy mod",
 
@@ -164,5 +177,5 @@
   "menu.reportBugs": "Informejtycy.pl",
 
   "multiplayer.disconnect.handshake_timeout": "Przekroczono czas weryfikacji modów",
-  "multiplayer.disconnect.forbidden_mod": "Wykryto niedozwoloną lub zmienioną modyfikację: %s",
+  "multiplayer.disconnect.forbidden_mod": "Wykryto niedozwoloną lub zmienioną modyfikację: %s"
 }

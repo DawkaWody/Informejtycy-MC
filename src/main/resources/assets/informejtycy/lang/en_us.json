@@ -3,6 +3,7 @@
   "block.informejtycy.dark_glowstone": "Dark Glowstone",
   "block.informejtycy.theory_forge": "Theory Forge",
   "block.informejtycy.brainrot_table": "Brainrot Table",
+  "block.informejtycy.recycler": "Recycler",
   "block.informejtycy.glinianka_block": "Glinianka Block",
   "block.informejtycy.trash_can": "Trash Can",
   "block.informejtycy.silver_wolf_block": "Silver Wolf Block",
@@ -12,10 +13,12 @@
   "item.informejtycy.dark_glowstone": "Dark Glowstone",
   "item.informejtycy.theory_forge_block": "Theory Forge",
   "item.informejtycy.brainrot_table_block": "Brainrot Table",
+  "item.informejtycy.recycler_block": "Recycler",
   "item.informejtycy.glinianka_block": "Glinianka Block",
   "item.informejtycy.trash_can": "Trash Can",
   "item.informejtycy.silver_wolf_block": "Silver Wolf Block",
   "item.informejtycy.golden_wolf_block": "Golden Wolf Block",
+
   "item.informejtycy.silver_wolf": "Silver Wolf",
   "item.informejtycy.golden_wolf": "Golden Wolf",
   "item.informejtycy.balls_under_magnifier": "Balls Under Magnifier",
@@ -28,6 +31,7 @@
   "item.informejtycy.dark_glowstone_dust": "Dark Glowstone Dust",
   "item.informejtycy.talisman_of_shriek": "Talisman of Shriek",
   "item.informejtycy.plus": "Plus",
+  "item.informejtycy.recyclable_bottle": "Recyclable Bottle",
   "item.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
   "item.informejtycy.tralalero_tralala": "Tralalero Tralala",
   "item.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
@@ -45,6 +49,8 @@
   "item.informejtycy.music_disc_zalewix_beat.description": "Wuzix - Zalewix Beat",
   "item.informejtycy.music_disc_stella": "Music Disc",
   "item.informejtycy.music_disc_stella.description": "Barter - Czoło Stelli jest gargantualne",
+  "item.informejtycy.music_disc_megamiksklasa2": "Music Disc",
+  "item.informejtycy.music_disc_megamiksklasa2.description": "W(x) - Megamiks klasa 2",
 
   "item.informejtycy.informejtycy_helmet": "Informejtycy Helmet",
   "item.informejtycy.informejtycy_chestplate": "Informejtycy Chestplate",
@@ -100,6 +106,12 @@
   "painting.informejtycy.wuzini.author": "Anonymous",
   "painting.informejtycy.bialoleka.title": "Białołęka Core",
   "painting.informejtycy.bialoleka.author": "Jacob Light",
+  "painting.informejtycy.zabka.title": "Żabka",
+  "painting.informejtycy.zabka.author": "Frogshop",
+  "painting.informejtycy.hotdog.title": "Hotdog",
+  "painting.informejtycy.hotdog.author": "Frogshop",
+  "painting.informejtycy.kaucjomania.title": "Kaucjomania",
+  "painting.informejtycy.kaucjomania.author": "Frogshop",
 
   "tooltip.informejtycy.silver_wolf_ore": "Sigma alpha silver wolf",
   "tooltip.informejtycy.glinianka_block.line1": "Ja na gdyniance to mam",
@@ -124,6 +136,7 @@
   "tooltip.informejtycy.zarzyk_gel_bottle.line1": "Po żel do włosów",
   "tooltip.informejtycy.zarzyk_gel_bottle.line2": "udaj się pod S2",
   "tooltip.informejtycy.talisman_of_shriek": "Aka Talisman of Shrek",
+  "tooltip.informejtycy.recyclable_bottle": "🎶 Kaucyjnyy michał otwórz drzwii 🎶",
 
   "itemgroup.informejtycy.informejtycy": "Informejtycy mod",
 

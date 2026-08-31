@@ -3,6 +3,7 @@ package daw.ka.informejtycy.block;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.custom.BrainrotTableBlock;
 import daw.ka.informejtycy.block.custom.FacingBlock;
+import daw.ka.informejtycy.block.custom.RecyclerBlock;
 import daw.ka.informejtycy.block.custom.TheoryForgeBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -17,6 +18,7 @@ public class CustomBlocks {
 	public static Block DARK_GLOWSTONE;
 	public static Block THEORY_FORGE_BLOCK;
 	public static Block BRAINROT_TABLE_BLOCK;
+	public static Block RECYCLER_BLOCK;
     public static Block GLINIANKA_BLOCK;
     public static Block TRASH_CAN;
     public static Block SILVER_WOLF_BLOCK;
@@ -47,6 +49,11 @@ public class CustomBlocks {
 			.strength(2f, 3.0f)
 			.requiresTool()
 			.sounds(BlockSoundGroup.WOOD)
+			.nonOpaque();
+	public static final AbstractBlock.Settings RECYCLER_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+			.strength(-1.0F, 3600000.0F)
+			.dropsNothing()
+			.sounds(BlockSoundGroup.STONE)
 			.nonOpaque();
     public static final AbstractBlock.Settings GLINIANKA_BLOCK_SETTINGS = AbstractBlock.Settings.create()
             .strength(0.6f)
@@ -96,6 +103,8 @@ public class CustomBlocks {
 			.maxCount(64);
 	public static final Item.Settings BRAINROT_TABLE_BLOCK_ITEM_SETTINGS = new Item.Settings()
 			.maxCount(64);
+	public static final Item.Settings RECYCLER_BLOCK_ITEM_SETTINGS = new Item.Settings()
+			.maxCount(1);
     public static final Item.Settings GLINIANKA_BLOCK_ITEM_SETTINGS = new Item.Settings()
             .maxCount(64);
     public static final Item.Settings TRASH_CAN_ITEM_SETTINGS = new Item.Settings()
@@ -132,6 +141,11 @@ public class CustomBlocks {
 				BRAINROT_TABLE_BLOCK_SETTINGS,
 				BRAINROT_TABLE_BLOCK_ITEM_SETTINGS,
 				BrainrotTableBlock.class
+		);
+		RECYCLER_BLOCK = InformejtycyRegistry.registerCustomBlock("recycler_block",
+				RECYCLER_BLOCK_SETTINGS,
+				RECYCLER_BLOCK_ITEM_SETTINGS,
+				RecyclerBlock.class
 		);
 		SILVER_WOLF_BLOCK = InformejtycyRegistry.registerBlock("silver_wolf_block",
 				SILVER_WOLF_BLOCK_SETTINGS,

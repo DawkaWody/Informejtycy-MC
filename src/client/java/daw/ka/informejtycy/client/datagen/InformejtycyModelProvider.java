@@ -37,12 +37,14 @@ public class InformejtycyModelProvider extends FabricModelProvider {
         itemModelGenerator.register(CustomItems.DARK_GLOWSTONE_DUST, Models.GENERATED);
         itemModelGenerator.register(CustomItems.TALISMAN_OF_SHRIEK, Models.GENERATED);
         itemModelGenerator.register(CustomItems.PLUS, Models.GENERATED);
+		itemModelGenerator.register(CustomItems.RECYCLABLE_BOTTLE, Models.GENERATED);
 		itemModelGenerator.register(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC, Models.GENERATED);
 		itemModelGenerator.register(CustomItems.HOLY_WARS_MUSIC_DISC, Models.GENERATED);
 		itemModelGenerator.register(CustomItems.YOU_MUST_BURN_MUSIC_DISC, Models.GENERATED);
 		itemModelGenerator.register(CustomItems.NO_MORE_TEARS_MUSIC_DISC, Models.GENERATED);
         itemModelGenerator.register(CustomItems.ZALEWIX_BEAT_MUSIC_DISC, Models.GENERATED);
 		itemModelGenerator.register(CustomItems.STELLA_MUSIC_DISC, Models.GENERATED);
+		itemModelGenerator.register(CustomItems.MEGAMIKSKLASA2_MUSIC_DISC, Models.GENERATED);
         itemModelGenerator.register(CustomItems.ZMYSIO_ELYTRA, Models.GENERATED);
 
         itemModelGenerator.register(CustomItems.INFORMEJTYCY_SWORD, Models.HANDHELD);

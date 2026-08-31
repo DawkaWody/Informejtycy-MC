@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:zabka",
+  "width": 3,
+  "height": 1,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.zabka.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.zabka.author"
+  }
+}

@@ -79,5 +79,13 @@
         "stream": true
       }
     ]
+  },
+  "megamiksklasa2": {
+    "sounds": [
+      {
+        "name": "informejtycy:megamiksklasa2",
+        "stream": true
+      }
+    ]
   }
 }

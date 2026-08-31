@@ -22,5 +22,7 @@ public class Evidence {
         public String version;
         public String hash;
         public String file;
+        // Id of the mod this one is nested in (jar-in-jar), or null when it stands on its own.
+        public String parent;
     }
 }

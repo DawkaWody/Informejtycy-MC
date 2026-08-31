@@ -17,6 +17,7 @@ public class CustomSounds {
 	public static SoundEvent NO_MORE_TEARS;
     public static SoundEvent ZALEWIX_BEAT;
 	public static SoundEvent STELLA;
+	public static SoundEvent MEGAMIKSKLASA2;
 
 	public static final RegistryKey<JukeboxSong> RIDE_THE_LIGHTNING_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
 			InformejtycyRegistry.id("ride_the_lightning"));
@@ -30,6 +31,8 @@ public class CustomSounds {
             InformejtycyRegistry.id("zalewix_beat"));
 	public static final RegistryKey<JukeboxSong> STELLA_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
 			InformejtycyRegistry.id("stella"));
+	public static final RegistryKey<JukeboxSong> MEGAMIKSKLASA2_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+			InformejtycyRegistry.id("megamiksklasa2"));
 
 	public static void registerAll() {
 		MENU_AUDIO = InformejtycyRegistry.registerSoundEvent("menu_audio");
@@ -42,5 +45,6 @@ public class CustomSounds {
 		NO_MORE_TEARS = InformejtycyRegistry.registerSoundEvent("no_more_tears");
         ZALEWIX_BEAT = InformejtycyRegistry.registerSoundEvent("zalewix_beat");
 		STELLA = InformejtycyRegistry.registerSoundEvent("stella");
+		MEGAMIKSKLASA2 = InformejtycyRegistry.registerSoundEvent("megamiksklasa2");
 	}
 }

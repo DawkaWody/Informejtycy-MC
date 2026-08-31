@@ -3,6 +3,7 @@ package daw.ka.informejtycy;
 import daw.ka.informejtycy.event.InformejtycyEvents;
 import daw.ka.informejtycy.loot.InformejtycyLootTableModifiers;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
+import daw.ka.informejtycy.structure.InformejtycyStructureOverrides;
 import daw.ka.informejtycy.world.gen.InformejtycyWorldGen;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -21,5 +22,6 @@ public class Informejtycy implements ModInitializer {
 		InformejtycyLootTableModifiers.registerAll();
 		InformejtycyScreenHandlers.registerAll();
 		InformejtycyEvents.registerAll();
+		InformejtycyStructureOverrides.registerAll();
 	}
 }

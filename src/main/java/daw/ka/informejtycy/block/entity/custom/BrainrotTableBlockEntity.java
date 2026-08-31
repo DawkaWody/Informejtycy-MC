@@ -3,7 +3,6 @@ package daw.ka.informejtycy.block.entity.custom;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.entity.CustomBlockEntities;
 import daw.ka.informejtycy.item.CustomItems;
-import daw.ka.informejtycy.potion.CustomPotions;
 import daw.ka.informejtycy.recipe.CustomRecipes;
 import daw.ka.informejtycy.recipe.custom.BrainrotTableRecipe;
 import daw.ka.informejtycy.recipe.custom.BrainrotTableRecipeInput;
@@ -26,7 +25,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.recipe.RecipeEntry;
 import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -45,6 +43,7 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
@@ -197,7 +196,7 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 	}
 
 	@Override
-	public BlockPos getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+	public @NonNull BlockPos getScreenOpeningData(@NonNull ServerPlayerEntity serverPlayerEntity) {
 		return this.pos;
 	}
 

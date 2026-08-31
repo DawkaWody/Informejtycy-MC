@@ -17,6 +17,7 @@ public class CustomItemGroups {
 				entries.add(CustomBlocks.DARK_GLOWSTONE);
 				entries.add(CustomBlocks.THEORY_FORGE_BLOCK);
 				entries.add(CustomBlocks.BRAINROT_TABLE_BLOCK);
+				entries.add(CustomBlocks.RECYCLER_BLOCK);
 				entries.add(CustomBlocks.SILVER_WOLF_BLOCK);
 				entries.add(CustomBlocks.GOLDEN_WOLF_BLOCK);
                 entries.add(CustomBlocks.GLINIANKA_BLOCK);
@@ -37,12 +38,15 @@ public class CustomItemGroups {
 				entries.add(CustomItems.CONCENTRATED_ZARZYK_GEL);
 				entries.add(CustomItems.DARK_GLOWSTONE_DUST);
 				entries.add(CustomItems.TALISMAN_OF_SHRIEK);
+				entries.add(CustomItems.PLUS);
+				entries.add(CustomItems.RECYCLABLE_BOTTLE);
 				entries.add(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC);
 				entries.add(CustomItems.HOLY_WARS_MUSIC_DISC);
 				entries.add(CustomItems.YOU_MUST_BURN_MUSIC_DISC);
 				entries.add(CustomItems.NO_MORE_TEARS_MUSIC_DISC);
                 entries.add(CustomItems.ZALEWIX_BEAT_MUSIC_DISC);
 				entries.add(CustomItems.STELLA_MUSIC_DISC);
+				entries.add(CustomItems.MEGAMIKSKLASA2_MUSIC_DISC);
 				entries.add(CustomItems.INFORMEJTYCY_SWORD);
 				entries.add(CustomItems.INFORMEJTYCY_PICKAXE);
 				entries.add(CustomItems.INFORMEJTYCY_SHOVEL);

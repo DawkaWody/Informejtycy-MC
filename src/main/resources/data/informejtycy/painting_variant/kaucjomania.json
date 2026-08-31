@@ -1,0 +1,13 @@
+{
+  "asset_id": "informejtycy:kaucjomania",
+  "width": 3,
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.informejtycy.kaucjomania.title"
+  },
+  "author": {
+    "color": "gray",
+    "translate": "painting.informejtycy.kaucjomania.author"
+  }
+}
