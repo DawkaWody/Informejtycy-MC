@@ -28,7 +28,7 @@ public class ZabkaHouses {
             "zabka3",
             "zabka4"
     );
-    private static final int WEIGHT = 6;
+    private static final int WEIGHT = 4;
 
     public static void register() {
         DynamicRegistrySetupCallback.EVENT.register(view -> {

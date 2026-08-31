@@ -38,14 +38,16 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
     private static final int INPUT_SLOT = 0;
     private static final Item INPUT_ITEM = CustomItems.RECYCLABLE_BOTTLE;
     private static final List<Item> OUTPUT_POOL = List.of(
-            Items.DIAMOND,
-            Items.IRON_BLOCK,
-            Items.GOLD_BLOCK,
-            Items.EMERALD_BLOCK,
-            Items.LAPIS_BLOCK,
-            Items.COAL_BLOCK,
-            Items.REDSTONE_BLOCK,
-            Items.GOLDEN_APPLE
+            Items.IRON_INGOT,
+            Items.GOLD_INGOT,
+            Items.EMERALD,
+            Items.LAPIS_LAZULI,
+            Items.COAL,
+            Items.REDSTONE
+    );
+    private static final List<Item> OUTPUT_POOL_UNCOMMON = List.of(
+            Items.GOLDEN_APPLE,
+            Items.DIAMOND
     );
     private static final List<Item> OUTPUT_POOL_RARE = List.of(
             Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE,
@@ -104,8 +106,11 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
         } else {
             this.inventory.get(INPUT_SLOT).decrement(1);
         }
-        boolean isRare = Math.random() < 0.05;
-        Item outputItem = isRare ? OUTPUT_POOL_RARE.get((int) (Math.random() * OUTPUT_POOL_RARE.size())) : OUTPUT_POOL.get((int) (Math.random() * OUTPUT_POOL.size()));
+        boolean isRare = world.random.nextFloat() < 0.01f;
+        boolean isUncommon = !isRare && world.random.nextFloat() < 0.15f;
+        Item outputItem = isRare ? OUTPUT_POOL_RARE.get(world.random.nextInt(OUTPUT_POOL_RARE.size())) :
+                isUncommon ? OUTPUT_POOL_UNCOMMON.get(world.random.nextInt(OUTPUT_POOL_UNCOMMON.size())) :
+                        OUTPUT_POOL.get(world.random.nextInt(OUTPUT_POOL.size()));
         world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5,
                 new ItemStack(outputItem, 1)));
     }
