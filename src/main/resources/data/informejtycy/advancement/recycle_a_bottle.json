@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:adventure/root",
+  "criteria": {
+	"processed_recyclable_bottle": {
+	  "trigger": "minecraft:impossible"
+	}
+  },
+  "display": {
+	"description": {
+	  "translate": "advancements.informejtycy.recycle_a_bottle.description"
+	},
+	"icon": {
+	  "count": 1,
+	  "id": "informejtycy:recyclable_bottle"
+	},
+	"title": {
+	  "translate": "advancements.informejtycy.recycle_a_bottle.title"
+	}
+  },
+  "requirements": [
+	[
+	  "processed_recyclable_bottle"
+	]
+  ],
+  "sends_telemetry_event": true
+}
+

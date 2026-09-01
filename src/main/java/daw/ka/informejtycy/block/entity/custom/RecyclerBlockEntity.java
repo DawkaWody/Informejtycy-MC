@@ -7,6 +7,8 @@ import daw.ka.informejtycy.util.ImplementedInventory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.advancement.AdvancementEntry;
+import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -27,11 +29,13 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.UUID;
 
 public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
@@ -57,6 +61,7 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
     protected final PropertyDelegate propertyDelegate;
     private int progress;
     private int maxProgress = 100;
+    private @Nullable UUID lastOperator;
 
     public RecyclerBlockEntity(BlockPos pos, BlockState state) {
         super(CustomBlockEntities.RECYCLER_BLOCK_ENTITY_TYPE, pos, state);
@@ -113,6 +118,29 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
                         OUTPUT_POOL.get(world.random.nextInt(OUTPUT_POOL.size()));
         world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5,
                 new ItemStack(outputItem, 1)));
+
+        grantRecycleAdvancement();
+    }
+
+    public void setLastOperator(@Nullable UUID lastOperator) {
+        this.lastOperator = lastOperator;
+        markDirty();
+    }
+
+    private void grantRecycleAdvancement() {
+        if (world == null || world.getServer() == null || lastOperator == null) return;
+
+        ServerPlayerEntity player = world.getServer().getPlayerManager().getPlayer(lastOperator);
+        if (player == null || player.getEntityWorld() != world) return;
+
+        AdvancementEntry advancement = world.getServer().getAdvancementLoader()
+                .get(Identifier.of("informejtycy", "recycle_a_bottle"));
+        if (advancement == null) return;
+
+        AdvancementProgress advancementProgress = player.getAdvancementTracker().getProgress(advancement);
+        for (String criterion : advancementProgress.getUnobtainedCriteria()) {
+            player.getAdvancementTracker().grantCriterion(advancement, criterion);
+        }
     }
 
     void resetProgress() {
@@ -146,6 +174,9 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
         Inventories.writeData(view, inventory);
         view.putInt("recycler.progress", progress);
         view.putInt("recycler.max_progress", maxProgress);
+        if (lastOperator != null) {
+            view.putString("recycler.last_operator", lastOperator.toString());
+        }
     }
 
     @Override
@@ -153,6 +184,13 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
         Inventories.readData(view, inventory);
         progress = view.getInt("recycler.progress", 0);
         maxProgress = view.getInt("recycler.max_progress", 100);
+        view.getOptionalString("recycler.last_operator").ifPresentOrElse(value -> {
+            try {
+                lastOperator = UUID.fromString(value);
+            } catch (IllegalArgumentException ignored) {
+                lastOperator = null;
+            }
+        }, () -> lastOperator = null);
         super.readData(view);
     }
 

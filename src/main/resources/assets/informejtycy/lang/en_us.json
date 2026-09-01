@@ -168,6 +168,10 @@
   "advancements.informejtycy.kill_zmysio_boss.description": "Defeat Zmysio",
   "advancements.informejtycy.craft_golden_wolf_block.title": "Yi lang ma",
   "advancements.informejtycy.craft_golden_wolf_block.description": "Craft a Golden Wolf Block",
+  "advancements.informejtycy.recycle_a_bottle.title": "Kaucjomania",
+  "advancements.informejtycy.recycle_a_bottle.description": "Process a Recyclable Bottle in the Recycler",
+  "advancements.informejtycy.get_megamiks_music_disc.title": "Kaucjomaniak",
+    "advancements.informejtycy.get_megamiks_music_disc.description": "Recycle wayy to much bottles",
 
   "tag.item.informejtycy.informejtycy_repair": "informejtycy_repair",
   "tag.item.informejtycy.reinforced_informejtycy_repair": "reinforced_informejtycy_repair",

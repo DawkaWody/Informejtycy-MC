@@ -1,0 +1,33 @@
+{
+  "parent": "informejtycy:recycle_a_bottle",
+  "criteria": {
+    "disc": {
+      "conditions": {
+        "items": [
+          {
+            "items": "informejtycy:music_disc_megamiksklasa2"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.informejtycy.get_megamiks_music_disc.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "informejtycy:music_disc_megamiksklasa2"
+    },
+    "title": {
+      "translate": "advancements.informejtycy.get_megamiks_music_disc.title"
+    }
+  },
+  "requirements": [
+    [
+      "disc"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

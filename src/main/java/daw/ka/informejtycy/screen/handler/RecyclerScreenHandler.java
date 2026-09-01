@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
 
@@ -87,6 +88,16 @@ public class RecyclerScreenHandler extends ScreenHandler {
     @Override
     public boolean canUse(PlayerEntity player) {
         return this.inventory.canPlayerUse(player);
+    }
+
+    @Override
+    public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
+        super.onSlotClick(slotIndex, button, actionType, player);
+
+        ItemStack recyclerInput = this.blockEntity.getStack(0);
+        if (recyclerInput.isOf(CustomItems.RECYCLABLE_BOTTLE)) {
+            this.blockEntity.setLastOperator(player.getUuid());
+        }
     }
 
     private void addPlayerInventorySlots(PlayerInventory playerInventory) {
