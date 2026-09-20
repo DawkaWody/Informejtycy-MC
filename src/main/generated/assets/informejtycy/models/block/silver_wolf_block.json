@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "informejtycy:block/silver_wolf_block"
-  }
-}
