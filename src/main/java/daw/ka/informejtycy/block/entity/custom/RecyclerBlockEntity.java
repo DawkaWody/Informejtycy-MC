@@ -29,6 +29,7 @@ import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jspecify.annotations.NonNull;
@@ -40,6 +41,7 @@ import java.util.UUID;
 public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
     private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private static final int INPUT_SLOT = 0;
+    private static final int[] INPUT_SLOTS = {INPUT_SLOT};
     private static final Item INPUT_ITEM = CustomItems.RECYCLABLE_BOTTLE;
     private static final List<Item> OUTPUT_POOL = List.of(
             Items.IRON_INGOT,
@@ -146,6 +148,21 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedScreenHa
     void resetProgress() {
         this.progress = 0;
         this.maxProgress = 100;
+    }
+
+    @Override
+    public boolean isValid(int slot, ItemStack stack) {
+        return slot == INPUT_SLOT && stack.isOf(INPUT_ITEM);
+    }
+
+    @Override
+    public int[] getAvailableSlots(Direction side) {
+        return INPUT_SLOTS;
+    }
+
+    @Override
+    public boolean canExtract(int slot, ItemStack stack, Direction side) {
+        return false;
     }
 
     @Override

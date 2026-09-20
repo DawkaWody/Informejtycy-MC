@@ -3,7 +3,6 @@ package daw.ka.informejtycy.recipe.custom;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import daw.ka.informejtycy.Informejtycy;
-import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.recipe.CustomRecipes;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
@@ -46,11 +45,7 @@ public record BrainrotTableRecipe(Ingredient input, ItemStack output) implements
 
 	@Override
 	public RecipeBookCategory getRecipeBookCategory() {
-		return Registry.register(
-				Registries.RECIPE_BOOK_CATEGORY,
-				InformejtycyRegistry.id("recipes"),
-				new RecipeBookCategory()
-		);
+		return CustomRecipes.RECIPE_BOOK_CATEGORY;
 	}
 
 	public static class Serializer implements RecipeSerializer<BrainrotTableRecipe> {

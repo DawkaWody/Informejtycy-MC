@@ -5,6 +5,7 @@ import daw.ka.informejtycy.block.custom.BrainrotTableBlock;
 import daw.ka.informejtycy.block.custom.FacingBlock;
 import daw.ka.informejtycy.block.custom.RecyclerBlock;
 import daw.ka.informejtycy.block.custom.TheoryForgeBlock;
+import daw.ka.informejtycy.block.custom.ZmysioSummoningBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -158,12 +159,12 @@ public class CustomBlocks {
         GLINIANKA_BLOCK = InformejtycyRegistry.registerCustomBlock("glinianka_block",
                 GLINIANKA_BLOCK_SETTINGS,
                 GLINIANKA_BLOCK_ITEM_SETTINGS,
-                FacingBlock.class
+                ZmysioSummoningBlock.class
         );
         TRASH_CAN = InformejtycyRegistry.registerCustomBlock("trash_can",
                 TRASH_CAN_SETTINGS,
                 TRASH_CAN_ITEM_SETTINGS,
-                FacingBlock.class
+                ZmysioSummoningBlock.class
         );
         ZMYSIO_SUMMON_ANCHOR = InformejtycyRegistry.registerBlock("zmysio_summon_anchor",
                 AbstractBlock.Settings.create(),

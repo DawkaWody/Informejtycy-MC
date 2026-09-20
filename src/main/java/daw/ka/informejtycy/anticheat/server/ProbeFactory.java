@@ -50,7 +50,7 @@ public final class ProbeFactory {
         this.template = template;
     }
 
-    public record Probe(byte[] bytecode, byte[] secret, List<String> measuredResources) {
+    public record Probe(byte[] bytecode, byte[] secret) {
     }
 
     public Probe build(List<String> measuredResources) {
@@ -84,7 +84,7 @@ public final class ProbeFactory {
         constants.put(sentinel("RESOURCES"), String.join("\n", measuredResources));
 
         byte[] bytecode = transform(constants);
-        return new Probe(bytecode, secret.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8), measuredResources);
+        return new Probe(bytecode, secret.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     private static String sentinel(String name) {

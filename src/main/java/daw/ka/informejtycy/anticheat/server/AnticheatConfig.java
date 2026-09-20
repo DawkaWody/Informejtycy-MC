@@ -19,8 +19,12 @@ public class AnticheatConfig {
     private static final String CONFIG_FILENAME = "allowed_mods.json";
     private static final int CURRENT_VERSION = 2;
     private static final long SANE_MINIMUM_TIMEOUT_MS = 60000L;
+    // The measured class names end up in one string constant in the probe, which is capped at 64KB.
+    private static final int MAX_MEASURED_CLASS_COUNT = 256;
+    private static final long MAX_TIMEOUT_MS = 3600000L;
 
     public static ConfigData DATA;
+    public static boolean usingFallback;
 
     public static void load() {
         Path configDir = FabricLoader.getInstance().getConfigDir();
@@ -33,12 +37,14 @@ public class AnticheatConfig {
 
         try (FileReader reader = new FileReader(file.toFile())) {
             DATA = GSON.fromJson(reader, ConfigData.class);
+            usingFallback = false;
         } catch (Exception e) {
             // Refusing to boot over a typo in a json file is worse than running unenforced: the
             // defaults only log, so a broken config costs visibility, never a wrongly kicked player.
             Informejtycy.LOGGER.error("[Anticheat] Could not read {}. Falling back to the defaults, "
                     + "which do not kick anybody. Fix the file and restart to restore enforcement.", file, e);
             DATA = null;
+            usingFallback = true;
         }
 
         if (DATA == null) {
@@ -54,6 +60,11 @@ public class AnticheatConfig {
         if (DATA.timeout < SANE_MINIMUM_TIMEOUT_MS) {
             Informejtycy.LOGGER.warn("[Anticheat] timeout is {}ms. If this server has a login mod, a player "
                     + "cannot answer before logging in and will be recorded as TIMEOUT", DATA.timeout);
+        }
+
+        if (DATA.enforce && !DATA.requireAttestation) {
+            Informejtycy.LOGGER.warn("[Anticheat] enforce is on but requireAttestation is off, so a player who "
+                    + "removes the mod or never answers is only logged, not kicked");
         }
     }
 
@@ -122,8 +133,10 @@ public class AnticheatConfig {
             if (blockedHashes == null) blockedHashes = defaults.blockedHashes;
             if (trustedMixinOwners == null) trustedMixinOwners = defaults.trustedMixinOwners;
             if (timeout <= 0L) timeout = defaults.timeout;
+            if (timeout > MAX_TIMEOUT_MS) timeout = MAX_TIMEOUT_MS;
             if (maxCollectMs < 0L) maxCollectMs = defaults.maxCollectMs;
             if (measuredClassCount <= 0) measuredClassCount = defaults.measuredClassCount;
+            if (measuredClassCount > MAX_MEASURED_CLASS_COUNT) measuredClassCount = MAX_MEASURED_CLASS_COUNT;
         }
     }
 }

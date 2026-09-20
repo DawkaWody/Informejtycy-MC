@@ -80,7 +80,7 @@ public class CustomItems {
     public static final Item.Settings PLUS_SETTINGS = new Item.Settings().maxCount(64).fireproof().rarity(Rarity.UNCOMMON);
 	public static final Item.Settings RECYCLABLE_BOTTLE_SETTINGS = new Item.Settings().maxCount(16).rarity(Rarity.UNCOMMON);
     // Music discs
-	public static final Item.Settings RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.RIDE_THE_LIGHTNING_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
+	public static final Item.Settings RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.RIDE_THE_LIGHTNING_KEY).maxCount(1).fireproof().rarity(Rarity.UNCOMMON);
 	public static final Item.Settings HOLY_WARS_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.HOLY_WARS_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
 	public static final Item.Settings YOU_MUST_BURN_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.YOU_MUST_BURN_KEY).maxCount(1).rarity(Rarity.UNCOMMON);
 	public static final Item.Settings NO_MORE_TEARS_MUSIC_DISC_SETTINGS = new Item.Settings().jukeboxPlayable(CustomSounds.NO_MORE_TEARS_KEY).maxCount(1).rarity(Rarity.UNCOMMON);

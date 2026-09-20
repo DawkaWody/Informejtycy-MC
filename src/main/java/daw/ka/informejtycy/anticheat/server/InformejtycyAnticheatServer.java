@@ -6,6 +6,7 @@ import daw.ka.informejtycy.anticheat.Attestation;
 import daw.ka.informejtycy.anticheat.Challenge;
 import daw.ka.informejtycy.anticheat.Envelope;
 import daw.ka.informejtycy.anticheat.Evidence;
+import daw.ka.informejtycy.anticheat.ProbeSignature;
 import daw.ka.informejtycy.anticheat.payload.HandshakePayload;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -15,11 +16,13 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModOrigin;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +42,8 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
     private static final long FIRST_RESEND_MS = 2000L;
     private static final long MAX_RESEND_MS = 10000L;
     private static final int NONCE_BYTES = 32;
+    // Leaves room for resends and for a client clock that runs a little ahead.
+    private static final long SIGNATURE_MARGIN_MS = 10 * 60 * 1000L;
     // An honest client answers a challenge once per resend and always with the nonce we sent. This
     // only bounds how many unusable reports one connection can make us decompress and parse.
     private static final int MAX_REJECTED_REPLIES = 8;
@@ -49,12 +54,19 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
 
     private static final Map<UUID, HandshakeSession> sessions = new ConcurrentHashMap<>();
     private static final Map<UUID, ScheduledFuture<?>> tasks = new ConcurrentHashMap<>();
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(
-            runnable -> new Thread(runnable, "Informejtycy-Anticheat-Handshake"));
+    // Every change to sessions and tasks happens on this thread, so a join, a reply and a disconnect of
+    // the same player can never interleave.
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "Informejtycy-Anticheat-Handshake");
+        thread.setDaemon(true);
+        return thread;
+    });
 
     private static List<String> measurableClasses = List.of();
     private static EvidenceVerifier verifier;
     private static ProbeFactory probeFactory;
+    private static PrivateKey signingKey;
+    private static String modVersion = "unknown";
 
     @Override
     public void onInitializeServer() {
@@ -68,29 +80,34 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
 
     private static void registerHandshakePayload() {
         PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.playC2S().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
     }
 
     private static void prepareAttestation() {
         measurableClasses = discoverMeasurableClasses();
         probeFactory = ProbeFactory.createOrNull();
+        signingKey = ProbeSigningKey.loadOrNull();
 
         Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(Informejtycy.MOD_ID);
-        String version = container.map(mod -> mod.getMetadata().getVersion().getFriendlyString()).orElse("unknown");
+        modVersion = container.map(mod -> mod.getMetadata().getVersion().getFriendlyString()).orElse("unknown");
         String jarHash = null;
-        if (container.isPresent() && container.get().getOrigin().getKind() == ModOrigin.Kind.PATH) {
+        if (container.isPresent() && container.get().getOrigin().getKind() == ModOrigin.Kind.PATH
+                && !container.get().getOrigin().getPaths().isEmpty()) {
             Path path = container.get().getOrigin().getPaths().getFirst();
             if (Files.isRegularFile(path)) {
                 jarHash = Attestation.hashFile(path);
             }
         }
 
-        verifier = new EvidenceVerifier(version, jarHash);
+        verifier = new EvidenceVerifier(modVersion, jarHash);
         Informejtycy.LOGGER.info("[Anticheat] Attesting against {} class files of informejtycy {} (jar {})",
-                measurableClasses.size(), version, jarHash == null ? "not a file" : jarHash.substring(0, 12));
+                measurableClasses.size(), modVersion, jarHash == null ? "not a file" : jarHash.substring(0, 12));
 
-        if (probeFactory == null || measurableClasses.size() < Attestation.ALWAYS_MEASURED.size()) {
+        if (probeFactory == null || measurableClasses.isEmpty()) {
             Informejtycy.LOGGER.warn("[Anticheat] Probe generation is unavailable here; handshakes will be skipped");
+        } else if (measurableClasses.size() < Attestation.ALWAYS_MEASURED.size()) {
+            Informejtycy.LOGGER.warn("[Anticheat] Only {} of the {} core classes can be measured; handshakes will "
+                    + "run with a weaker measurement", measurableClasses.size(), Attestation.ALWAYS_MEASURED.size());
         }
     }
 
@@ -131,53 +148,70 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
     }
 
     private static void registerConnectionEvents() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> startHandshake(handler.player, server));
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> stopHandshake(handler.player.getUuid()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> startHandshake(handler, server));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> scheduler.execute(() -> stopHandshake(handler)));
     }
 
     private static void registerHandshakeReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             ServerPlayerEntity player = context.player();
-            UUID playerId = player.getUuid();
+            MinecraftServer server = context.server();
+            // Decompressing and verifying a report is too slow for the server thread.
+            scheduler.execute(() -> handleReply(player, server, payload.data()));
+        });
+    }
 
-            HandshakeSession session = sessions.get(playerId);
-            if (session == null) {
-                return;
-            }
+    private static void handleReply(ServerPlayerEntity player, MinecraftServer server, byte[] data) {
+        UUID playerId = player.getUuid();
 
-            Envelope envelope;
-            try {
-                envelope = GSON.fromJson(Attestation.decompress(payload.data()), Envelope.class);
-            } catch (Exception e) {
-                Informejtycy.LOGGER.warn("[Anticheat] Unreadable report from {}: {}",
-                        player.getName().getString(), e.toString());
-                rejectReply(player, session);
-                return;
-            }
+        HandshakeSession session = sessions.get(playerId);
+        if (session == null || session.handler() != player.networkHandler) {
+            return;
+        }
 
-            // An answer to a challenge we are no longer waiting on. Drop it; do not judge it.
-            if (envelope == null || !session.nonceString().equals(envelope.nonce)) {
-                rejectReply(player, session);
-                return;
-            }
+        Envelope envelope;
+        try {
+            envelope = GSON.fromJson(Attestation.decompress(data), Envelope.class);
+        } catch (Exception e) {
+            Informejtycy.LOGGER.warn("[Anticheat] Unreadable report from {}: {}",
+                    player.getName().getString(), e.toString());
+            rejectReply(player, server, session);
+            return;
+        }
 
-            if (!sessions.remove(playerId, session)) {
-                return;
-            }
+        // An answer to a challenge we are no longer waiting on. Drop it; do not judge it.
+        if (envelope == null || !session.nonceString().equals(envelope.nonce)) {
+            rejectReply(player, server, session);
+            return;
+        }
 
-            cancelTask(playerId);
-            long latencyMs = session.latencyMs();
+        if (!sessions.remove(playerId, session)) {
+            return;
+        }
 
-            Verdict verdict = verifier.verify(session, envelope, latencyMs);
-            report(player, verdict, latencyMs);
-            enforce(player, verdict);
+        cancelTask(playerId);
+        long latencyMs = session.latencyMs();
+
+        Verdict verdict;
+        try {
+            verdict = verifier.verify(session, envelope, latencyMs);
+        } catch (Exception e) {
+            Informejtycy.LOGGER.warn("[Anticheat] Could not verify the report from {}: {}",
+                    player.getName().getString(), e.toString());
+            verdict = new Verdict(Verdict.Status.TAMPERED, List.of("unverifiable-report"), null);
+        }
+
+        Verdict finalVerdict = verdict;
+        server.execute(() -> {
+            report(player, finalVerdict, latencyMs);
+            enforce(player, finalVerdict);
         });
     }
 
     // Too many unusable replies means the client will never produce a usable one; the report is
     // oversized, or someone is making us decompress rubbish on the server thread. Either way the
     // remaining resends are wasted, so settle it now instead of waiting out the whole timeout.
-    private static void rejectReply(ServerPlayerEntity player, HandshakeSession session) {
+    private static void rejectReply(ServerPlayerEntity player, MinecraftServer server, HandshakeSession session) {
         if (session.rejectedReplies().incrementAndGet() < MAX_REJECTED_REPLIES) {
             return;
         }
@@ -189,23 +223,44 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
 
         cancelTask(playerId);
         Verdict verdict = new Verdict(Verdict.Status.TAMPERED, List.of("unusable-report"), null);
-        report(player, verdict, session.latencyMs());
-        enforce(player, verdict);
+        long latencyMs = session.latencyMs();
+        server.execute(() -> {
+            report(player, verdict, latencyMs);
+            enforce(player, verdict);
+        });
     }
 
-    private static void startHandshake(ServerPlayerEntity player, MinecraftServer server) {
-        UUID playerId = player.getUuid();
-        HandshakeSession session = createSession();
-        if (session == null) {
-            Informejtycy.LOGGER.warn("[Anticheat] Skipping handshake for {}: attestation is unavailable",
-                    player.getName().getString());
+    private static void startHandshake(ServerPlayNetworkHandler handler, MinecraftServer server) {
+        ServerPlayerEntity player = handler.player;
+        if (AnticheatConfig.usingFallback) {
+            Informejtycy.LOGGER.warn("[Anticheat] allowed_mods.json could not be read at startup, so {} is checked "
+                    + "against the defaults and nobody gets kicked", player.getName().getString());
+        }
+
+        // Clients without the mod never register the channel, so there is nothing to wait for.
+        if (!ServerPlayNetworking.canSend(handler, HandshakePayload.ID)) {
+            Verdict verdict = new Verdict(Verdict.Status.TIMEOUT, List.of("mod-missing"), null);
+            report(player, verdict, 0L);
+            enforce(player, verdict);
             return;
         }
 
-        // A reconnect can land before the previous connection's chain has noticed it ended.
-        stopHandshake(playerId);
-        sessions.put(playerId, session);
-        scheduleSend(player, server, playerId, session, 0L, FIRST_RESEND_MS);
+        // Building a probe is too slow for the server thread.
+        scheduler.execute(() -> {
+            HandshakeSession session = createSession(handler);
+            if (session == null) {
+                Informejtycy.LOGGER.warn("[Anticheat] Skipping handshake for {}: attestation is unavailable",
+                        player.getName().getString());
+                return;
+            }
+
+            // A reconnect can land before the previous connection's chain has noticed it ended.
+            UUID playerId = player.getUuid();
+            sessions.remove(playerId);
+            cancelTask(playerId);
+            sessions.put(playerId, session);
+            scheduleSend(player, server, playerId, session, 0L, FIRST_RESEND_MS);
+        });
     }
 
     private static void scheduleSend(ServerPlayerEntity player, MinecraftServer server, UUID playerId,
@@ -250,9 +305,9 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         }
     }
 
-    private static HandshakeSession createSession() {
+    private static HandshakeSession createSession(ServerPlayNetworkHandler handler) {
         List<String> measure = pickMeasuredClasses();
-        if (measure.isEmpty() || probeFactory == null) {
+        if (measure.isEmpty() || probeFactory == null || signingKey == null) {
             return null;
         }
 
@@ -261,9 +316,11 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
             byte[] key = Attestation.hmac(probe.secret(), Attestation.expectedMeasurement(measure));
 
             byte[] nonce = Attestation.randomBytes(NONCE_BYTES);
-            Challenge challenge = Challenge.of(nonce, probe.bytecode());
+            long expires = System.currentTimeMillis() + AnticheatConfig.DATA.timeout + SIGNATURE_MARGIN_MS;
+            String signature = ProbeSignature.sign(signingKey, Attestation.encode(nonce), expires, probe.bytecode());
+            Challenge challenge = Challenge.of(nonce, probe.bytecode(), expires, signature);
             byte[] packet = Attestation.compress(GSON.toJson(challenge));
-            return new HandshakeSession(Attestation.encode(nonce), measure, key, packet, System.nanoTime());
+            return new HandshakeSession(handler, Attestation.encode(nonce), measure, key, packet, System.nanoTime());
         } catch (Exception e) {
             Informejtycy.LOGGER.error("[Anticheat] Could not build a challenge", e);
             return null;
@@ -315,9 +372,12 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         if (verdict.status() == Verdict.Status.FORBIDDEN && config.enforce) {
             message = "Forbidden mod detected: " + namesOfBlockedMods(verdict.reasons());
         } else if (verdict.status() == Verdict.Status.TAMPERED && config.requireAttestation) {
-            message = "Informejtycy mod couldn't be verified";
+            boolean outdated = verdict.reasons().stream().anyMatch(reason -> reason.startsWith("version-mismatch:"));
+            message = outdated ? "Please update the Informejtycy mod to version " + modVersion
+                    : "Informejtycy mod couldn't be verified";
         } else if (verdict.status() == Verdict.Status.TIMEOUT && config.requireAttestation) {
-            message = "No response from anticheat client";
+            message = verdict.reasons().contains("mod-missing") ? "This server requires the Informejtycy mod"
+                    : "No response from anticheat client";
         }
 
         if (message == null) {
@@ -398,9 +458,14 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         }
     }
 
-    private static void stopHandshake(UUID playerId) {
-        sessions.remove(playerId);
-        cancelTask(playerId);
+    // Only ends the session of this connection: a late disconnect of an old connection must not end
+    // the handshake of the new one.
+    private static void stopHandshake(ServerPlayNetworkHandler handler) {
+        UUID playerId = handler.player.getUuid();
+        HandshakeSession session = sessions.get(playerId);
+        if (session != null && session.handler() == handler && sessions.remove(playerId, session)) {
+            cancelTask(playerId);
+        }
     }
 }
 

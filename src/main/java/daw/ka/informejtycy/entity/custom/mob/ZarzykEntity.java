@@ -49,13 +49,13 @@ public class ZarzykEntity extends HostileEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(2, new WanderAroundGoal(this, MOVEMENT_SPEED));
-        this.goalSelector.add(5, new MeleeAttackGoal(this, ANGRY_MOVEMENT_SPEED, false));
-        this.goalSelector.add(1, new LookAtEntityGoal(this, PlayerEntity.class, 10f));
-        this.goalSelector.add(1, new LookAroundGoal(this));
+        this.goalSelector.add(2, new MeleeAttackGoal(this, ANGRY_MOVEMENT_SPEED, false));
+        this.goalSelector.add(7, new WanderAroundGoal(this, MOVEMENT_SPEED));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 10f));
+        this.goalSelector.add(8, new LookAroundGoal(this));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, SheepEntity.class, true, true));
-        this.targetSelector.add(4, new ActiveTargetGoal<>(this, VillagerEntity.class, 0, false, false, ENTITY_IS_CHILD));
+        this.targetSelector.add(4, new ActiveTargetGoal<>(this, SheepEntity.class, true, true));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, VillagerEntity.class, 0, false, false, ENTITY_IS_CHILD));
     }
 
     @Override

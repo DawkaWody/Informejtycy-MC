@@ -21,9 +21,14 @@ public class InformejtycyBlockTagProvider extends FabricTagProvider.BlockTagProv
                 .add(CustomBlocks.TRASH_CAN)
                 .add(CustomBlocks.SILVER_WOLF_ORE)
                 .add(CustomBlocks.SILVER_WOLF_BLOCK)
-                .add(CustomBlocks.GOLDEN_WOLF_BLOCK);
+                .add(CustomBlocks.GOLDEN_WOLF_BLOCK)
+                .add(CustomBlocks.BOMBARDINO_COCODRILO);
         valueLookupBuilder(BlockTags.AXE_MINEABLE)
-                .add(CustomBlocks.BRAINROT_TABLE_BLOCK);
+                .add(CustomBlocks.BRAINROT_TABLE_BLOCK)
+                .add(CustomBlocks.TUNG_TUNG_SAHUR)
+                .add(CustomBlocks.CHIMPANZINI_BANANINI);
+        valueLookupBuilder(BlockTags.HOE_MINEABLE)
+                .add(CustomBlocks.TRALALERO_TRALALA);
 		valueLookupBuilder(BlockTags.NEEDS_DIAMOND_TOOL)
 				.add(CustomBlocks.SILVER_WOLF_ORE)
                 .add(CustomBlocks.SILVER_WOLF_BLOCK)

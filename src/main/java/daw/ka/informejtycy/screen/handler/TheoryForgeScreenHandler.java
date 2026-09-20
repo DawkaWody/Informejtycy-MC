@@ -2,6 +2,7 @@ package daw.ka.informejtycy.screen.handler;
 
 import daw.ka.informejtycy.block.entity.custom.TheoryForgeBlockEntity;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
+import daw.ka.informejtycy.util.FilteredSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -29,10 +30,10 @@ public class TheoryForgeScreenHandler extends ScreenHandler {
 		this.blockEntity = (TheoryForgeBlockEntity) blockEntity;
 		this.propertyDelegate = propertyDelegate;
 
-		this.addSlot(new Slot(inventory, 0, 13, 16));
-		this.addSlot(new Slot(inventory, 1, 53, 35));
-		this.addSlot(new Slot(inventory, 2, 82, 35));
-		this.addSlot(new Slot(inventory, 3, 141, 35));
+		this.addSlot(new FilteredSlot(inventory, 0, 13, 16));
+		this.addSlot(new FilteredSlot(inventory, 1, 53, 35));
+		this.addSlot(new FilteredSlot(inventory, 2, 82, 35));
+		this.addSlot(new FilteredSlot(inventory, 3, 141, 35));
 
 		addPlayerInventorySlots(playerInventory);
 
@@ -71,7 +72,7 @@ public class TheoryForgeScreenHandler extends ScreenHandler {
 				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
+			} else if (!this.insertItem(originalStack, 0, TheoryForgeBlockEntity.OUTPUT_SLOT, false)) {
 					return ItemStack.EMPTY;
 			}
 

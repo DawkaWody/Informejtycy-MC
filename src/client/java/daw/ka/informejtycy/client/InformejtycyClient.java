@@ -7,6 +7,7 @@ import daw.ka.informejtycy.client.entity.zarzyk.ZarzykEntityModel;
 import daw.ka.informejtycy.client.entity.zarzyk.ZarzykEntityRenderer;
 import daw.ka.informejtycy.client.entity.zmysio.ZmysioEntityModel;
 import daw.ka.informejtycy.client.entity.zmysio.ZmysioEntityRenderer;
+import daw.ka.informejtycy.client.gui.TitleScreenVideo;
 import daw.ka.informejtycy.client.gui.screen.BrainrotTableScreen;
 import daw.ka.informejtycy.client.gui.screen.RecyclerScreen;
 import daw.ka.informejtycy.client.gui.screen.TheoryForgeScreen;
@@ -16,6 +17,7 @@ import daw.ka.informejtycy.entity.CustomEntities;
 import daw.ka.informejtycy.particle.CustomParticles;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -46,6 +48,12 @@ public class InformejtycyClient implements ClientModInitializer {
 		HandledScreens.register(InformejtycyScreenHandlers.THEORY_FORGE_SCREEN_HANDLER, TheoryForgeScreen::new);
 		HandledScreens.register(InformejtycyScreenHandlers.BRAINROT_TABLE_SCREEN_HANDLER, BrainrotTableScreen::new);
 		HandledScreens.register(InformejtycyScreenHandlers.RECYCLER_SCREEN_HANDLER, RecyclerScreen::new);
+
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (client.world != null && TitleScreenVideo.isPlaying()) {
+				TitleScreenVideo.stop();
+			}
+		});
 
 		ItemTooltipCallback.EVENT.register((ItemStack stack, Item.TooltipContext context, TooltipType type, java.util.List<Text> lines) -> {
 			Item item = stack.getItem();
@@ -133,18 +141,25 @@ public class InformejtycyClient implements ClientModInitializer {
 
         InformejtycyAnticheatClient.init();
 		InformejtycyDiscordRP.init();
-		new Thread(() -> {
+		Thread discordThread = new Thread(() -> {
 			while (true) {
 				try {
 					if (MinecraftClient.getInstance().isRunning()) {
 						InformejtycyDiscordRP.update();
 					}
+				} catch (RuntimeException e) {
+					Informejtycy.LOGGER.warn("Failed to update Discord Rich Presence", e);
+				}
+
+				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {
 					InformejtycyDiscordRP.stop();
 					break;
 				}
 			}
-		}, "Informejtycy-DiscordRP").start();
+		}, "Informejtycy-DiscordRP");
+		discordThread.setDaemon(true);
+		discordThread.start();
 	}
 }

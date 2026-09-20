@@ -25,6 +25,7 @@ public class ZmysioEntityRenderer extends MobEntityRenderer<ZmysioEntity, Zmysio
     @Override
     public void updateRenderState(ZmysioEntity entity, ZmysioEntityRenderState renderState, float f) {
         super.updateRenderState(entity, renderState, f);
+        renderState.spawnAnimationState.copyFrom(entity.spawnAnimationState);
         renderState.idleAnimationState.copyFrom(entity.idleAnimationState);
         renderState.shootRightAnimationState.copyFrom(entity.shootRightAnimationState);
         renderState.shootLeftAnimationState.copyFrom(entity.shootLeftAnimationState);

@@ -15,38 +15,39 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public class MixinElytraBuff {
-    private final float liftCoefficient = 0.85f; // 0.75f
-    private final float liftMultiplier = 0.055f; // 0.04f
+    @Unique private static final float liftCoefficient = 0.85f;
+    @Unique private static final float liftMultiplier = 0.055f;
+    @Unique private static final float gravityMultiplier = 0.98f;
 
     @Inject(method = "calcGlidingVelocity", at = @At("HEAD"), cancellable = true)
     private void buffElytraFlight(Vec3d oldVelocity, CallbackInfoReturnable<Vec3d> cir) {
         LivingEntity self = (LivingEntity) (Object) this;
         Item wornItem = self.getEquippedStack(EquipmentSlot.CHEST).getItem();
-        if (wornItem == CustomItems.ZMYSIO_ELYTRA) {
-            Vec3d vec3d = self.getRotationVector();
-            float f = self.getPitch() * (float) (Math.PI / 180.0);
-            double d = Math.sqrt(vec3d.x * vec3d.x + vec3d.z * vec3d.z);
-            double e = oldVelocity.horizontalLength();
-            double g = this.getEffectiveGravityAccessible();
-            double h = MathHelper.square(Math.cos(f));
-            oldVelocity = oldVelocity.add(0.0, g * (-1.0 + h * liftCoefficient), 0.0);
-            if (oldVelocity.y < 0.0 && d > 0.0) {
-                double i = oldVelocity.y * -0.1 * h;
-                oldVelocity = oldVelocity.add(vec3d.x * i / d, i, vec3d.z * i / d);
-            }
+        if (wornItem != CustomItems.ZMYSIO_ELYTRA) return;
 
-            if (f < 0.0F && d > 0.0) {
-                double i = e * -MathHelper.sin(f) * liftMultiplier;
-                oldVelocity = oldVelocity.add(-vec3d.x * i / d, i * 3.2, -vec3d.z * i / d);
-            }
-
-            if (d > 0.0) {
-                oldVelocity = oldVelocity.add((vec3d.x / d * e - oldVelocity.x) * 0.1, 0.0, (vec3d.z / d * e - oldVelocity.z) * 0.1);
-            }
-
-            Vec3d result = oldVelocity.multiply(0.99F, 0.98F, 0.99F);
-            cir.setReturnValue(result);
+        Vec3d vec3d = self.getRotationVector();
+        float f = self.getPitch() * (float) (Math.PI / 180.0);
+        double d = Math.sqrt(vec3d.x * vec3d.x + vec3d.z * vec3d.z);
+        double e = oldVelocity.horizontalLength();
+        double g = this.getEffectiveGravityAccessible();
+        double h = MathHelper.square(Math.cos(f));
+        oldVelocity = oldVelocity.add(0.0, g * (-1.0 + h * liftCoefficient), 0.0);
+        if (oldVelocity.y < 0.0 && d > 0.0) {
+            double i = oldVelocity.y * -0.1 * h;
+            oldVelocity = oldVelocity.add(vec3d.x * i / d, i, vec3d.z * i / d);
         }
+
+        if (f < 0.0F && d > 0.0) {
+            double i = e * -MathHelper.sin(f) * liftMultiplier;
+            oldVelocity = oldVelocity.add(-vec3d.x * i / d, i * 3.2, -vec3d.z * i / d);
+        }
+
+        if (d > 0.0) {
+            oldVelocity = oldVelocity.add((vec3d.x / d * e - oldVelocity.x) * 0.1, 0.0, (vec3d.z / d * e - oldVelocity.z) * 0.1);
+        }
+
+        Vec3d result = oldVelocity.multiply(0.99F, gravityMultiplier, 0.99F);
+        cir.setReturnValue(result);
     }
 
     @Unique

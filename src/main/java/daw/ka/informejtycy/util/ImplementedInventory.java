@@ -1,5 +1,6 @@
 package daw.ka.informejtycy.util;
 
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -209,6 +210,9 @@ public interface ImplementedInventory extends SidedInventory {
 
 	@Override
 	default boolean canPlayerUse(PlayerEntity player) {
+		if (this instanceof BlockEntity blockEntity) {
+			return Inventory.canPlayerUse(blockEntity, player);
+		}
 		return true;
 	}
 }

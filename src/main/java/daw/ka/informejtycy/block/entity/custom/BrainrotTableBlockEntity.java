@@ -17,6 +17,7 @@ import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -41,6 +42,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
@@ -50,13 +52,17 @@ import java.util.Optional;
 public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
 	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
 	private static final int INPUT_SLOT = 0;
-	private static final int OUTPUT_SLOT = 1;
+	public static final int OUTPUT_SLOT = 1;
+
+	private static final int[] INPUT_SLOTS = {INPUT_SLOT};
+	private static final int[] BOTTOM_SLOTS = {OUTPUT_SLOT};
 
 	private static final int XP_DROP = 10;
 
 	protected final PropertyDelegate propertyDelegate;
 	private int progress;
 	private int maxProgress = 280;
+	private Item craftingItem;
 
 	public BrainrotTableBlockEntity(BlockPos pos, BlockState state) {
 		super(CustomBlockEntities.BRAINROT_TABLE_BLOCK_ENTITY_TYPE, pos, state);
@@ -87,6 +93,12 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 
 	public void tick(World world, BlockPos pos, BlockState state, BrainrotTableBlockEntity blockEntity) {
 		boolean isCrafting = blockEntity.progress > 0;
+
+		Item inputItem = this.getStack(INPUT_SLOT).getItem();
+		if (inputItem != craftingItem) {
+			craftingItem = inputItem;
+			resetProgress();
+		}
 
 		if (hasRecipe()) {
 			increaseCraftingProgress();
@@ -142,9 +154,10 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("wuzini"));
 			}
 			this.setStack(OUTPUT_SLOT, painting);
+		} else if (this.getStack(OUTPUT_SLOT).isEmpty()) {
+			this.setStack(OUTPUT_SLOT, output.copy());
 		} else {
-			this.setStack(OUTPUT_SLOT, new ItemStack(output.getItem(),
-					this.getStack(OUTPUT_SLOT).getCount() + output.getCount()));
+			this.getStack(OUTPUT_SLOT).increment(output.getCount());
 		}
 		this.removeStack(INPUT_SLOT, 1);
 
@@ -186,8 +199,23 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 	private boolean canInsertOutput(ItemStack item, int count) {
 		if (item.isOf(Items.PAINTING)) return this.getStack(OUTPUT_SLOT).isEmpty();
 		int maxCount = this.getStack(OUTPUT_SLOT).isEmpty() ? 64 : this.getStack(OUTPUT_SLOT).getMaxCount();
-		return (this.getStack(OUTPUT_SLOT).isEmpty() || this.getStack(OUTPUT_SLOT).getItem() == item.getItem()) &&
+		return (this.getStack(OUTPUT_SLOT).isEmpty() || ItemStack.areItemsAndComponentsEqual(this.getStack(OUTPUT_SLOT), item)) &&
 				this.getStack(OUTPUT_SLOT).getCount() + count <= maxCount;
+	}
+
+	@Override
+	public boolean isValid(int slot, ItemStack stack) {
+		return slot == INPUT_SLOT;
+	}
+
+	@Override
+	public int[] getAvailableSlots(Direction side) {
+		return side == Direction.DOWN ? BOTTOM_SLOTS : INPUT_SLOTS;
+	}
+
+	@Override
+	public boolean canExtract(int slot, ItemStack stack, Direction side) {
+		return slot == OUTPUT_SLOT;
 	}
 
 	@Override
@@ -223,6 +251,7 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 		Inventories.readData(view, inventory);
 		progress = view.getInt("brainrot_table.progress", 0);
 		maxProgress = view.getInt("brainrot_table.max_progress", 280);
+		craftingItem = inventory.get(INPUT_SLOT).getItem();
 		super.readData(view);
 	}
 
