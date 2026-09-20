@@ -26,6 +26,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -68,6 +69,7 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
     private static final byte STATUS_SPIN_ATTACK = 69;
     private static final byte STATUS_GAS_ATTACK = 70;
     private static final byte STATUS_DEATH = 71;
+    private static final byte STATUS_SPAWN = 72;
 
     private static final TargetPredicate.EntityPredicate CAN_ATTACK_PREDICTATE = (entity, world) -> entity.isPlayer();
     private final ZmysioProjectileScheduler projectileScheduler = new ZmysioProjectileScheduler(this.getEntityWorld());
@@ -100,6 +102,7 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
     private UUID stinkCloudId;
     private boolean killed = false;
     private DamageSource killer;
+    private UUID killerId;
 
     public ZmysioEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
@@ -129,9 +132,17 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
         super.writeCustomData(view);
         view.putInt("Invul", this.getInvulnerableTimer());
         view.putBoolean("Summoned", this.summoned);
-        if (this.stinkCloud != null && this.stinkCloud.isAlive()) {
-            view.putString("CloudId", this.stinkCloud.getUuid().toString());
-            view.putLong("CloudRemove", Math.max(0, this.cloudRemoveTick - this.age));
+        view.putInt("Phase", this.currentPhase);
+        view.putBoolean("Armored", this.isArmored());
+        view.putBoolean("Killed", this.killed);
+        if (this.killed && this.getKillerId() != null) {
+            view.putString("KillerId", this.getKillerId().toString());
+        }
+
+        UUID cloudId = this.stinkCloud != null && this.stinkCloud.isAlive() ? this.stinkCloud.getUuid() : this.stinkCloudId;
+        if (cloudId != null && this.cloudRemoveTick > this.age) {
+            view.putString("CloudId", cloudId.toString());
+            view.putLong("CloudRemove", this.cloudRemoveTick - this.age);
         }
         else {
             view.remove("CloudId");
@@ -146,6 +157,18 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
         this.summoned = view.getBoolean("Summoned", false);
         if (this.hasCustomName()) {
             this.bossBar.setName(this.getDisplayName());
+        }
+
+        this.currentPhase = view.getInt("Phase", 0);
+        this.dataTracker.set(ARMORED, view.getBoolean("Armored", false));
+        this.killed = view.getBoolean("Killed", false);
+        this.killerId = null;
+        if (this.killed) {
+            this.deathAnimationTimer = deathAnimationDuration;
+            String killerIdStr = view.getString("KillerId", null);
+            if (killerIdStr != null) {
+                this.killerId = UUID.fromString(killerIdStr);
+            }
         }
 
         this.stinkCloudId = null;
@@ -203,8 +226,8 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
             int e = this.getTrackedEntityId();
             if (e > 0 && this.age >= this.attackCooldown) {
                 this.attackCooldown = this.age + (ATTACK_INTERVAL_SECONDS - 1 + this.random.nextInt(2)) * 20L;
-                LivingEntity entity = (LivingEntity) this.getEntityWorld().getEntityById(e);
-                if (this.canTarget(entity) && this.canSee(entity) && entity instanceof PlayerEntity target) {
+                if (this.getEntityWorld().getEntityById(e) instanceof PlayerEntity target
+                        && this.canTarget(target) && this.canSee(target)) {
                     ArrayList<AttackType> avaiableAttacks = new ArrayList<>();
                     if (!isInAttackRange(target) && this.squaredDistanceTo(target) < MILK_ATTACK_RANGE * MILK_ATTACK_RANGE)
                         avaiableAttacks.add(AttackType.MILK_PROJECTILE);
@@ -252,7 +275,7 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
         super.tick();
         projectileScheduler.tick();
 
-        if (!summoned) onSummoned();
+        if (!summoned && !this.getEntityWorld().isClient()) onSummoned();
 
         if (this.getEntityWorld().isClient()) {
             if (this.idleAnimationTimer <= 0) {
@@ -328,13 +351,15 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
             this.gasAnimationState.start(this.age);
         else if (status == STATUS_DEATH)
             this.deathAnimationState.start(this.age);
+        else if (status == STATUS_SPAWN)
+            this.spawnAnimationState.start(this.age);
     }
 
     public void onSummoned() {
         this.summoned = true;
         this.setInvulTimer(ON_SUMMONED_INVUL_TIMER);
         this.bossBar.setPercent(0.0F);
-        this.spawnAnimationState.start(this.age);
+        this.getEntityWorld().sendEntityStatus(this, STATUS_SPAWN);
     }
 
     private void initiateDeath() {
@@ -346,7 +371,25 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
 
     private void die(ServerWorld world) {
         if (this.stinkCloud != null) this.stinkCloud.discard();
-        super.damage(world, this.killer, this.getMaxHealth());
+        super.damage(world, this.killer != null ? this.killer : loadedKiller(world), this.getMaxHealth());
+    }
+
+    private DamageSource loadedKiller(ServerWorld world) {
+        Entity attacker = this.killerId != null ? world.getEntity(this.killerId) : null;
+        if (attacker instanceof PlayerEntity player) {
+            return world.getDamageSources().playerAttack(player);
+        }
+        if (attacker instanceof LivingEntity living) {
+            return world.getDamageSources().mobAttack(living);
+        }
+        return world.getDamageSources().generic();
+    }
+
+    private @Nullable UUID getKillerId() {
+        if (this.killer != null && this.killer.getAttacker() != null) {
+            return this.killer.getAttacker().getUuid();
+        }
+        return this.killerId;
     }
 
     private void shootAt(LivingEntity target) {
@@ -415,7 +458,7 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
         this.stinkCloud = new AreaEffectCloudEntity(serverWorld, target.getX(), target.getY(), target.getZ());
         this.stinkCloud.setOwner(this);
         this.stinkCloud.setRadius(GAS_ATTACK_RADIUS);
-        this.stinkCloud.setDuration(-1);
+        this.stinkCloud.setDuration(GAS_ATTACK_DURATION);
         this.stinkCloud.setParticleType(new StinkAreaParticleEffect(CustomParticles.STINK_AREA_PARTICLE, 1.0F));
         this.stinkCloud.setPotionDurationScale(0.25f);
         this.stinkCloud.addEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE));
@@ -464,7 +507,12 @@ public class ZmysioEntity extends HostileEntity implements RangedAttackMob {
     @Override
     public void onStartedTrackingBy(ServerPlayerEntity player) {
         super.onStartedTrackingBy(player);
-        this.bossBar.addPlayer(player);
+        if (this.killed) {
+            player.networkHandler.sendPacket(new EntityStatusS2CPacket(this, STATUS_DEATH));
+        }
+        else {
+            this.bossBar.addPlayer(player);
+        }
     }
 
     @Override

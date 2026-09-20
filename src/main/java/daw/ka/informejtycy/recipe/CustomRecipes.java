@@ -5,6 +5,7 @@ import daw.ka.informejtycy.recipe.custom.BrainrotTableRecipe;
 import daw.ka.informejtycy.recipe.custom.TheoryForgeRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -15,6 +16,8 @@ public class CustomRecipes {
 
 	public static RecipeType<TheoryForgeRecipe> THEORY_FORGE_RECIPE_TYPE;
 	public static RecipeType<BrainrotTableRecipe> BRAINROT_TABLE_RECIPE_TYPE;
+
+	public static RecipeBookCategory RECIPE_BOOK_CATEGORY;
 
 	public static void registerAll() {
 		THEORY_FORGE_RECIPE_SERIALIZER = Registry.register(
@@ -38,5 +41,8 @@ public class CustomRecipes {
 					}
 				}
 		);
+
+		RECIPE_BOOK_CATEGORY = Registry.register(
+				Registries.RECIPE_BOOK_CATEGORY, Identifier.of(Informejtycy.MOD_ID, "recipes"), new RecipeBookCategory());
 	}
 }

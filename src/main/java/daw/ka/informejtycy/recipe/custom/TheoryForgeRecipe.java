@@ -2,15 +2,12 @@ package daw.ka.informejtycy.recipe.custom;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.recipe.CustomRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.World;
 
@@ -47,11 +44,7 @@ public record TheoryForgeRecipe(Ingredient input1, Ingredient input2, ItemStack 
 
 	@Override
 	public RecipeBookCategory getRecipeBookCategory() {
-		return Registry.register(
-				Registries.RECIPE_BOOK_CATEGORY,
-				InformejtycyRegistry.id("recipes"),
-				new RecipeBookCategory()
-		);
+		return CustomRecipes.RECIPE_BOOK_CATEGORY;
 	}
 
 	public static class Serializer implements RecipeSerializer<TheoryForgeRecipe> {

@@ -255,7 +255,11 @@ public final class EvidenceVerifier {
     // Taking only the text before the first dot flagged half of every honest player's modpack.
     private static boolean isOwnedByKnownMod(String config, Set<String> known) {
         for (String token : config.split(OWNER_SEPARATORS)) {
-            if (!token.isEmpty() && known.contains(token)) {
+            if (token.isEmpty()) {
+                continue;
+            }
+            // Mod ids and config names disagree on '-' and '_' (my-mod vs my_mod.mixins.json).
+            if (known.contains(token) || known.contains(token.replace('_', '-')) || known.contains(token.replace('-', '_'))) {
                 return true;
             }
         }

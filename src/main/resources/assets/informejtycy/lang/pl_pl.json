@@ -8,6 +8,10 @@
   "block.informejtycy.trash_can": "Kosz na Śmieci",
   "block.informejtycy.silver_wolf_block": "Blok Srebrnego Wilka",
   "block.informejtycy.golden_wolf_block": "Blok Złotego Wilka",
+  "block.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
+  "block.informejtycy.tralalero_tralala": "Tralalero Tralala",
+  "block.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
+  "block.informejtycy.chimpanzini_bananini": "Chimpanzini Bananini",
 
   "item.informejtycy.silver_wolf_ore": "Ruda Srebrnego Wilka",
   "item.informejtycy.dark_glowstone": "Ciemny Jasnogłaz",
@@ -80,6 +84,7 @@
   "item.minecraft.tipped_arrow.effect.Aura": "Strzała Aury",
 
   "effect.informejtycy.aura": "Aura",
+  "effect.informejtycy.sneakiness": "Skrytość",
 
   "enchantment.informejtycy.thunderstruck": "Thunderstruck",
 

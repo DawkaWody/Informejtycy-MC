@@ -12,7 +12,9 @@ import net.minecraft.loot.LootTable;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LeafEntry;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
+import net.minecraft.loot.function.LimitCountLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
+import net.minecraft.loot.operator.BoundedIntUnaryOperator;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
@@ -31,7 +33,7 @@ public class InformejtycyLootTableProvider extends FabricBlockLootTableProvider 
 	@Override
 	public void generate() {
 		addDrop(CustomBlocks.SILVER_WOLF_ORE, multipleOreDrops(CustomBlocks.SILVER_WOLF_ORE, CustomItems.SILVER_WOLF, 1.0f, 2.0f));
-		addDrop(CustomBlocks.DARK_GLOWSTONE, multipleOreDrops(CustomBlocks.DARK_GLOWSTONE, CustomItems.DARK_GLOWSTONE_DUST, 2.0f, 4.0f));
+		addDrop(CustomBlocks.DARK_GLOWSTONE, glowstoneDrops(CustomBlocks.DARK_GLOWSTONE, CustomItems.DARK_GLOWSTONE_DUST));
 		addDrop(CustomBlocks.THEORY_FORGE_BLOCK);
 		addDrop(CustomBlocks.BRAINROT_TABLE_BLOCK);
         addDrop(CustomBlocks.SILVER_WOLF_BLOCK);
@@ -42,6 +44,18 @@ public class InformejtycyLootTableProvider extends FabricBlockLootTableProvider 
 		addDrop(CustomBlocks.TRALALERO_TRALALA);
 		addDrop(CustomBlocks.TUNG_TUNG_SAHUR);
 		addDrop(CustomBlocks.CHIMPANZINI_BANANINI);
+	}
+
+	protected LootTable.Builder glowstoneDrops(Block block, Item drop) {
+		try {
+			RegistryWrapper.Impl<Enchantment> impl = REGISTRY_LOOKUP.get().getOrThrow(RegistryKeys.ENCHANTMENT);
+			return this.dropsWithSilkTouch(block, this.applyExplosionDecay(block, ItemEntry.builder(drop)
+					.apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(2.0f, 4.0f)))
+					.apply(ApplyBonusLootFunction.uniformBonusCount(impl.getOrThrow(Enchantments.FORTUNE)))
+					.apply(LimitCountLootFunction.builder(BoundedIntUnaryOperator.create(1, 4)))));
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	protected LootTable.Builder multipleOreDrops(Block block, Item drop, float minDrops, float maxDrops) {

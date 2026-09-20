@@ -96,6 +96,7 @@ public class ZmysioEntityModel extends EntityModel<ZmysioEntityRenderState> {
         super.setAngles(state);
         this.setHeadAngles(state.relativeHeadYaw, state.pitch);
 
+        this.spawnAnimation.apply(state.spawnAnimationState, state.age, 1f);
         this.idleAnimation.apply(state.idleAnimationState, state.age, 1f);
         this.shootRightAnimation.apply(state.shootRightAnimationState, state.age, 1f);
         this.shootLeftAnimation.apply(state.shootLeftAnimationState, state.age, 1f);

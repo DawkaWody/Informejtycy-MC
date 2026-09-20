@@ -4,6 +4,7 @@ import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.entity.AnimationState;
 
 public class ZmysioEntityRenderState extends LivingEntityRenderState {
+    public final AnimationState spawnAnimationState = new AnimationState();
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState shootRightAnimationState = new AnimationState();
     public final AnimationState shootLeftAnimationState = new AnimationState();

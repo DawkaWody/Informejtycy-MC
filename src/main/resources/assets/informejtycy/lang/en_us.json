@@ -8,6 +8,10 @@
   "block.informejtycy.trash_can": "Trash Can",
   "block.informejtycy.silver_wolf_block": "Silver Wolf Block",
   "block.informejtycy.golden_wolf_block": "Golden Wolf Block",
+  "block.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
+  "block.informejtycy.tralalero_tralala": "Tralalero Tralala",
+  "block.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
+  "block.informejtycy.chimpanzini_bananini": "Chimpanzini Bananini",
 
   "item.informejtycy.silver_wolf_ore": "Silver Wolf Ore",
   "item.informejtycy.dark_glowstone": "Dark Glowstone",
@@ -80,6 +84,7 @@
   "item.minecraft.tipped_arrow.effect.Aura": "Aura Arrow",
 
   "effect.informejtycy.aura": "Aura",
+  "effect.informejtycy.sneakiness": "Sneakiness",
 
   "enchantment.informejtycy.thunderstruck": "Thunderstruck",
 
@@ -171,7 +176,7 @@
   "advancements.informejtycy.recycle_a_bottle.title": "Kaucjomania",
   "advancements.informejtycy.recycle_a_bottle.description": "Process a Recyclable Bottle in the Recycler",
   "advancements.informejtycy.get_megamiks_music_disc.title": "Kaucjomaniak",
-    "advancements.informejtycy.get_megamiks_music_disc.description": "Recycle wayy to much bottles",
+  "advancements.informejtycy.get_megamiks_music_disc.description": "Recycle wayy to many bottles",
 
   "tag.item.informejtycy.informejtycy_repair": "informejtycy_repair",
   "tag.item.informejtycy.reinforced_informejtycy_repair": "reinforced_informejtycy_repair",

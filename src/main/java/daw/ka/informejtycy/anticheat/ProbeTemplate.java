@@ -316,6 +316,8 @@ public final class ProbeTemplate implements Function<String, String> {
             files.add("listing-failed");
             return files;
         }
+        // listFiles has no defined order, and the cap below must drop the same files every time.
+        java.util.Arrays.sort(entries);
 
         for (int i = 0; i < entries.length && i < MAX_MODS_DIR_ENTRIES; i++) {
             java.io.File entry = entries[i];
@@ -721,27 +723,43 @@ public final class ProbeTemplate implements Function<String, String> {
         return parts;
     }
 
+    // Only the top level "id" counts: nested objects such as custom.modmenu.parent have their own.
     private static String extractJsonId(String json) {
-        int index = json.indexOf("\"id\"");
-        if (index < 0) {
-            return null;
-        }
+        int depth = 0;
+        String lastString = null;
+        boolean expectingValue = false;
 
-        int colon = json.indexOf(':', index);
-        if (colon < 0) {
-            return null;
-        }
+        for (int i = 0; i < json.length(); i++) {
+            char c = json.charAt(i);
+            if (c == '"') {
+                int end = i + 1;
+                while (end < json.length() && json.charAt(end) != '"') {
+                    end += json.charAt(end) == '\\' ? 2 : 1;
+                }
+                if (end >= json.length()) {
+                    return null;
+                }
 
-        int open = json.indexOf('"', colon);
-        if (open < 0) {
-            return null;
+                String value = json.substring(i + 1, end);
+                if (expectingValue && depth == 1 && "id".equals(lastString)) {
+                    return value;
+                }
+                lastString = value;
+                expectingValue = false;
+                i = end;
+            } else if (c == ':') {
+                expectingValue = true;
+            } else if (c == '{' || c == '[') {
+                depth++;
+                expectingValue = false;
+            } else if (c == '}' || c == ']') {
+                depth--;
+                expectingValue = false;
+            } else if (c == ',') {
+                expectingValue = false;
+            }
         }
-
-        int close = json.indexOf('"', open + 1);
-        if (close < 0) {
-            return null;
-        }
-        return json.substring(open + 1, close);
+        return null;
     }
 
     private static void appendArray(StringBuilder out, List<String> values) {

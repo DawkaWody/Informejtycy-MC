@@ -3,6 +3,7 @@ package daw.ka.informejtycy.screen.handler;
 import daw.ka.informejtycy.block.entity.custom.RecyclerBlockEntity;
 import daw.ka.informejtycy.item.CustomItems;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
+import daw.ka.informejtycy.util.FilteredSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -30,12 +31,7 @@ public class RecyclerScreenHandler extends ScreenHandler {
         this.blockEntity = (RecyclerBlockEntity) blockEntity;
         this.propertyDelegate = propertyDelegate;
 
-        this.addSlot(new Slot(this.inventory, 0, 79, 15) {
-            @Override
-            public boolean canInsert(ItemStack stack) {
-                return stack.getItem() == CustomItems.RECYCLABLE_BOTTLE;
-            }
-        });
+        this.addSlot(new FilteredSlot(this.inventory, 0, 79, 15));
 
         addPlayerInventorySlots(playerInventory);
 

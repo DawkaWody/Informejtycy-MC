@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import daw.ka.informejtycy.Informejtycy;
 import daw.ka.informejtycy.anticheat.Attestation;
 import daw.ka.informejtycy.anticheat.Challenge;
+import daw.ka.informejtycy.anticheat.ProbeSignature;
 import daw.ka.informejtycy.anticheat.payload.HandshakePayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -17,15 +18,18 @@ import java.util.function.Function;
 
 public class InformejtycyAnticheatClient {
     private static final Gson GSON = new Gson();
-    private static final ExecutorService WORKER =
-            Executors.newSingleThreadExecutor(runnable -> new Thread(runnable, "Informejtycy-Anticheat"));
+    private static final ExecutorService WORKER = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "Informejtycy-Anticheat");
+        thread.setDaemon(true);
+        return thread;
+    });
 
     private static String answeredNonce;
     private static String answeredEnvelope;
 
     public static void init() {
         PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.playC2S().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
 
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             PacketSender sender = context.responseSender();
@@ -41,8 +45,18 @@ public class InformejtycyAnticheatClient {
     private static void respond(HandshakePayload payload, PacketSender sender) {
         try {
             Challenge challenge = GSON.fromJson(Attestation.decompress(payload.data()), Challenge.class);
-            if (challenge == null || challenge.nonce == null || challenge.probe == null) {
+            if (challenge == null || challenge.nonce == null || challenge.probe == null || challenge.signature == null) {
                 Informejtycy.LOGGER.warn("[Anticheat] Ignoring malformed challenge");
+                return;
+            }
+
+            if (!ProbeSignature.verify(challenge.nonce, challenge.expires, Attestation.decode(challenge.probe), challenge.signature)) {
+                Informejtycy.LOGGER.warn("[Anticheat] Ignoring challenge that is not signed by the Informejtycy server");
+                return;
+            }
+
+            if (System.currentTimeMillis() > challenge.expires) {
+                Informejtycy.LOGGER.warn("[Anticheat] Ignoring expired challenge (is the system clock correct?)");
                 return;
             }
 

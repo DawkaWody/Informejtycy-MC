@@ -8,6 +8,7 @@
     "MixinEscapeMenu",
     "MixinSplashScreen",
     "MixinTitleScreen",
+    "MixinMusicTracker",
     "MixinPaintingRenderer"
   ],
   "injectors": {

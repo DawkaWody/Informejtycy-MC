@@ -1,14 +1,16 @@
 package daw.ka.informejtycy.anticheat.server;
 
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public record HandshakeSession(String nonceString, List<String> measuredResources,
+public record HandshakeSession(ServerPlayNetworkHandler handler, String nonceString, List<String> measuredResources,
                                byte[] expectedKey, byte[] challengePacket, long issuedAtNanos,
                                AtomicInteger rejectedReplies) {
-    public HandshakeSession(String nonceString, List<String> measuredResources,
+    public HandshakeSession(ServerPlayNetworkHandler handler, String nonceString, List<String> measuredResources,
                             byte[] expectedKey, byte[] challengePacket, long issuedAtNanos) {
-        this(nonceString, measuredResources, expectedKey, challengePacket, issuedAtNanos, new AtomicInteger());
+        this(handler, nonceString, measuredResources, expectedKey, challengePacket, issuedAtNanos, new AtomicInteger());
     }
 
     public long latencyMs() {

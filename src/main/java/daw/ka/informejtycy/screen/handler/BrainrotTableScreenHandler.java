@@ -2,6 +2,7 @@ package daw.ka.informejtycy.screen.handler;
 
 import daw.ka.informejtycy.block.entity.custom.BrainrotTableBlockEntity;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
+import daw.ka.informejtycy.util.FilteredSlot;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -29,8 +30,8 @@ public class BrainrotTableScreenHandler extends ScreenHandler {
 		this.blockEntity = (BrainrotTableBlockEntity) blockEntity;
 		this.propertyDelegate = propertyDelegate;
 
-		this.addSlot(new Slot(inventory, 0, 53, 35));
-		this.addSlot(new Slot(inventory, 1, 108, 35));
+		this.addSlot(new FilteredSlot(inventory, 0, 53, 35));
+		this.addSlot(new FilteredSlot(inventory, 1, 108, 35));
 
 		addPlayerInventorySlots(playerInventory);
 
@@ -61,7 +62,7 @@ public class BrainrotTableScreenHandler extends ScreenHandler {
 				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(originalStack, 0, this.inventory.size(), false)) {
+			} else if (!this.insertItem(originalStack, 0, BrainrotTableBlockEntity.OUTPUT_SLOT, false)) {
 				return ItemStack.EMPTY;
 			}
 

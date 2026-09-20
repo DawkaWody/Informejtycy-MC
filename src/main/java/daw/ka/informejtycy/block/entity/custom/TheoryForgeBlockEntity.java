@@ -14,6 +14,7 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -45,7 +46,11 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	private static final int FUEL_SLOT = 0;
 	private static final int INPUT_SLOT_1 = 1;
 	private static final int INPUT_SLOT_2 = 2;
-	private static final int OUTPUT_SLOT = 3;
+	public static final int OUTPUT_SLOT = 3;
+
+	private static final int[] TOP_SLOTS = {INPUT_SLOT_1, INPUT_SLOT_2};
+	private static final int[] SIDE_SLOTS = {FUEL_SLOT};
+	private static final int[] BOTTOM_SLOTS = {OUTPUT_SLOT, FUEL_SLOT};
 
 	private static final int FUEL_PER_CRAFT = 2;
 	private static final int XP_DROP = 5;
@@ -55,6 +60,8 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	private int maxProgress = 140;
 	private int fuelLevel;
 	private int maxFuelLevel = 8;
+	private Item craftingItem1;
+	private Item craftingItem2;
 
 	public TheoryForgeBlockEntity(BlockPos pos, BlockState state) {
 		super(CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE, pos, state);
@@ -88,6 +95,14 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	public void tick(World world, BlockPos pos, BlockState state, TheoryForgeBlockEntity blockEntity) {
 		boolean hasFuel = blockEntity.fuelLevel > 0;
 		boolean isCrafting = blockEntity.progress > 0;
+
+		Item inputItem1 = this.getStack(INPUT_SLOT_1).getItem();
+		Item inputItem2 = this.getStack(INPUT_SLOT_2).getItem();
+		if (inputItem1 != craftingItem1 || inputItem2 != craftingItem2) {
+			craftingItem1 = inputItem1;
+			craftingItem2 = inputItem2;
+			resetProgress();
+		}
 
 		if (hasRecipe() && hasEnoughFuel()) {
 			increaseCraftingProgress();
@@ -129,8 +144,11 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 		ItemStack output = recipe.get().value().output();
 		this.removeStack(INPUT_SLOT_1, 1);
 		this.removeStack(INPUT_SLOT_2, 1);
-		this.setStack(OUTPUT_SLOT, new ItemStack(output.getItem(),
-				this.getStack(OUTPUT_SLOT).getCount() + output.getCount()));
+		if (this.getStack(OUTPUT_SLOT).isEmpty()) {
+			this.setStack(OUTPUT_SLOT, output.copy());
+		} else {
+			this.getStack(OUTPUT_SLOT).increment(output.getCount());
+		}
 		consumeFuel();
 
 		if (world != null && !world.isClient()) {
@@ -184,17 +202,33 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 
 	private boolean canInsertOutput(ItemStack item, int count) {
 		int maxCount = this.getStack(OUTPUT_SLOT).isEmpty() ? 64 : this.getStack(OUTPUT_SLOT).getMaxCount();
-		return (this.getStack(OUTPUT_SLOT).isEmpty() || this.getStack(OUTPUT_SLOT).getItem() == item.getItem()) &&
+		return (this.getStack(OUTPUT_SLOT).isEmpty() || ItemStack.areItemsAndComponentsEqual(this.getStack(OUTPUT_SLOT), item)) &&
 				this.getStack(OUTPUT_SLOT).getCount() + count <= maxCount;
 	}
 
 	@Override
-	public boolean canInsert(int slot, ItemStack stack, @Nullable Direction side) {
+	public boolean isValid(int slot, ItemStack stack) {
 		return switch (slot) {
 			case FUEL_SLOT -> stack.getItem() == Items.LAVA_BUCKET;
-			case INPUT_SLOT_1, INPUT_SLOT_2 -> true;
+			case INPUT_SLOT_1, INPUT_SLOT_2 -> stack.getItem() != Items.LAVA_BUCKET;
 			default -> false;
 		};
+	}
+
+	@Override
+	public int[] getAvailableSlots(@Nullable Direction side) {
+		if (side == null) return SIDE_SLOTS;
+
+		return switch (side) {
+			case UP -> TOP_SLOTS;
+			case DOWN -> BOTTOM_SLOTS;
+			default -> SIDE_SLOTS;
+		};
+	}
+
+	@Override
+	public boolean canExtract(int slot, ItemStack stack, Direction side) {
+		return slot == OUTPUT_SLOT || (slot == FUEL_SLOT && stack.getItem() == Items.BUCKET);
 	}
 
 	@Override
@@ -234,6 +268,8 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 		maxProgress = view.getInt("theory_forge.max_progress", 140);
 		fuelLevel = view.getInt("theory_forge.fuel_level", 0);
 		maxFuelLevel = view.getInt("theory_forge.max_fuel_level", 8);
+		craftingItem1 = inventory.get(INPUT_SLOT_1).getItem();
+		craftingItem2 = inventory.get(INPUT_SLOT_2).getItem();
 		super.readData(view);
 	}
 

@@ -7,6 +7,7 @@ import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import daw.ka.informejtycy.Informejtycy;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +16,9 @@ import java.util.Properties;
 
 public class InformejtycyDiscordRP {
 	private static IPCClient client;
-	private static boolean ready = false;
+	private static volatile boolean ready = false;
+	private static boolean loggedMissingDiscord = false;
+	private static final Properties VERSIONS = loadVersions();
 
 	private static OffsetDateTime startTimestamp;
     private static String nickname;
@@ -62,20 +65,40 @@ public class InformejtycyDiscordRP {
 			@Override
 			public void onReady(IPCClient client) {
 				ready = true;
+				loggedMissingDiscord = false;
 				startTimestamp = OffsetDateTime.now();
                 nickname = MinecraftClient.getInstance().getSession().getUsername();
 				Informejtycy.LOGGER.info("Connected to Discord {}", client.getDiscordBuild());
 			}
+
+			@Override
+			public void onClose(IPCClient client, JSONObject json) {
+				ready = false;
+			}
+
+			@Override
+			public void onDisconnect(IPCClient client, Throwable t) {
+				ready = false;
+			}
 		});
+	}
+
+	private static void connect() {
 		try {
 			client.connect();
 		} catch (NoDiscordClientException | RuntimeException e) {
-			Informejtycy.LOGGER.warn("No opened Discord client found");
+			if (!loggedMissingDiscord) {
+				Informejtycy.LOGGER.warn("No opened Discord client found, will keep trying");
+				loggedMissingDiscord = true;
+			}
 		}
 	}
 
 	public static void update() {
-		if (!ready) return;
+		if (!ready) {
+			connect();
+			if (!ready) return;
+		}
 
 		MinecraftClient client = MinecraftClient.getInstance();
 		ServerInfo server = client.getCurrentServerEntry();
@@ -92,26 +115,29 @@ public class InformejtycyDiscordRP {
 	}
 
 	public static void stop() {
-		client.close();
+		if (ready) {
+			ready = false;
+			client.close();
+		}
 	}
 
 	private static String getModVersion() {
-		Properties p = new Properties();
-		try (InputStream in = InformejtycyDiscordRP.class.getResourceAsStream("/version/version.properties")) {
-			p.load(in);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		return p.getProperty("mod_version");
+		return VERSIONS.getProperty("mod_version", "unknown");
 	}
 
 	private static String getMinecraftVersion() {
+		return VERSIONS.getProperty("minecraft_version", "unknown");
+	}
+
+	private static Properties loadVersions() {
 		Properties p = new Properties();
 		try (InputStream in = InformejtycyDiscordRP.class.getResourceAsStream("/version/version.properties")) {
-			p.load(in);
+			if (in != null) {
+				p.load(in);
+			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			Informejtycy.LOGGER.warn("Could not read version.properties", e);
 		}
-		return p.getProperty("minecraft_version");
+		return p;
 	}
 }

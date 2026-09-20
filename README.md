@@ -29,6 +29,7 @@ Build:
 ```shell
 git clone https://github.com/DawkaWody/Informejtycy-MC.git
 cd Informejtycy-MC
+.\gradlew runDatagen
 .\gradlew build
 ```
 The built mod will be located in `build/libs/`
