@@ -3,6 +3,12 @@ plugins {
     id 'maven-publish'
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 version = project.mod_version
 group = project.maven_group
 
@@ -91,6 +97,34 @@ afterEvaluate {
     }
 }
 
+tasks.named("runServer") {
+    doFirst {
+        def eulaFile = file("run/eula.txt")
+        eulaFile.parentFile.mkdirs()
+        
+        def currentDate = new Date().format("dd:MM:yyyy HH:mm:ss z")
+        eulaFile.text = "# File generated automatically: agreement to https://aka.ms/MinecraftEULA.\n# ${currentDate}\neula=true"
+
+        def propertiesFile = file("run/server.properties")
+
+        if (!propertiesFile.exists()) {
+            propertiesFile.parentFile.mkdirs()
+            propertiesFile.createNewFile()
+        }
+
+        def properties = new Properties()
+
+        propertiesFile.withInputStream {
+            properties.load(it)
+        }
+
+        properties.setProperty("online-mode", "false")
+
+        propertiesFile.withOutputStream {
+            properties.store(it, null)
+        }
+    }
+}
 
 def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
