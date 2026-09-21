@@ -1,90 +1,71 @@
 package daw.ka.informejtycy.client.datagen;
 
-import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.item.CustomItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.client.data.BlockStateModelGenerator;
-import net.minecraft.client.data.ItemModelGenerator;
-import net.minecraft.client.data.Models;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ModelTemplates;
+
+import java.util.Map;
 
 public class InformejtycyModelProvider extends FabricModelProvider {
-	public InformejtycyModelProvider(FabricDataOutput output) {
+	public InformejtycyModelProvider(FabricPackOutput output) {
 		super(output);
 	}
 
 	@Override
-	public void generateBlockStateModels(BlockStateModelGenerator blockStateModelGenerator) {
-		blockStateModelGenerator.registerSimpleCubeAll(CustomBlocks.SILVER_WOLF_ORE);
-		blockStateModelGenerator.registerSimpleCubeAll(CustomBlocks.DARK_GLOWSTONE);
-		blockStateModelGenerator.registerSimpleCubeAll(CustomBlocks.SILVER_WOLF_BLOCK);
-		blockStateModelGenerator.registerSimpleCubeAll(CustomBlocks.GOLDEN_WOLF_BLOCK);
+	public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
+		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_ORE);
+		blockStateModelGenerator.createTrivialCube(CustomBlocks.DARK_GLOWSTONE);
+		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_BLOCK);
+		blockStateModelGenerator.createTrivialCube(CustomBlocks.GOLDEN_WOLF_BLOCK);
 	}
 
 	@Override
-	public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-		itemModelGenerator.register(CustomItems.SILVER_WOLF, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.GOLDEN_WOLF, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.BALLS_UNDER_MAGNIFIER, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.STICKY_NOTES, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.LIGHT_FOOD, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.ZMYSIO_MILK_BUCKET, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.ZARZYK_GEL, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.CONCENTRATED_ZARZYK_GEL, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.DARK_GLOWSTONE_DUST, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.TALISMAN_OF_SHRIEK, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.PLUS, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.RECYCLABLE_BOTTLE, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.HOLY_WARS_MUSIC_DISC, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.YOU_MUST_BURN_MUSIC_DISC, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.NO_MORE_TEARS_MUSIC_DISC, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.ZALEWIX_BEAT_MUSIC_DISC, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.STELLA_MUSIC_DISC, Models.GENERATED);
-		itemModelGenerator.register(CustomItems.MEGAMIKSKLASA2_MUSIC_DISC, Models.GENERATED);
-        itemModelGenerator.register(CustomItems.ZMYSIO_ELYTRA, Models.GENERATED);
+	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
+		itemModelGenerator.generateFlatItem(CustomItems.SILVER_WOLF, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.GOLDEN_WOLF, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.BALLS_UNDER_MAGNIFIER, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.STICKY_NOTES, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.LIGHT_FOOD, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_MILK_BUCKET, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.ZARZYK_GEL, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.CONCENTRATED_ZARZYK_GEL, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.DARK_GLOWSTONE_DUST, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.TALISMAN_OF_SHRIEK, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.PLUS, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.RECYCLABLE_BOTTLE, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.HOLY_WARS_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.YOU_MUST_BURN_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.NO_MORE_TEARS_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.ZALEWIX_BEAT_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.STELLA_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.MEGAMIKSKLASA2_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_ELYTRA, ModelTemplates.FLAT_ITEM);
 
-        itemModelGenerator.register(CustomItems.INFORMEJTYCY_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.INFORMEJTYCY_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.INFORMEJTYCY_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.INFORMEJTYCY_AXE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.INFORMEJTYCY_HOE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.REINFORCED_INFORMEJTYCY_SWORD, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.REINFORCED_INFORMEJTYCY_PICKAXE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.REINFORCED_INFORMEJTYCY_SHOVEL, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.REINFORCED_INFORMEJTYCY_AXE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.REINFORCED_INFORMEJTYCY_HOE, Models.HANDHELD);
-        itemModelGenerator.register(CustomItems.ZMYSIO_SWORD, Models.HANDHELD);
+        itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
 
-		itemModelGenerator.registerArmor(CustomItems.INFORMEJTYCY_HELMET, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("informejtycy")), ItemModelGenerator.HELMET_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.INFORMEJTYCY_CHESTPLATE, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("informejtycy")), ItemModelGenerator.CHESTPLATE_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.INFORMEJTYCY_LEGGINGS, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("informejtycy")), ItemModelGenerator.LEGGINGS_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.INFORMEJTYCY_BOOTS, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("informejtycy")), ItemModelGenerator.BOOTS_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.REINFORCED_INFORMEJTYCY_HELMET, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("reinforced_informejtycy")), ItemModelGenerator.HELMET_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("reinforced_informejtycy")), ItemModelGenerator.CHESTPLATE_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("reinforced_informejtycy")), ItemModelGenerator.LEGGINGS_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("reinforced_informejtycy")), ItemModelGenerator.BOOTS_TRIM_ID_PREFIX, false);
-		itemModelGenerator.registerArmor(CustomItems.PRESIDENT_HELMET, RegistryKey.of(
-				RegistryKey.ofRegistry(Identifier.ofVanilla("equipment_asset")),
-				InformejtycyRegistry.id("president_helmet")), ItemModelGenerator.HELMET_TRIM_ID_PREFIX, false);
+		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_HELMET, ItemModelGenerators.TRIM_PREFIX_HELMET, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_CHESTPLATE, ItemModelGenerators.TRIM_PREFIX_CHESTPLATE, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_LEGGINGS, ItemModelGenerators.TRIM_PREFIX_LEGGINGS, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_BOOTS, ItemModelGenerators.TRIM_PREFIX_BOOTS, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.REINFORCED_INFORMEJTYCY_HELMET, ItemModelGenerators.TRIM_PREFIX_HELMET, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE, ItemModelGenerators.TRIM_PREFIX_CHESTPLATE, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS, ItemModelGenerators.TRIM_PREFIX_LEGGINGS, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS, ItemModelGenerators.TRIM_PREFIX_BOOTS, false, Map.of());
+		itemModelGenerator.generateTrimmableItem(CustomItems.PRESIDENT_HELMET, ItemModelGenerators.TRIM_PREFIX_HELMET, false, Map.of());
 	}
 }

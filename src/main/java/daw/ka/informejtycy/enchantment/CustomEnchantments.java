@@ -2,41 +2,41 @@ package daw.ka.informejtycy.enchantment;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.enchantment.custom.ThunderstruckEnchantmentEffect;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.component.type.AttributeModifierSlot;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.effect.EnchantmentEffectTarget;
-import net.minecraft.registry.Registerable;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.EnchantmentTags;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentTarget;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.ItemTags;
 
 public class CustomEnchantments {
-	public static final RegistryKey<Enchantment> THUNDERSTRUCK =
-			RegistryKey.of(RegistryKeys.ENCHANTMENT, InformejtycyRegistry.id("thunderstruck"));
+	public static final ResourceKey<Enchantment> THUNDERSTRUCK =
+			ResourceKey.create(Registries.ENCHANTMENT, InformejtycyRegistry.id("thunderstruck"));
 
-	public static void bootstrap(Registerable<Enchantment> registerable) {
-		var enchantments = registerable.getRegistryLookup(RegistryKeys.ENCHANTMENT);
-		var items = registerable.getRegistryLookup(RegistryKeys.ITEM);
+	public static void bootstrap(BootstrapContext<Enchantment> registerable) {
+		var enchantments = registerable.lookup(Registries.ENCHANTMENT);
+		var items = registerable.lookup(Registries.ITEM);
 
-		register(registerable, THUNDERSTRUCK, Enchantment.builder(Enchantment.definition(
+		register(registerable, THUNDERSTRUCK, Enchantment.enchantment(Enchantment.definition(
 				items.getOrThrow(ItemTags.WEAPON_ENCHANTABLE),
 				items.getOrThrow(ItemTags.SHARP_WEAPON_ENCHANTABLE),
 				5,
 				3,
-				Enchantment.leveledCost(5, 7),
-				Enchantment.leveledCost(25,9),
+				Enchantment.dynamicCost(5, 7),
+				Enchantment.dynamicCost(25,9),
 				2,
-				AttributeModifierSlot.MAINHAND))
-				.addEffect(EnchantmentEffectComponentTypes.POST_ATTACK,
-						EnchantmentEffectTarget.ATTACKER,
-						EnchantmentEffectTarget.VICTIM,
+				EquipmentSlotGroup.MAINHAND))
+				.withEffect(EnchantmentEffectComponents.POST_ATTACK,
+						EnchantmentTarget.ATTACKER,
+						EnchantmentTarget.VICTIM,
 						new ThunderstruckEnchantmentEffect())
 		);
 	}
 
-	private static void register(Registerable<Enchantment> registerable, RegistryKey<Enchantment> key, Enchantment.Builder builder) {
-		registerable.register(key, builder.build(key.getValue()));
+	private static void register(BootstrapContext<Enchantment> registerable, ResourceKey<Enchantment> key, Enchantment.Builder builder) {
+		registerable.register(key, builder.build(key.identifier()));
 	}
 }

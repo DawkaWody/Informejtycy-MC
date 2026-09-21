@@ -2,17 +2,17 @@ package daw.ka.informejtycy.client.entity.zarzyk;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.entity.custom.mob.ZarzykEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.Identifier;
 
-public class ZarzykEntityRenderer extends MobEntityRenderer<ZarzykEntity, ZarzykEntityRenderState, ZarzykEntityModel> {
-    public ZarzykEntityRenderer(EntityRendererFactory.Context context) {
-        super(context, new ZarzykEntityModel(context.getPart(ZarzykEntityModel.ZARZYK)), 1f);
+public class ZarzykEntityRenderer extends MobRenderer<ZarzykEntity, ZarzykEntityRenderState, ZarzykEntityModel> {
+    public ZarzykEntityRenderer(EntityRendererProvider.Context context) {
+        super(context, new ZarzykEntityModel(context.bakeLayer(ZarzykEntityModel.ZARZYK)), 1f);
     }
 
     @Override
-    public Identifier getTexture(ZarzykEntityRenderState state) {
+    public Identifier getTextureLocation(ZarzykEntityRenderState state) {
         return InformejtycyRegistry.id("textures/entity/zarzyk/zarzyk.png");
     }
 
@@ -22,8 +22,8 @@ public class ZarzykEntityRenderer extends MobEntityRenderer<ZarzykEntity, Zarzyk
     }
 
     @Override
-    public void updateRenderState(ZarzykEntity entity, ZarzykEntityRenderState renderState, float f) {
-        super.updateRenderState(entity, renderState, f);
+    public void extractRenderState(ZarzykEntity entity, ZarzykEntityRenderState renderState, float f) {
+        super.extractRenderState(entity, renderState, f);
         renderState.idleAnimationState.copyFrom(entity.idleAnimationState);
         renderState.attackAnimationState.copyFrom(entity.attackAnimationState);
         renderState.walkAnimationState.copyFrom(entity.walkAnimationState);

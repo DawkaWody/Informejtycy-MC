@@ -1,38 +1,38 @@
 package daw.ka.informejtycy.item.custom;
 
 import daw.ka.informejtycy.particle.CustomParticles;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Unit;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 public class ZmysioElytraItem extends AlwaysGlintItem {
-    public ZmysioElytraItem(Settings settings) {
+    public ZmysioElytraItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        if (world.isClient()) return;
+    public void inventoryTick(ItemStack stack, ServerLevel world, Entity entity, @Nullable EquipmentSlot slot) {
+        if (world.isClientSide()) return;
         if (!(entity instanceof LivingEntity living)) return;
 
-        ItemStack chestStack = living.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack chestStack = living.getItemBySlot(EquipmentSlot.CHEST);
         if (chestStack != stack) return;
-        if (stack.getComponents().get(DataComponentTypes.GLIDER) != Unit.INSTANCE) return;
-        if (!living.isGliding()) return;
+        if (stack.getComponents().get(DataComponents.GLIDER) != Unit.INSTANCE) return;
+        if (!living.isFallFlying()) return;
 
-        Vec3d pos = living.getEntityPos();
-        Vec3d vel = living.getVelocity();
-        Vec3d back = vel.normalize().multiply(-0.6);
+        Vec3 pos = living.position();
+        Vec3 vel = living.getDeltaMovement();
+        Vec3 back = vel.normalize().scale(-0.6);
         double px = pos.x + back.x;
         double py = pos.y + 0.2;
         double pz = pos.z + back.z;
-        world.spawnParticles(
+        world.sendParticles(
                 CustomParticles.STINK_PARTICLE,
                 px, py, pz,
                 6,

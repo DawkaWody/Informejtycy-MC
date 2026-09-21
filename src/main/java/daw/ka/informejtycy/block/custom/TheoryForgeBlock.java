@@ -1,112 +1,115 @@
 package daw.ka.informejtycy.block.custom;
 
-import com.mojang.serialization.MapCodec;
 import daw.ka.informejtycy.block.entity.CustomBlockEntities;
 import daw.ka.informejtycy.block.entity.custom.TheoryForgeBlockEntity;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.*;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.Containers;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-public class TheoryForgeBlock extends BlockWithEntity implements BlockEntityProvider {
-	public static final VoxelShape SHAPE = Block.createCubeShape(16);
-	public static final MapCodec<TheoryForgeBlock> CODEC = TheoryForgeBlock.createCodec(TheoryForgeBlock::new);
-	public static final BooleanProperty LIT = Properties.LIT;
-	public static final Property<Direction> FACING = Properties.HORIZONTAL_FACING;
+public class TheoryForgeBlock extends BaseEntityBlock implements EntityBlock {
+	public static final VoxelShape SHAPE = Block.cube(16);
+	public static final BooleanProperty LIT = BlockStateProperties.LIT;
+	public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-	public TheoryForgeBlock(Settings settings) {
-		super(settings.luminance(state -> state.get(LIT) ? 15 : 0));
-		setDefaultState(getDefaultState().with(LIT, false));
+	public TheoryForgeBlock(Properties settings) {
+		super(settings.lightLevel(state -> state.getValue(LIT) ? 15 : 0));
+		registerDefaultState(defaultBlockState().setValue(LIT, false));
 	}
 
 	@Override
-	protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+	protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
 		if (state.getBlock() != world.getBlockState(pos).getBlock()) {
 			BlockEntity blockEntity = world.getBlockEntity(pos);
 			if (blockEntity instanceof TheoryForgeBlockEntity) {
-				ItemScatterer.spawn(world, pos, (Inventory) blockEntity);
-				world.updateComparators(pos, this);
+				Containers.dropContents(world, pos, (Container) blockEntity);
+				world.updateNeighbourForOutputSignal(pos, this);
 			}
-			super.onStateReplaced(state, world, pos, moved);
+			super.affectNeighborsAfterRemoval(state, world, pos, moved);
 		}
 	}
 
 	@Override
-	protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos,
-										 PlayerEntity player, Hand hand, BlockHitResult hit) {
-		if (!world.isClient()) {
-			NamedScreenHandlerFactory screenHandlerFactory = ((TheoryForgeBlockEntity) world.getBlockEntity(pos));
+	protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos,
+										 Player player, InteractionHand hand, BlockHitResult hit) {
+		if (!world.isClientSide()) {
+			MenuProvider screenHandlerFactory = ((TheoryForgeBlockEntity) world.getBlockEntity(pos));
 			if (screenHandlerFactory != null) {
-				player.openHandledScreen(screenHandlerFactory);
+				player.openMenu(screenHandlerFactory);
 			}
 		}
-		return ActionResult.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override
-	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-		if (world.isClient()) return null;
-		return validateTicker(type, CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE,
+	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+		if (world.isClientSide()) return null;
+		return createTickerHelper(type, CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE,
 				(w, p, s, be) -> be.tick(w, p, s, be));
 	}
 
 	@Override
-	protected BlockState rotate(BlockState state, BlockRotation rotation) {
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
+	protected BlockState rotate(BlockState state, Rotation rotation) {
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	@Override
-	protected BlockState mirror(BlockState state, BlockMirror mirror) {
-		return state.rotate(mirror.getRotation(state.get(FACING)));
+	protected BlockState mirror(BlockState state, Mirror mirror) {
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(FACING, ctx.getPlayer().getHorizontalFacing().getOpposite());
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		return this.defaultBlockState().setValue(FACING, ctx.getPlayer().getDirection().getOpposite());
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(LIT);
 		builder.add(FACING);
-		super.appendProperties(builder);
+		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
-	protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+	protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
 
+
 	@Override
-	protected MapCodec<? extends BlockWithEntity> getCodec() {
-		return CODEC;
+	public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE.create(pos, state);
 	}
 
 	@Override
-	public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-		return CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE.instantiate(pos, state);
-	}
-
-	@Override
-	protected BlockRenderType getRenderType(BlockState state) {
-		return BlockRenderType.MODEL;
+	protected RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
 	}
 }

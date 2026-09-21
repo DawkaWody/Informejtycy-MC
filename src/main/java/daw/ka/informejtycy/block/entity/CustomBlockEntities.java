@@ -6,7 +6,7 @@ import daw.ka.informejtycy.block.entity.custom.BrainrotTableBlockEntity;
 import daw.ka.informejtycy.block.entity.custom.RecyclerBlockEntity;
 import daw.ka.informejtycy.block.entity.custom.TheoryForgeBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class CustomBlockEntities {
 	public static BlockEntityType<TheoryForgeBlockEntity> THEORY_FORGE_BLOCK_ENTITY_TYPE = FabricBlockEntityTypeBuilder

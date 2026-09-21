@@ -28,8 +28,8 @@ public class InformejtycyAnticheatClient {
     private static String answeredEnvelope;
 
     public static void init() {
-        PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playC2S().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
+        PayloadTypeRegistry.clientboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
 
         ClientPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
             PacketSender sender = context.responseSender();

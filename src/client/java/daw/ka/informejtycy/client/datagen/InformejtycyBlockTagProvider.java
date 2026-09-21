@@ -2,40 +2,46 @@ package daw.ka.informejtycy.client.datagen;
 
 import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.tag.CustomTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
 
-public class InformejtycyBlockTagProvider extends FabricTagProvider.BlockTagProvider {
-	public InformejtycyBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
+	public InformejtycyBlockTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 		super(output, registriesFuture);
 	}
 
 	@Override
-	protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-		valueLookupBuilder(BlockTags.PICKAXE_MINEABLE)
-                .add(CustomBlocks.THEORY_FORGE_BLOCK)
-                .add(CustomBlocks.TRASH_CAN)
-                .add(CustomBlocks.SILVER_WOLF_ORE)
-                .add(CustomBlocks.SILVER_WOLF_BLOCK)
-                .add(CustomBlocks.GOLDEN_WOLF_BLOCK)
-                .add(CustomBlocks.BOMBARDINO_COCODRILO);
-        valueLookupBuilder(BlockTags.AXE_MINEABLE)
-                .add(CustomBlocks.BRAINROT_TABLE_BLOCK)
-                .add(CustomBlocks.TUNG_TUNG_SAHUR)
-                .add(CustomBlocks.CHIMPANZINI_BANANINI);
-        valueLookupBuilder(BlockTags.HOE_MINEABLE)
-                .add(CustomBlocks.TRALALERO_TRALALA);
-		valueLookupBuilder(BlockTags.NEEDS_DIAMOND_TOOL)
-				.add(CustomBlocks.SILVER_WOLF_ORE)
-                .add(CustomBlocks.SILVER_WOLF_BLOCK)
-                .add(CustomBlocks.GOLDEN_WOLF_BLOCK);
-		valueLookupBuilder(CustomTags.Blocks.NEEDS_INFORMEJTYCY_TOOL)
+	protected void addTags(HolderLookup.Provider wrapperLookup) {
+		builder(BlockTags.MINEABLE_WITH_PICKAXE)
+                .add(key(CustomBlocks.THEORY_FORGE_BLOCK))
+                .add(key(CustomBlocks.TRASH_CAN))
+                .add(key(CustomBlocks.SILVER_WOLF_ORE))
+                .add(key(CustomBlocks.SILVER_WOLF_BLOCK))
+                .add(key(CustomBlocks.GOLDEN_WOLF_BLOCK))
+                .add(key(CustomBlocks.BOMBARDINO_COCODRILO));
+        builder(BlockTags.MINEABLE_WITH_AXE)
+                .add(key(CustomBlocks.BRAINROT_TABLE_BLOCK))
+                .add(key(CustomBlocks.TUNG_TUNG_SAHUR))
+                .add(key(CustomBlocks.CHIMPANZINI_BANANINI));
+        builder(BlockTags.MINEABLE_WITH_HOE)
+                .add(key(CustomBlocks.TRALALERO_TRALALA));
+		builder(BlockTags.NEEDS_DIAMOND_TOOL)
+				.add(key(CustomBlocks.SILVER_WOLF_ORE))
+                .add(key(CustomBlocks.SILVER_WOLF_BLOCK))
+                .add(key(CustomBlocks.GOLDEN_WOLF_BLOCK));
+		builder(CustomTags.Blocks.NEEDS_INFORMEJTYCY_TOOL)
 				.addTag(BlockTags.NEEDS_DIAMOND_TOOL);
-		valueLookupBuilder(CustomTags.Blocks.NEEDS_REINFORCED_INFORMEJTYCY_TOOL)
+		builder(CustomTags.Blocks.NEEDS_REINFORCED_INFORMEJTYCY_TOOL)
 				.addTag(BlockTags.NEEDS_DIAMOND_TOOL);
+	}
+
+	private static ResourceKey<Block> key(Block block) {
+		return block.builtInRegistryHolder().key();
 	}
 }

@@ -1,16 +1,17 @@
 package daw.ka.informejtycy.client.particle;
 
 import daw.ka.informejtycy.particle.effect.StinkAreaParticleEffect;
-import net.minecraft.client.particle.BillboardParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFactory;
-import net.minecraft.client.particle.SpriteProvider;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
-public class StinkAreaParticle extends BillboardParticle {
+public class StinkAreaParticle extends SingleQuadParticle {
     private static final float MIN_RED = 0.5450980F;
     private static final float MIN_GREEN = 0.81176470F;
     private static final float MIN_BLUE = 0.3647058F;
@@ -18,79 +19,79 @@ public class StinkAreaParticle extends BillboardParticle {
     private static final float MAX_GREEN = 0.3294117F;
     private static final float MAX_BLUE = 0.2431372F;
     private boolean reachedGround;
-    private final SpriteProvider spriteProvider;
+    private final SpriteSet spriteProvider;
 
-    protected StinkAreaParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteProvider spriteProvider) {
-        super(world, x, y, z, velocityX, velocityY, velocityZ, spriteProvider.getFirst());
+    protected StinkAreaParticle(ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, SpriteSet spriteProvider) {
+        super(world, x, y, z, velocityX, velocityY, velocityZ, spriteProvider.first());
 
-        this.velocityMultiplier = 0.96F;
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
-        this.velocityZ = velocityZ;
-        this.red = MathHelper.nextFloat(this.random, MIN_RED, MAX_RED);
-        this.green = MathHelper.nextFloat(this.random, MIN_GREEN, MAX_GREEN);
-        this.blue = MathHelper.nextFloat(this.random, MIN_BLUE, MAX_BLUE);
-        this.scale *= 0.75F;
-        this.maxAge = (int)(20.0 / (this.random.nextFloat() * 0.8 + 0.2));
+        this.friction = 0.96F;
+        this.xd = velocityX;
+        this.yd = velocityY;
+        this.zd = velocityZ;
+        this.rCol = Mth.nextFloat(this.random, MIN_RED, MAX_RED);
+        this.gCol = Mth.nextFloat(this.random, MIN_GREEN, MAX_GREEN);
+        this.bCol = Mth.nextFloat(this.random, MIN_BLUE, MAX_BLUE);
+        this.quadSize *= 0.75F;
+        this.lifetime = (int)(20.0 / (this.random.nextFloat() * 0.8 + 0.2));
         this.reachedGround = false;
-        this.collidesWithWorld = false;
+        this.hasPhysics = false;
         this.spriteProvider = spriteProvider;
-        this.updateSprite(spriteProvider);
+        this.setSpriteFromAge(spriteProvider);
     }
 
     @Override
     public void tick() {
-        this.lastX = this.x;
-        this.lastY = this.y;
-        this.lastZ = this.z;
-        if (this.age++ >= this.maxAge) {
-            this.markDead();
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime) {
+            this.remove();
         } else {
-            this.updateSprite(this.spriteProvider);
+            this.setSpriteFromAge(this.spriteProvider);
             if (this.onGround) {
-                this.velocityY = 0.0;
+                this.yd = 0.0;
                 this.reachedGround = true;
             }
 
             if (this.reachedGround) {
-                this.velocityY += 0.002;
+                this.yd += 0.002;
             }
 
-            this.move(this.velocityX, this.velocityY, this.velocityZ);
-            if (this.y == this.lastY) {
-                this.velocityX *= 1.1;
-                this.velocityZ *= 1.1;
+            this.move(this.xd, this.yd, this.zd);
+            if (this.y == this.yo) {
+                this.xd *= 1.1;
+                this.zd *= 1.1;
             }
 
-            this.velocityX = this.velocityX * this.velocityMultiplier;
-            this.velocityZ = this.velocityZ * this.velocityMultiplier;
+            this.xd = this.xd * this.friction;
+            this.zd = this.zd * this.friction;
             if (this.reachedGround) {
-                this.velocityY = this.velocityY * this.velocityMultiplier;
+                this.yd = this.yd * this.friction;
             }
         }
     }
 
     @Override
-    protected RenderType getRenderType() {
-        return RenderType.PARTICLE_ATLAS_OPAQUE;
+    protected SingleQuadParticle.@NonNull Layer getLayer() {
+        return SingleQuadParticle.Layer.OPAQUE;
     }
 
     @Override
-    public float getSize(float tickProgress) {
-        return this.scale * MathHelper.clamp((this.age + tickProgress) / this.maxAge * 32.0F, 0.0F, 1.0F);
+    public float getQuadSize(float tickProgress) {
+        return this.quadSize * Mth.clamp((this.age + tickProgress) / this.lifetime * 32.0F, 0.0F, 1.0F);
     }
 
-    public static class Factory implements ParticleFactory<StinkAreaParticleEffect> {
-        private final SpriteProvider spriteProvider;
+    public static class Factory implements ParticleProvider<StinkAreaParticleEffect> {
+        private final SpriteSet spriteProvider;
 
-        public Factory(SpriteProvider spriteProvider) {
+        public Factory(SpriteSet spriteProvider) {
             this.spriteProvider = spriteProvider;
         }
 
         @Override
-        public @Nullable Particle createParticle(StinkAreaParticleEffect parameters, ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, Random random) {
+        public @Nullable Particle createParticle(StinkAreaParticleEffect parameters, @NonNull ClientLevel world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, @NonNull RandomSource random) {
             StinkAreaParticle particle = new StinkAreaParticle(world, x, y, z, velocityX, velocityY, velocityZ, this.spriteProvider);
-            particle.move(parameters.getPower());
+            particle.setPower(parameters.getPower());
             return particle;
         }
     }

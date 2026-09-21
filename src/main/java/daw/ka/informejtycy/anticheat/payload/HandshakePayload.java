@@ -1,22 +1,22 @@
 package daw.ka.informejtycy.anticheat.payload;
 
-import daw.ka.informejtycy.Informejtycy;
+import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.anticheat.Attestation;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import io.netty.buffer.ByteBuf;
+import org.jspecify.annotations.NonNull;
 
-public record HandshakePayload(byte[] data) implements CustomPayload {
-    public static final Id<HandshakePayload> ID =
-            new Id<>(Identifier.of(Informejtycy.MOD_ID, "handshake"));
-    public static final PacketCodec<ByteBuf, HandshakePayload> CODEC =
-            PacketCodecs.byteArray(Attestation.MAX_PACKET_BYTES).xmap(HandshakePayload::new, HandshakePayload::data);
+public record HandshakePayload(byte[] data) implements CustomPacketPayload {
+    public static final Type<HandshakePayload> ID =
+            new Type<>(InformejtycyRegistry.id("handshake"));
+    public static final StreamCodec<ByteBuf, HandshakePayload> CODEC =
+            ByteBufCodecs.byteArray(Attestation.MAX_PACKET_BYTES).map(HandshakePayload::new, HandshakePayload::data);
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public @NonNull Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 }

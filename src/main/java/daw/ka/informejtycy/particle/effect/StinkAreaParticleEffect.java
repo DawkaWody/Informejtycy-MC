@@ -3,12 +3,12 @@ package daw.ka.informejtycy.particle.effect;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 
-public class StinkAreaParticleEffect implements ParticleEffect {
+public class StinkAreaParticleEffect implements ParticleOptions {
     private final ParticleType<StinkAreaParticleEffect> type;
     private final float power;
 
@@ -18,8 +18,8 @@ public class StinkAreaParticleEffect implements ParticleEffect {
                 .optionalFieldOf("power", new StinkAreaParticleEffect(type, 1.0F));
     }
 
-    public static PacketCodec<? super ByteBuf, StinkAreaParticleEffect> createPacketCodec(ParticleType<StinkAreaParticleEffect> type) {
-        return PacketCodecs.FLOAT.xmap(power -> new StinkAreaParticleEffect(type, power), effect -> effect.power);
+    public static StreamCodec<? super ByteBuf, StinkAreaParticleEffect> createPacketCodec(ParticleType<StinkAreaParticleEffect> type) {
+        return ByteBufCodecs.FLOAT.map(power -> new StinkAreaParticleEffect(type, power), effect -> effect.power);
     }
 
     public StinkAreaParticleEffect(ParticleType<StinkAreaParticleEffect> type, float power) {

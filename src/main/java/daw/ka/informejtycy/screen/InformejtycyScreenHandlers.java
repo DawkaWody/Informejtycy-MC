@@ -3,30 +3,30 @@ package daw.ka.informejtycy.screen;
 import daw.ka.informejtycy.screen.handler.BrainrotTableScreenHandler;
 import daw.ka.informejtycy.screen.handler.RecyclerScreenHandler;
 import daw.ka.informejtycy.screen.handler.TheoryForgeScreenHandler;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.math.BlockPos;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.core.BlockPos;
 
 import static daw.ka.informejtycy.InformejtycyRegistry.id;
 
 public class InformejtycyScreenHandlers {
-	public static ScreenHandlerType<TheoryForgeScreenHandler> THEORY_FORGE_SCREEN_HANDLER;
-	public static ScreenHandlerType<BrainrotTableScreenHandler> BRAINROT_TABLE_SCREEN_HANDLER;
-	public static ScreenHandlerType<RecyclerScreenHandler> RECYCLER_SCREEN_HANDLER;
+	public static MenuType<TheoryForgeScreenHandler> THEORY_FORGE_SCREEN_HANDLER;
+	public static MenuType<BrainrotTableScreenHandler> BRAINROT_TABLE_SCREEN_HANDLER;
+	public static MenuType<RecyclerScreenHandler> RECYCLER_SCREEN_HANDLER;
 
 	public static void registerAll() {
-		THEORY_FORGE_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, RegistryKey.of(RegistryKeys.SCREEN_HANDLER,
+		THEORY_FORGE_SCREEN_HANDLER = Registry.register(BuiltInRegistries.MENU, ResourceKey.create(Registries.MENU,
 				id("theory_forge_screen_handler")),
-				new ExtendedScreenHandlerType<>(TheoryForgeScreenHandler::new, BlockPos.PACKET_CODEC));
-		BRAINROT_TABLE_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, RegistryKey.of(RegistryKeys.SCREEN_HANDLER,
+				new ExtendedMenuType<>(TheoryForgeScreenHandler::new, BlockPos.STREAM_CODEC));
+		BRAINROT_TABLE_SCREEN_HANDLER = Registry.register(BuiltInRegistries.MENU, ResourceKey.create(Registries.MENU,
 				id("brainrot_table_screen_handler")),
-				new ExtendedScreenHandlerType<>(BrainrotTableScreenHandler::new, BlockPos.PACKET_CODEC));
-		RECYCLER_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, RegistryKey.of(RegistryKeys.SCREEN_HANDLER,
+				new ExtendedMenuType<>(BrainrotTableScreenHandler::new, BlockPos.STREAM_CODEC));
+		RECYCLER_SCREEN_HANDLER = Registry.register(BuiltInRegistries.MENU, ResourceKey.create(Registries.MENU,
 				id("recycler_screen_handler")),
-				new ExtendedScreenHandlerType<>(RecyclerScreenHandler::new, BlockPos.PACKET_CODEC));
+				new ExtendedMenuType<>(RecyclerScreenHandler::new, BlockPos.STREAM_CODEC));
 	}
 }

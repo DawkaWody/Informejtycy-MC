@@ -4,15 +4,15 @@ import daw.ka.informejtycy.Informejtycy;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.client.sound.MenuMusicSound;
 import daw.ka.informejtycy.sound.CustomSounds;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.sound.SoundSystem;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.client.sounds.SoundEngine;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class TitleScreenVideo {
 	private static final long AUDIO_RETRY_MS = 5000;
 	private static final long SHEET_RETRY_MS = 1000;
 
-	private static NativeImageBackedTexture texture;
+	private static DynamicTexture texture;
 	private static int currentSheet = -1;
 	private static CompletableFuture<NativeImage> nextSheet;
 	private static int nextSheetIndex = -1;
@@ -46,8 +46,8 @@ public class TitleScreenVideo {
 	private static long sheetRetryAt = 0;
 	private static long startTime = -1;
 
-	public static void render(DrawContext context, int width, int height) {
-		MinecraftClient client = MinecraftClient.getInstance();
+	public static void render(GuiGraphicsExtractor context, int width, int height) {
+		Minecraft client = Minecraft.getInstance();
 		if (audio == null) {
 			start(client);
 		}
@@ -66,7 +66,7 @@ public class TitleScreenVideo {
 
 		int u = (frame % SHEET_COLUMNS) * FRAME_WIDTH;
 		int v = (frame % FRAMES_PER_SHEET / SHEET_COLUMNS) * FRAME_HEIGHT;
-		context.drawTexture(RenderPipelines.GUI_TEXTURED, TEXTURE_ID, 0, 0, u, v, width, height,
+		context.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_ID, 0, 0, u, v, width, height,
 				FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH * SHEET_COLUMNS, FRAME_HEIGHT * SHEET_ROWS);
 	}
 
@@ -77,12 +77,12 @@ public class TitleScreenVideo {
 	public static void stop() {
 		if (audio == null) return;
 
-		MinecraftClient client = MinecraftClient.getInstance();
+		Minecraft client = Minecraft.getInstance();
 		client.getSoundManager().stop(audio);
 		audio = null;
 
 		if (texture != null) {
-			client.getTextureManager().destroyTexture(TEXTURE_ID);
+			client.getTextureManager().release(TEXTURE_ID);
 			texture = null;
 		}
 		currentSheet = -1;
@@ -94,14 +94,14 @@ public class TitleScreenVideo {
 		}
 	}
 
-	private static void start(MinecraftClient client) {
-		client.getMusicTracker().stop();
+	private static void start(Minecraft client) {
+		client.getMusicManager().stopPlaying();
 		playAudio(client.getSoundManager());
 	}
 
 	private static void playAudio(SoundManager soundManager) {
 		audio = new MenuMusicSound(CustomSounds.MENU_AUDIO, 0.8f);
-		audioFailed = soundManager.play(audio) == SoundSystem.PlayResult.NOT_STARTED;
+		audioFailed = soundManager.play(audio) == SoundEngine.PlayResult.NOT_STARTED;
 		audioStarted = false;
 		if (audioFailed) {
 			audioRetryAt = System.currentTimeMillis() + AUDIO_RETRY_MS;
@@ -119,7 +119,7 @@ public class TitleScreenVideo {
 			return;
 		}
 
-		boolean playing = soundManager.isPlaying(audio);
+		boolean playing = soundManager.isActive(audio);
 		if (playing && !audioStarted) {
 			audioStarted = true;
 			startTime = System.currentTimeMillis();
@@ -128,7 +128,7 @@ public class TitleScreenVideo {
 		}
 	}
 
-	private static void updateSheet(MinecraftClient client, int sheet) {
+	private static void updateSheet(Minecraft client, int sheet) {
 		if (sheet == currentSheet || System.currentTimeMillis() < sheetRetryAt) return;
 		if (nextSheet == null || nextSheetIndex != sheet) {
 			requestSheet(client.getResourceManager(), sheet);
@@ -149,10 +149,10 @@ public class TitleScreenVideo {
 		nextSheetIndex = -1;
 
 		if (texture == null) {
-			texture = new NativeImageBackedTexture(() -> "Informejtycy title video", image);
-			client.getTextureManager().registerTexture(TEXTURE_ID, texture);
+			texture = new DynamicTexture(() -> "Informejtycy title video", image);
+			client.getTextureManager().register(TEXTURE_ID, texture);
 		} else {
-			texture.setImage(image);
+			texture.setPixels(image);
 			texture.upload();
 		}
 
@@ -172,6 +172,6 @@ public class TitleScreenVideo {
 			} catch (IOException e) {
 				throw new UncheckedIOException(e);
 			}
-		}, Util.getMainWorkerExecutor());
+		}, Util.backgroundExecutor());
 	}
 }

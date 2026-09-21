@@ -3,30 +3,30 @@ package daw.ka.informejtycy.screen.handler;
 import daw.ka.informejtycy.block.entity.custom.BrainrotTableBlockEntity;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
 import daw.ka.informejtycy.util.FilteredSlot;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.SimpleContainerData;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.core.BlockPos;
 
-public class BrainrotTableScreenHandler extends ScreenHandler {
+public class BrainrotTableScreenHandler extends AbstractContainerMenu {
 	public final BrainrotTableBlockEntity blockEntity;
-	private final Inventory inventory;
-	private final PropertyDelegate propertyDelegate;
+	private final Container inventory;
+	private final ContainerData propertyDelegate;
 
-	public BrainrotTableScreenHandler(int syncId, PlayerInventory inventory, BlockPos pos) {
-		this(syncId, inventory, inventory.player.getEntityWorld().getBlockEntity(pos), new ArrayPropertyDelegate(2));
+	public BrainrotTableScreenHandler(int syncId, Inventory inventory, BlockPos pos) {
+		this(syncId, inventory, inventory.player.level().getBlockEntity(pos), new SimpleContainerData(2));
 	}
 
-	public BrainrotTableScreenHandler(int syncId, PlayerInventory playerInventory,
-									BlockEntity blockEntity, PropertyDelegate propertyDelegate) {
+	public BrainrotTableScreenHandler(int syncId, Inventory playerInventory,
+									BlockEntity blockEntity, ContainerData propertyDelegate) {
 		super(InformejtycyScreenHandlers.BRAINROT_TABLE_SCREEN_HANDLER, syncId);
-		this.inventory = (Inventory) blockEntity;
+		this.inventory = (Container) blockEntity;
 		this.blockEntity = (BrainrotTableBlockEntity) blockEntity;
 		this.propertyDelegate = propertyDelegate;
 
@@ -35,7 +35,7 @@ public class BrainrotTableScreenHandler extends ScreenHandler {
 
 		addPlayerInventorySlots(playerInventory);
 
-		addProperties(propertyDelegate);
+		addDataSlots(propertyDelegate);
 	}
 
 	public boolean isCrafting() {
@@ -51,25 +51,25 @@ public class BrainrotTableScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public ItemStack quickMove(PlayerEntity player, int invSlot) {
+	public ItemStack quickMoveStack(Player player, int invSlot) {
 		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(invSlot);
-		if (slot.hasStack()) {
-			ItemStack originalStack = slot.getStack();
+		if (slot.hasItem()) {
+			ItemStack originalStack = slot.getItem();
 			newStack = originalStack.copy();
 
-			if (invSlot < this.inventory.size()) {
-				if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) {
+			if (invSlot < this.inventory.getContainerSize()) {
+				if (!this.moveItemStackTo(originalStack, this.inventory.getContainerSize(), this.slots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.insertItem(originalStack, 0, BrainrotTableBlockEntity.OUTPUT_SLOT, false)) {
+			} else if (!this.moveItemStackTo(originalStack, 0, BrainrotTableBlockEntity.OUTPUT_SLOT, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (originalStack.isEmpty()) {
-				slot.setStack(ItemStack.EMPTY);
+				slot.setByPlayer(ItemStack.EMPTY);
 			} else {
-				slot.markDirty();
+				slot.setChanged();
 			}
 		}
 
@@ -77,11 +77,11 @@ public class BrainrotTableScreenHandler extends ScreenHandler {
 	}
 
 	@Override
-	public boolean canUse(PlayerEntity player) {
-		return this.inventory.canPlayerUse(player);
+	public boolean stillValid(Player player) {
+		return this.inventory.stillValid(player);
 	}
 
-	private void addPlayerInventorySlots(PlayerInventory playerInventory) {
+	private void addPlayerInventorySlots(Inventory playerInventory) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				int x = 8 + j * 18 - (j >= 5 ? 1 : 0);

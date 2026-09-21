@@ -1,7 +1,7 @@
 package daw.ka.informejtycy.client.entity.zmysio;
 
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
-import net.minecraft.entity.AnimationState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.world.entity.AnimationState;
 
 public class ZmysioEntityRenderState extends LivingEntityRenderState {
     public final AnimationState spawnAnimationState = new AnimationState();

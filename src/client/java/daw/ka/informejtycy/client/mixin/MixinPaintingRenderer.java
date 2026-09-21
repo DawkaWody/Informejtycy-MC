@@ -1,22 +1,22 @@
 package daw.ka.informejtycy.client.mixin;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.PaintingEntityRenderer;
-import net.minecraft.client.render.entity.state.PaintingEntityRenderState;
-import net.minecraft.client.render.state.CameraRenderState;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.texture.SpriteContents;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.decoration.painting.PaintingEntity;
-import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.PaintingRenderer;
+import net.minecraft.client.renderer.entity.state.PaintingRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.SpriteContents;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.decoration.painting.Painting;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.resources.Identifier;
+import com.mojang.math.Axis;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,64 +24,66 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(PaintingEntityRenderer.class)
-public abstract class MixinPaintingRenderer extends EntityRenderer<PaintingEntity, PaintingEntityRenderState> {
-	protected MixinPaintingRenderer(EntityRendererFactory.Context context) {
+@Mixin(PaintingRenderer.class)
+public abstract class MixinPaintingRenderer extends EntityRenderer<Painting, PaintingRenderState> {
+	protected MixinPaintingRenderer(EntityRendererProvider.Context context) {
 		super(context);
 	}
 
-    @Shadow @Final private SpriteAtlasTexture paintingAtlases;
-	@Shadow protected abstract void renderPainting(MatrixStack matrixStack, OrderedRenderCommandQueue orderedRenderCommandQueue, RenderLayer renderLayer, int[] is, int i, int j, Sprite sprite, Sprite sprite2);
-	@Shadow protected abstract void vertex(MatrixStack.Entry matrix, VertexConsumer vertexConsumer, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light);
+    @Shadow @Final private TextureAtlas paintingsAtlas;
+	@Shadow protected abstract void renderPainting(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue, RenderType renderLayer, int[] is, int i, int j, TextureAtlasSprite sprite, TextureAtlasSprite sprite2);
+	@Shadow protected static void vertex(PoseStack.Pose matrix, VertexConsumer vertexConsumer, float x, float y, float u, float v, float z, int normalX, int normalY, int normalZ, int light) {
+		throw new AssertionError();
+	}
 
-	@Inject(method = "render", at = @At("HEAD"), cancellable = true)
-	private void makePaintingTransparent(PaintingEntityRenderState paintingEntityRenderState, MatrixStack matrixStack,
-                                         OrderedRenderCommandQueue orderedRenderCommandQueue, CameraRenderState cameraRenderState,
+	@Inject(method = "submit", at = @At("HEAD"), cancellable = true)
+	private void makePaintingTransparent(PaintingRenderState paintingEntityRenderState, PoseStack matrixStack,
+                                         SubmitNodeCollector orderedRenderCommandQueue, CameraRenderState cameraRenderState,
                                          CallbackInfo ci) {
 		PaintingVariant paintingVariant = paintingEntityRenderState.variant;
 		if (paintingVariant != null) {
-			matrixStack.push();
-			matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((float)(180 - paintingEntityRenderState.facing.getHorizontalQuarterTurns() * 90)));
-			Sprite backSprite = paintingAtlases.getSprite(Identifier.ofVanilla("back"));
-            Sprite frontSprite = paintingAtlases.getSprite(paintingVariant.assetId());
+			matrixStack.pushPose();
+			matrixStack.rotate(Axis.YP.rotationDegrees((float)(180 - paintingEntityRenderState.direction.get2DDataValue() * 90)));
+			TextureAtlasSprite backSprite = paintingsAtlas.getSprite(Identifier.withDefaultNamespace("back"));
+            TextureAtlasSprite frontSprite = paintingsAtlas.getSprite(paintingVariant.assetId());
 			this.renderPainting(matrixStack,
                     orderedRenderCommandQueue,
-                    RenderLayers.entityTranslucent(backSprite.getAtlasId()),
-                    paintingEntityRenderState.lightmapCoordinates,
+                    RenderTypes.entityTranslucent(backSprite.atlasLocation()),
+                    paintingEntityRenderState.lightCoordsPerBlock,
                     paintingVariant.width(),
                     paintingVariant.height(),
                     frontSprite,
                     backSprite);
-			matrixStack.pop();
-			super.render(paintingEntityRenderState, matrixStack, orderedRenderCommandQueue, cameraRenderState);
+			matrixStack.popPose();
+			super.submit(paintingEntityRenderState, matrixStack, orderedRenderCommandQueue, cameraRenderState);
 		}
 
 		ci.cancel();
 	}
 
 	@Inject(method = "renderPainting", at = @At("HEAD"), cancellable = true)
-	private void handleBackRendering(MatrixStack matrixStack, OrderedRenderCommandQueue orderedRenderCommandQueue,
-                                     RenderLayer renderLayer, int[] lightmapCoordinates, int width, int height,
-                                     Sprite paintingSprite, Sprite backSprite, CallbackInfo ci) {
-		orderedRenderCommandQueue.submitCustom(matrixStack, renderLayer, ((entry, vertexConsumer) -> {
+	private void handleBackRendering(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue,
+                                     RenderType renderLayer, int[] lightmapCoordinates, int width, int height,
+                                     TextureAtlasSprite paintingSprite, TextureAtlasSprite backSprite, CallbackInfo ci) {
+		orderedRenderCommandQueue.submitCustomGeometry(matrixStack, renderLayer, ((entry, vertexConsumer) -> {
             float f = (float)(-width) / 2.0F;
             float g = (float)(-height) / 2.0F;
-            float i = backSprite.getMinU();
-            float j = backSprite.getMaxU();
-            float k = backSprite.getMinV();
-            float l = backSprite.getMaxV();
-            float m = backSprite.getMinU();
-            float n = backSprite.getMaxU();
-            float o = backSprite.getMinV();
-            float p = backSprite.getFrameV(0.0625F);
-            float q = backSprite.getMinU();
-            float r = backSprite.getFrameU(0.0625F);
-            float s = backSprite.getMinV();
-            float t = backSprite.getMaxV();
+            float i = backSprite.getU0();
+            float j = backSprite.getU1();
+            float k = backSprite.getV0();
+            float l = backSprite.getV1();
+            float m = backSprite.getU0();
+            float n = backSprite.getU1();
+            float o = backSprite.getV0();
+            float p = backSprite.getV(0.0625F);
+            float q = backSprite.getU0();
+            float r = backSprite.getU(0.0625F);
+            float s = backSprite.getV0();
+            float t = backSprite.getV1();
             double d = (double)1.0F / (double)width;
             double e = (double)1.0F / (double)height;
 
-            SpriteContents contents = paintingSprite.getContents();
+            SpriteContents contents = paintingSprite.contents();
 
             for(int u = 0; u < width; ++u) {
                 for(int v = 0; v < height; ++v) {
@@ -90,41 +92,41 @@ public abstract class MixinPaintingRenderer extends EntityRenderer<PaintingEntit
                     float y = g + (float)(v + 1);
                     float z = g + (float)v;
                     int aa = lightmapCoordinates[u + v * width];
-                    float ab = paintingSprite.getFrameU((float)(d * (double)(width - u)));
-                    float ac = paintingSprite.getFrameU((float)(d * (double)(width - (u + 1))));
-                    float ad = paintingSprite.getFrameV((float)(e * (double)(height - v)));
-                    float ae = paintingSprite.getFrameV((float)(e * (double)(height - (v + 1))));
+                    float ab = paintingSprite.getU((float)(d * (double)(width - u)));
+                    float ac = paintingSprite.getU((float)(d * (double)(width - (u + 1))));
+                    float ad = paintingSprite.getV((float)(e * (double)(height - v)));
+                    float ae = paintingSprite.getV((float)(e * (double)(height - (v + 1))));
 
-                    this.vertex(entry, vertexConsumer, w, z, ac, ad, -0.03125F, 0, 0, -1, aa);
-                    this.vertex(entry, vertexConsumer, x, z, ab, ad, -0.03125F, 0, 0, -1, aa);
-                    this.vertex(entry, vertexConsumer, x, y, ab, ae, -0.03125F, 0, 0, -1, aa);
-                    this.vertex(entry, vertexConsumer, w, y, ac, ae, -0.03125F, 0, 0, -1, aa);
+                    vertex(entry, vertexConsumer, w, z, ac, ad, -0.03125F, 0, 0, -1, aa);
+                    vertex(entry, vertexConsumer, x, z, ab, ad, -0.03125F, 0, 0, -1, aa);
+                    vertex(entry, vertexConsumer, x, y, ab, ae, -0.03125F, 0, 0, -1, aa);
+                    vertex(entry, vertexConsumer, w, y, ac, ae, -0.03125F, 0, 0, -1, aa);
 
-                    if (!contents.isPixelTransparent(0, u, v)) {
-                        this.vertex(entry, vertexConsumer, w, y, j, k, 0.03125F, 0, 0, 1, aa);
-                        this.vertex(entry, vertexConsumer, x, y, i, k, 0.03125F, 0, 0, 1, aa);
-                        this.vertex(entry, vertexConsumer, x, z, i, l, 0.03125F, 0, 0, 1, aa);
-                        this.vertex(entry, vertexConsumer, w, z, j, l, 0.03125F, 0, 0, 1, aa);
+                    if (!contents.isTransparent(0, u, v)) {
+                        vertex(entry, vertexConsumer, w, y, j, k, 0.03125F, 0, 0, 1, aa);
+                        vertex(entry, vertexConsumer, x, y, i, k, 0.03125F, 0, 0, 1, aa);
+                        vertex(entry, vertexConsumer, x, z, i, l, 0.03125F, 0, 0, 1, aa);
+                        vertex(entry, vertexConsumer, w, z, j, l, 0.03125F, 0, 0, 1, aa);
 
-                        this.vertex(entry, vertexConsumer, w, y, m, o, -0.03125F, 0, 1, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, y, n, o, -0.03125F, 0, 1, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, y, n, p, 0.03125F, 0, 1, 0, aa);
-                        this.vertex(entry, vertexConsumer, w, y, m, p, 0.03125F, 0, 1, 0, aa);
+                        vertex(entry, vertexConsumer, w, y, m, o, -0.03125F, 0, 1, 0, aa);
+                        vertex(entry, vertexConsumer, x, y, n, o, -0.03125F, 0, 1, 0, aa);
+                        vertex(entry, vertexConsumer, x, y, n, p, 0.03125F, 0, 1, 0, aa);
+                        vertex(entry, vertexConsumer, w, y, m, p, 0.03125F, 0, 1, 0, aa);
 
-                        this.vertex(entry, vertexConsumer, w, z, m, o, 0.03125F, 0, -1, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, z, n, o, 0.03125F, 0, -1, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, z, n, p, -0.03125F, 0, -1, 0, aa);
-                        this.vertex(entry, vertexConsumer, w, z, m, p, -0.03125F, 0, -1, 0, aa);
+                        vertex(entry, vertexConsumer, w, z, m, o, 0.03125F, 0, -1, 0, aa);
+                        vertex(entry, vertexConsumer, x, z, n, o, 0.03125F, 0, -1, 0, aa);
+                        vertex(entry, vertexConsumer, x, z, n, p, -0.03125F, 0, -1, 0, aa);
+                        vertex(entry, vertexConsumer, w, z, m, p, -0.03125F, 0, -1, 0, aa);
 
-                        this.vertex(entry, vertexConsumer, w, y, r, s, 0.03125F, -1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, w, z, r, t, 0.03125F, -1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, w, z, q, t, -0.03125F, -1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, w, y, q, s, -0.03125F, -1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, w, y, r, s, 0.03125F, -1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, w, z, r, t, 0.03125F, -1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, w, z, q, t, -0.03125F, -1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, w, y, q, s, -0.03125F, -1, 0, 0, aa);
 
-                        this.vertex(entry, vertexConsumer, x, y, r, s, -0.03125F, 1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, z, r, t, -0.03125F, 1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, z, q, t, 0.03125F, 1, 0, 0, aa);
-                        this.vertex(entry, vertexConsumer, x, y, q, s, 0.03125F, 1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, x, y, r, s, -0.03125F, 1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, x, z, r, t, -0.03125F, 1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, x, z, q, t, 0.03125F, 1, 0, 0, aa);
+                        vertex(entry, vertexConsumer, x, y, q, s, 0.03125F, 1, 0, 0, aa);
                     }
                 }
             }

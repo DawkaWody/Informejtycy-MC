@@ -34,7 +34,7 @@
     }
   ],
   "depends": {
-    "fabric": "*",
+    "fabric-api": "*",
     "minecraft": "${minecraft_version}"
   },
   "recommends": {

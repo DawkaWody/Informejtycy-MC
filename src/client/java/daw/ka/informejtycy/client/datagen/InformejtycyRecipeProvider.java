@@ -2,300 +2,324 @@ package daw.ka.informejtycy.client.datagen;
 
 import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.item.CustomItems;
+import daw.ka.informejtycy.potion.CustomPotions;
 import daw.ka.informejtycy.util.RecipeHelper;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.data.recipe.SmithingTransformRecipeJsonBuilder;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.data.recipes.BrewingRecipeBuilder;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.SmithingTransformRecipeBuilder;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.ItemTags;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
 public class InformejtycyRecipeProvider extends FabricRecipeProvider {
-	public InformejtycyRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+	public InformejtycyRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
 		super(output, registriesFuture);
 	}
 
 	@Override
-	protected @NonNull RecipeGenerator getRecipeGenerator(RegistryWrapper.@NonNull WrapperLookup wrapperLookup, @NonNull RecipeExporter exporter) {
-		return new RecipeGenerator(wrapperLookup, exporter) {
+	protected @NonNull RecipeProvider createRecipeProvider(HolderLookup.@NonNull Provider wrapperLookup,
+														  @NonNull BootstrapContext<Recipe<?>> recipeOutput,
+														  @NonNull BootstrapContext<Advancement> advancementOutput) {
+		return new RecipeProvider(recipeOutput, advancementOutput) {
 			@Override
-			public void generate() {
-				createShaped(RecipeCategory.MISC, CustomItems.PITCH_CONTEST_TROPHY, 1)
+			public void buildRecipes() {
+				shaped(RecipeCategory.MISC, CustomItems.PITCH_CONTEST_TROPHY, 1)
 						.pattern("BGB")
 						.pattern("GBG")
 						.pattern("BGB")
-						.input('B', CustomItems.BALLS_UNDER_MAGNIFIER)
-						.input('G', Items.GOLD_BLOCK)
-						.criterion(hasItem(CustomItems.BALLS_UNDER_MAGNIFIER), conditionsFromItem(CustomItems.BALLS_UNDER_MAGNIFIER))
-						.offerTo(exporter);
+						.define('B', CustomItems.BALLS_UNDER_MAGNIFIER)
+						.define('G', Items.GOLD_BLOCK)
+						.unlockedBy(getHasName(CustomItems.BALLS_UNDER_MAGNIFIER), has(CustomItems.BALLS_UNDER_MAGNIFIER))
+						.save(this.output);
 
-				createShaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.DARK_GLOWSTONE, 4)
+				shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.DARK_GLOWSTONE, 4)
 						.pattern("SGS")
 						.pattern("GNG")
 						.pattern("SGS")
-						.input('S', Items.SCULK)
-						.input('G', Items.GLOWSTONE)
-						.input('N', Items.NETHERITE_INGOT)
-						.criterion(hasItem(Items.GLOWSTONE), conditionsFromItem(Items.GLOWSTONE))
-						.offerTo(exporter, "dark_glowstone");
+						.define('S', Items.SCULK)
+						.define('G', Items.GLOWSTONE)
+						.define('N', Items.NETHERITE_INGOT)
+						.unlockedBy(getHasName(Items.GLOWSTONE), has(Items.GLOWSTONE))
+						.save(this.output, "dark_glowstone");
 
-				createShaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.DARK_GLOWSTONE, 1)
+				shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.DARK_GLOWSTONE, 1)
 						.pattern("##")
 						.pattern("##")
-						.input('#', CustomItems.DARK_GLOWSTONE_DUST)
-						.criterion(hasItem(CustomItems.DARK_GLOWSTONE_DUST), conditionsFromItem(CustomItems.DARK_GLOWSTONE_DUST))
-						.offerTo(exporter, "dark_glowstone_from_dust");
+						.define('#', CustomItems.DARK_GLOWSTONE_DUST)
+						.unlockedBy(getHasName(CustomItems.DARK_GLOWSTONE_DUST), has(CustomItems.DARK_GLOWSTONE_DUST))
+						.save(this.output, "dark_glowstone_from_dust");
 
-				createShaped(RecipeCategory.MISC, CustomBlocks.THEORY_FORGE_BLOCK, 1)
+				shaped(RecipeCategory.MISC, CustomBlocks.THEORY_FORGE_BLOCK, 1)
 						.pattern("GCG")
 						.pattern("CSC")
 						.pattern("BBB")
-						.input('G', CustomBlocks.DARK_GLOWSTONE)
-						.input('C', Items.MAGENTA_CONCRETE)
-						.input('S', Items.BLAST_FURNACE)
-						.input('B', Items.BLACKSTONE)
-						.criterion(hasItem(CustomBlocks.DARK_GLOWSTONE), conditionsFromItem(CustomBlocks.DARK_GLOWSTONE))
-						.offerTo(exporter);
+						.define('G', CustomBlocks.DARK_GLOWSTONE)
+						.define('C', Items.CONCRETE.pick(DyeColor.MAGENTA))
+						.define('S', Items.BLAST_FURNACE)
+						.define('B', Items.BLACKSTONE)
+						.unlockedBy(getHasName(CustomBlocks.DARK_GLOWSTONE), has(CustomBlocks.DARK_GLOWSTONE))
+						.save(this.output);
 
-				createShaped(RecipeCategory.MISC, CustomBlocks.BRAINROT_TABLE_BLOCK, 1)
+				shaped(RecipeCategory.MISC, CustomBlocks.BRAINROT_TABLE_BLOCK, 1)
 						.pattern("GG")
 						.pattern("PP")
 						.pattern("PP")
-						.input('G', CustomBlocks.DARK_GLOWSTONE)
-						.input('P', ItemTags.PLANKS)
-						.criterion(hasItem(CustomBlocks.DARK_GLOWSTONE), conditionsFromItem(CustomBlocks.DARK_GLOWSTONE))
-						.offerTo(exporter);
+						.define('G', CustomBlocks.DARK_GLOWSTONE)
+						.define('P', ItemTags.PLANKS)
+						.unlockedBy(getHasName(CustomBlocks.DARK_GLOWSTONE), has(CustomBlocks.DARK_GLOWSTONE))
+						.save(this.output);
 
-				createShaped(RecipeCategory.MISC, CustomItems.NO_MORE_TEARS_MUSIC_DISC, 1)
+				shaped(RecipeCategory.MISC, CustomItems.NO_MORE_TEARS_MUSIC_DISC, 1)
 						.pattern(" G ")
 						.pattern("GDE")
 						.pattern(" E ")
-						.input('G', CustomItems.DARK_GLOWSTONE_DUST)
-						.input('D', Items.MUSIC_DISC_TEARS)
-						.input('E', Items.ECHO_SHARD)
-						.criterion(hasItem(Items.MUSIC_DISC_TEARS), conditionsFromItem(Items.MUSIC_DISC_TEARS))
-						.offerTo(exporter);
+						.define('G', CustomItems.DARK_GLOWSTONE_DUST)
+						.define('D', Items.MUSIC_DISC_TEARS)
+						.define('E', Items.ECHO_SHARD)
+						.unlockedBy(getHasName(Items.MUSIC_DISC_TEARS), has(Items.MUSIC_DISC_TEARS))
+						.save(this.output);
 
-				createShaped(RecipeCategory.TOOLS, CustomItems.TALISMAN_OF_SHRIEK, 1)
+				shaped(RecipeCategory.TOOLS, CustomItems.TALISMAN_OF_SHRIEK, 1)
 						.pattern(" G ")
 						.pattern("GAG")
 						.pattern(" S ")
-						.input('G', CustomBlocks.DARK_GLOWSTONE)
-						.input('A', Items.AMETHYST_SHARD)
-						.input('S', Items.SCULK_SHRIEKER)
-						.criterion(hasItem(CustomBlocks.DARK_GLOWSTONE), conditionsFromItem(CustomBlocks.DARK_GLOWSTONE))
-						.offerTo(exporter);
+						.define('G', CustomBlocks.DARK_GLOWSTONE)
+						.define('A', Items.AMETHYST_SHARD)
+						.define('S', Items.SCULK_SHRIEKER)
+						.unlockedBy(getHasName(CustomBlocks.DARK_GLOWSTONE), has(CustomBlocks.DARK_GLOWSTONE))
+						.save(this.output);
 
-				createShaped(RecipeCategory.MISC, CustomBlocks.SILVER_WOLF_BLOCK, 1)
+				shaped(RecipeCategory.MISC, CustomBlocks.SILVER_WOLF_BLOCK, 1)
 						.pattern("SSS")
 						.pattern("SSS")
 						.pattern("SSS")
-						.input('S', CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter, "silver_wolf_block");
+						.define('S', CustomItems.SILVER_WOLF)
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output, "silver_wolf_block");
 
-				createShaped(RecipeCategory.MISC, CustomBlocks.GOLDEN_WOLF_BLOCK, 1)
+				shaped(RecipeCategory.MISC, CustomBlocks.GOLDEN_WOLF_BLOCK, 1)
 						.pattern("GGG")
 						.pattern("GGG")
 						.pattern("GGG")
-						.input('G', CustomItems.GOLDEN_WOLF)
-						.criterion(hasItem(CustomItems.GOLDEN_WOLF), conditionsFromItem(CustomItems.GOLDEN_WOLF))
-						.offerTo(exporter, "golden_wolf_block");
+						.define('G', CustomItems.GOLDEN_WOLF)
+						.unlockedBy(getHasName(CustomItems.GOLDEN_WOLF), has(CustomItems.GOLDEN_WOLF))
+						.save(this.output, "golden_wolf_block");
 
-                createShaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.GLINIANKA_BLOCK, 1)
+                shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.GLINIANKA_BLOCK, 1)
                         .pattern("CS")
                         .pattern("SC")
-                        .input('C', Items.CLAY)
-                        .input('S', CustomBlocks.SILVER_WOLF_BLOCK)
-                        .criterion(hasItem(CustomBlocks.SILVER_WOLF_BLOCK), conditionsFromItem(CustomBlocks.SILVER_WOLF_BLOCK))
-                        .offerTo(exporter, "glinianka_block");
+                        .define('C', Items.CLAY)
+                        .define('S', CustomBlocks.SILVER_WOLF_BLOCK)
+                        .unlockedBy(getHasName(CustomBlocks.SILVER_WOLF_BLOCK), has(CustomBlocks.SILVER_WOLF_BLOCK))
+                        .save(this.output, "glinianka_block");
 
 
-                createShaped(RecipeCategory.MISC, CustomBlocks.TRASH_CAN, 1)
+                shaped(RecipeCategory.MISC, CustomBlocks.TRASH_CAN, 1)
                         .pattern("I I")
                         .pattern("III")
                         .pattern("DDD")
-                        .input('I', Items.IRON_INGOT)
-                        .input('D', Items.COARSE_DIRT)
-                        .criterion(hasItem(Items.IRON_INGOT), conditionsFromItem(Items.IRON_INGOT))
-                        .offerTo(exporter, "trash_can");
+                        .define('I', Items.IRON_INGOT)
+                        .define('D', Items.COARSE_DIRT)
+                        .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
+                        .save(this.output, "trash_can");
 
-                createShaped(RecipeCategory.COMBAT, CustomItems.ZMYSIO_SWORD, 1)
+                shaped(RecipeCategory.COMBAT, CustomItems.ZMYSIO_SWORD, 1)
                         .pattern(" P ")
                         .pattern("MSM")
                         .pattern(" T ")
-                        .input('T', Items.GHAST_TEAR)
-                        .input('M', CustomItems.ZMYSIO_MILK_BUCKET)
-                        .input('S', CustomItems.REINFORCED_INFORMEJTYCY_SWORD)
-                        .input('P', CustomItems.PLUS)
-                        .criterion(hasItem(CustomItems.PLUS), conditionsFromItem(CustomItems.PLUS))
-                        .offerTo(exporter, "zmysio_sword");
+                        .define('T', Items.GHAST_TEAR)
+                        .define('M', CustomItems.ZMYSIO_MILK_BUCKET)
+                        .define('S', CustomItems.REINFORCED_INFORMEJTYCY_SWORD)
+                        .define('P', CustomItems.PLUS)
+                        .unlockedBy(getHasName(CustomItems.PLUS), has(CustomItems.PLUS))
+                        .save(this.output, "zmysio_sword");
 
-                createShaped(RecipeCategory.TRANSPORTATION, CustomItems.ZMYSIO_ELYTRA, 1)
+                shaped(RecipeCategory.TRANSPORTATION, CustomItems.ZMYSIO_ELYTRA, 1)
                         .pattern("S S")
                         .pattern("PEP")
                         .pattern(" P ")
-                        .input('S', Items.ARMADILLO_SCUTE)
-                        .input('E', Items.ELYTRA)
-                        .input('P', CustomItems.PLUS)
-                        .criterion(hasItem(Items.ELYTRA), conditionsFromItem(Items.ELYTRA))
-                        .offerTo(exporter, "zmysio_elytra");
+                        .define('S', Items.ARMADILLO_SCUTE)
+                        .define('E', Items.ELYTRA)
+                        .define('P', CustomItems.PLUS)
+                        .unlockedBy(getHasName(Items.ELYTRA), has(Items.ELYTRA))
+                        .save(this.output, "zmysio_elytra");
 
-				createShaped(RecipeCategory.COMBAT, CustomItems.PRESIDENT_HELMET, 1)
+				shaped(RecipeCategory.COMBAT, CustomItems.PRESIDENT_HELMET, 1)
 						.pattern("GCG")
 						.pattern("GHG")
-						.input('G', CustomItems.CONCENTRATED_ZARZYK_GEL)
-						.input('C', Items.COOKIE)
-						.input('H', CustomItems.REINFORCED_INFORMEJTYCY_HELMET)
-						.criterion(hasItem(CustomItems.CONCENTRATED_ZARZYK_GEL), conditionsFromItem(CustomItems.CONCENTRATED_ZARZYK_GEL))
-						.offerTo(exporter, "president_helmet");
+						.define('G', CustomItems.CONCENTRATED_ZARZYK_GEL)
+						.define('C', Items.COOKIE)
+						.define('H', CustomItems.REINFORCED_INFORMEJTYCY_HELMET)
+						.unlockedBy(getHasName(CustomItems.CONCENTRATED_ZARZYK_GEL), has(CustomItems.CONCENTRATED_ZARZYK_GEL))
+						.save(this.output, "president_helmet");
 
-				createShapeless(RecipeCategory.MISC, CustomItems.SILVER_WOLF, 9)
-						.input(CustomBlocks.SILVER_WOLF_BLOCK)
-						.criterion(hasItem(CustomBlocks.SILVER_WOLF_BLOCK), conditionsFromItem(CustomBlocks.SILVER_WOLF_BLOCK))
-						.offerTo(exporter, "silver_wolf_from_block");
+				shapeless(RecipeCategory.MISC, CustomItems.SILVER_WOLF, 9)
+						.requires(CustomBlocks.SILVER_WOLF_BLOCK)
+						.unlockedBy(getHasName(CustomBlocks.SILVER_WOLF_BLOCK), has(CustomBlocks.SILVER_WOLF_BLOCK))
+						.save(this.output, "silver_wolf_from_block");
 
-				createShapeless(RecipeCategory.MISC, CustomItems.GOLDEN_WOLF, 9)
-						.input(CustomBlocks.GOLDEN_WOLF_BLOCK)
-						.criterion(hasItem(CustomBlocks.GOLDEN_WOLF_BLOCK), conditionsFromItem(CustomBlocks.GOLDEN_WOLF_BLOCK))
-						.offerTo(exporter, "golden_wolf_from_block");
+				shapeless(RecipeCategory.MISC, CustomItems.GOLDEN_WOLF, 9)
+						.requires(CustomBlocks.GOLDEN_WOLF_BLOCK)
+						.unlockedBy(getHasName(CustomBlocks.GOLDEN_WOLF_BLOCK), has(CustomBlocks.GOLDEN_WOLF_BLOCK))
+						.save(this.output, "golden_wolf_from_block");
 
-				RecipeHelper.createHelmetRecipe(createShaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_HELMET, 1),
+				RecipeHelper.createHelmetRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_HELMET, 1),
 						CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
 
-				RecipeHelper.createChestplateRecipe(createShaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_CHESTPLATE, 1),
+				RecipeHelper.createChestplateRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_CHESTPLATE, 1),
 						CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
 
-				RecipeHelper.createLeggingsRecipe(createShaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_LEGGINGS, 1),
+				RecipeHelper.createLeggingsRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_LEGGINGS, 1),
 						CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
 
-				RecipeHelper.createBootsRecipe(createShaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_BOOTS, 1),
+				RecipeHelper.createBootsRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_BOOTS, 1),
 						CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
 
-				RecipeHelper.createSwordRecipe(createShaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SWORD, 1),
+				RecipeHelper.createSwordRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SWORD, 1),
 						CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
-				RecipeHelper.createPickaxeRecipe(createShaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_PICKAXE, 1),
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
+				RecipeHelper.createPickaxeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_PICKAXE, 1),
 								CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
-				RecipeHelper.createShovelRecipe(createShaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SHOVEL, 1),
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
+				RecipeHelper.createShovelRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SHOVEL, 1),
 								CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
-				RecipeHelper.createAxeRecipe(createShaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_AXE, 1),
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
+				RecipeHelper.createAxeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_AXE, 1),
 								CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
-				RecipeHelper.createHoeRecipe(createShaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_HOE, 1),
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
+				RecipeHelper.createHoeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_HOE, 1),
 								CustomItems.SILVER_WOLF)
-						.criterion(hasItem(CustomItems.SILVER_WOLF), conditionsFromItem(CustomItems.SILVER_WOLF))
-						.offerTo(exporter);
+						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
+						.save(this.output);
 
-				SmithingTransformRecipeJsonBuilder.create(
-						Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-						Ingredient.ofItems(CustomItems.INFORMEJTYCY_HELMET),
-						Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+				SmithingTransformRecipeBuilder.smithing(
+						Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+						Ingredient.of(CustomItems.INFORMEJTYCY_HELMET),
+						Ingredient.of(CustomItems.GOLDEN_WOLF),
 						RecipeCategory.COMBAT,
 						CustomItems.REINFORCED_INFORMEJTYCY_HELMET
 				)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_HELMET), conditionsFromItem(CustomItems.INFORMEJTYCY_HELMET))
-						.offerTo(exporter, "reinforced_informejtycy_helmet");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_CHESTPLATE),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_HELMET), has(CustomItems.INFORMEJTYCY_HELMET))
+						.save(this.output, "reinforced_informejtycy_helmet");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_CHESTPLATE),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.COMBAT,
 								CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_CHESTPLATE), conditionsFromItem(CustomItems.INFORMEJTYCY_CHESTPLATE))
-						.offerTo(exporter, "reinforced_informejtycy_chestplate");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_LEGGINGS),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_CHESTPLATE), has(CustomItems.INFORMEJTYCY_CHESTPLATE))
+						.save(this.output, "reinforced_informejtycy_chestplate");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_LEGGINGS),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.COMBAT,
 								CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_LEGGINGS), conditionsFromItem(CustomItems.INFORMEJTYCY_LEGGINGS))
-						.offerTo(exporter, "reinforced_informejtycy_leggings");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_BOOTS),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_LEGGINGS), has(CustomItems.INFORMEJTYCY_LEGGINGS))
+						.save(this.output, "reinforced_informejtycy_leggings");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_BOOTS),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.COMBAT,
 								CustomItems.REINFORCED_INFORMEJTYCY_BOOTS
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_BOOTS), conditionsFromItem(CustomItems.INFORMEJTYCY_BOOTS))
-						.offerTo(exporter, "reinforced_informejtycy_boots");
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_BOOTS), has(CustomItems.INFORMEJTYCY_BOOTS))
+						.save(this.output, "reinforced_informejtycy_boots");
 
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_SWORD),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_SWORD),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.COMBAT,
 								CustomItems.REINFORCED_INFORMEJTYCY_SWORD
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_SWORD), conditionsFromItem(CustomItems.INFORMEJTYCY_SWORD))
-						.offerTo(exporter, "reinforced_informejtycy_sword");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_PICKAXE),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_SWORD), has(CustomItems.INFORMEJTYCY_SWORD))
+						.save(this.output, "reinforced_informejtycy_sword");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_PICKAXE),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.TOOLS,
 								CustomItems.REINFORCED_INFORMEJTYCY_PICKAXE
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_PICKAXE), conditionsFromItem(CustomItems.INFORMEJTYCY_PICKAXE))
-						.offerTo(exporter, "reinforced_informejtycy_pickaxe");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_SHOVEL),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_PICKAXE), has(CustomItems.INFORMEJTYCY_PICKAXE))
+						.save(this.output, "reinforced_informejtycy_pickaxe");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_SHOVEL),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.TOOLS,
 								CustomItems.REINFORCED_INFORMEJTYCY_SHOVEL
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_SHOVEL), conditionsFromItem(CustomItems.INFORMEJTYCY_SHOVEL))
-						.offerTo(exporter, "reinforced_informejtycy_shovel");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_AXE),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_SHOVEL), has(CustomItems.INFORMEJTYCY_SHOVEL))
+						.save(this.output, "reinforced_informejtycy_shovel");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_AXE),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.TOOLS,
 								CustomItems.REINFORCED_INFORMEJTYCY_AXE
 						)
-						.criterion("has_informejtycy_axe", conditionsFromItem(CustomItems.INFORMEJTYCY_AXE))
-						.offerTo(exporter, "reinforced_informejtycy_axe");
-				SmithingTransformRecipeJsonBuilder.create(
-								Ingredient.ofItems(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
-								Ingredient.ofItems(CustomItems.INFORMEJTYCY_HOE),
-								Ingredient.ofItems(CustomItems.GOLDEN_WOLF),
+						.unlocks("has_informejtycy_axe", has(CustomItems.INFORMEJTYCY_AXE))
+						.save(this.output, "reinforced_informejtycy_axe");
+				SmithingTransformRecipeBuilder.smithing(
+								Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+								Ingredient.of(CustomItems.INFORMEJTYCY_HOE),
+								Ingredient.of(CustomItems.GOLDEN_WOLF),
 								RecipeCategory.TOOLS,
 								CustomItems.REINFORCED_INFORMEJTYCY_HOE
 						)
-						.criterion(hasItem(CustomItems.INFORMEJTYCY_HOE), conditionsFromItem(CustomItems.INFORMEJTYCY_HOE))
-						.offerTo(exporter, "reinforced_informejtycy_hoe");
+						.unlocks(getHasName(CustomItems.INFORMEJTYCY_HOE), has(CustomItems.INFORMEJTYCY_HOE))
+						.save(this.output, "reinforced_informejtycy_hoe");
+
+				new FabricBrewingProvider(this.output) {
+					@Override
+					protected void buildMixes() {
+						buildStartMix(Item.byBlock(CustomBlocks.SILVER_WOLF_ORE), CustomPotions.AURA_POTION);
+					}
+
+					@Override
+					protected void buildTransformations() {
+						save(BrewingRecipeBuilder.brewingContainerTransform(
+								Items.POTION, CustomPotions.AURA_POTION, Items.GUNPOWDER, Items.SPLASH_POTION));
+						save(BrewingRecipeBuilder.brewingContainerTransform(
+								Items.SPLASH_POTION, CustomPotions.AURA_POTION, Items.DRAGON_BREATH, Items.LINGERING_POTION));
+					}
+				}.buildRecipes();
 			}
 		};
 	}
 
 	@Override
-	public String getName() {
+	public @NonNull String getName() {
 		return "Recipe (zmysio hot)";
 	}
 }

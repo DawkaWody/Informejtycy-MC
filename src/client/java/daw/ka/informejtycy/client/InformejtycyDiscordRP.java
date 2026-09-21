@@ -5,8 +5,8 @@ import com.jagrosh.discordipc.IPCListener;
 import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import daw.ka.informejtycy.Informejtycy;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ServerData;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class InformejtycyDiscordRP {
 				ready = true;
 				loggedMissingDiscord = false;
 				startTimestamp = OffsetDateTime.now();
-                nickname = MinecraftClient.getInstance().getSession().getUsername();
+                nickname = Minecraft.getInstance().getUser().getName();
 				Informejtycy.LOGGER.info("Connected to Discord {}", client.getDiscordBuild());
 			}
 
@@ -100,14 +100,14 @@ public class InformejtycyDiscordRP {
 			if (!ready) return;
 		}
 
-		MinecraftClient client = MinecraftClient.getInstance();
-		ServerInfo server = client.getCurrentServerEntry();
+		Minecraft client = Minecraft.getInstance();
+		ServerData server = client.getCurrentServer();
 
-		if (client.isInSingleplayer() || client.isIntegratedServerRunning()) {
+		if (client.isLocalServer() || client.hasSingleplayerServer()) {
 			setRpSingleplayer();
 		}
 		else if (server != null) {
-			setRpMultiplayer(server.address);
+			setRpMultiplayer(server.ip);
 		}
 		else {
 			setRpMenu();

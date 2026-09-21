@@ -22,7 +22,7 @@ Projekt Informejtycy to darmowa platforma online, oferująca edukację informaty
 ## Building from source
 
 Requirements:
-- Java 21
+- Java 25
 - Gradle
 
 Build:

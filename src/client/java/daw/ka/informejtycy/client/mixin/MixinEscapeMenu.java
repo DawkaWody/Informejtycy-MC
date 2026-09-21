@@ -1,17 +1,13 @@
 package daw.ka.informejtycy.client.mixin;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
-import net.minecraft.SharedConstants;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ConfirmLinkScreen;
-import net.minecraft.client.gui.screen.GameMenuScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.GridWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.screens.PauseScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,11 +15,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.net.URI;
-
-@Mixin(value = GameMenuScreen.class)
+@Mixin(value = PauseScreen.class)
 public abstract class MixinEscapeMenu {
-	@Unique private static final URI INFORMEJTYCY_URI = URI.create("https://informejtycy.pl/");
 	@Unique private static final Identifier TOP_LOGO = InformejtycyRegistry.id("textures/gui/pause_menu_logo.png");
 	@Unique private static final int TOP_LOGO_WIDTH = 2048;
 	@Unique private static final int TOP_LOGO_HEIGHT = 350;
@@ -32,47 +25,62 @@ public abstract class MixinEscapeMenu {
 	@Unique private static final int BOTTOM_LOGO_WIDTH = 1400;
 	@Unique private static final int BOTTOM_LOGO_HEIGHT = 450;
 
-	@Shadow @Final private boolean showMenu;
-	@Shadow protected abstract void initWidgets();
-	@Shadow public abstract boolean shouldShowMenu();
+	@Unique private static final int LOGO_MARGIN = 4;
+	@Unique private static final int MIN_LOGO_HEIGHT = 8;
 
-	@Shadow @Final private static Text SEND_FEEDBACK_TEXT;
-
-	@Shadow @Final private static Text REPORT_BUGS_TEXT;
+	@Shadow protected abstract void createPauseMenu();
+	@Shadow public abstract boolean showsPauseMenu();
 
 	@Inject(method = "init", at = @At("HEAD"), cancellable = true)
 	private void removeText(CallbackInfo ci) {
-		if (this.showMenu) {
-			this.initWidgets();
+		if (this.showsPauseMenu()) {
+			this.createPauseMenu();
 		}
 		ci.cancel();
 	}
 
-	@Inject(method = "render", at = @At("TAIL"))
-	private void renderLogo(DrawContext context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
-		if (this.shouldShowMenu()) {
-			drawLogo(context, TOP_LOGO_WIDTH, TOP_LOGO_HEIGHT, 275, 50, 10, TOP_LOGO);
-			drawLogo(context, BOTTOM_LOGO_WIDTH, BOTTOM_LOGO_HEIGHT, 165, 50, 195, BOTTOM_LOGO);
-		}
-	}
+	@Inject(method = "extractRenderState", at = @At("TAIL"))
+	private void renderLogo(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
+		if (!this.showsPauseMenu()) return;
 
-	@Inject(method = "addFeedbackAndBugsButtons", at = @At("HEAD"), cancellable = true)
-	private static void swapButtonLinks(Screen parentScreen, GridWidget.Adder gridAdder, CallbackInfo ci) {
-		gridAdder.add(ButtonWidget.builder(SEND_FEEDBACK_TEXT, ConfirmLinkScreen.opening(parentScreen, INFORMEJTYCY_URI)).width(98).build());
-		gridAdder.add(ButtonWidget.builder(REPORT_BUGS_TEXT, ConfirmLinkScreen.opening(parentScreen, INFORMEJTYCY_URI)).width(98).build()).active = !SharedConstants.getGameVersion().dataVersion().isNotMainSeries();
-		ci.cancel();
+		int menuTop = graphics.guiHeight();
+		int menuBottom = 0;
+		for (GuiEventListener child : ((Screen) (Object) this).children()) {
+			if (child instanceof AbstractWidget widget && widget.visible) {
+				menuTop = Math.min(menuTop, widget.getY());
+				menuBottom = Math.max(menuBottom, widget.getY() + widget.getHeight());
+			}
+		}
+		if (menuBottom <= 0) return;
+
+		drawLogo(graphics, TOP_LOGO_WIDTH, TOP_LOGO_HEIGHT, 275, 50, 0, menuTop, TOP_LOGO);
+		drawLogo(graphics, BOTTOM_LOGO_WIDTH, BOTTOM_LOGO_HEIGHT, 165, 50, menuBottom, graphics.guiHeight(), BOTTOM_LOGO);
 	}
 
 	@Unique
-	private void drawLogo(DrawContext context, int width, int height, int drawWidth, int drawHeight, int y, Identifier logo) {
+	private void drawLogo(GuiGraphicsExtractor context, int width, int height, int maxDrawWidth, int maxDrawHeight,
+						  int bandTop, int bandBottom, Identifier logo) {
+		int band = bandBottom - bandTop - LOGO_MARGIN * 2;
+		if (band < MIN_LOGO_HEIGHT) return;
+
+		int drawHeight = Math.min(maxDrawHeight, band);
+		int drawWidth = maxDrawWidth * drawHeight / maxDrawHeight;
+		int widthLimit = context.guiWidth() - LOGO_MARGIN * 2;
+		if (drawWidth > widthLimit) {
+			drawWidth = widthLimit;
+			drawHeight = maxDrawHeight * drawWidth / maxDrawWidth;
+		}
+		if (drawHeight < MIN_LOGO_HEIGHT) return;
+
 		float scaleX = (float) drawWidth / width;
 		float scaleY = (float) drawHeight / height;
-		int x = context.getScaledWindowWidth() / 2 - drawWidth / 2;
-		context.getMatrices().pushMatrix();
-		context.getMatrices().translate(x, y);
-		context.getMatrices().scale(scaleX, scaleY);
-		context.drawTexture(RenderPipelines.GUI_TEXTURED,
+		int x = (context.guiWidth() - drawWidth) / 2;
+		int y = bandTop + LOGO_MARGIN + (band - drawHeight) / 2;
+		context.pose().pushMatrix();
+		context.pose().translate(x, y);
+		context.pose().scale(scaleX, scaleY);
+		context.blit(RenderPipelines.GUI_TEXTURED,
 				logo, 0, 0, 0, 0, width, height, width, height);
-		context.getMatrices().popMatrix();
+		context.pose().popMatrix();
 	}
 }

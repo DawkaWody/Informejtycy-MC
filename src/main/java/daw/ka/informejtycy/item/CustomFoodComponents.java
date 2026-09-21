@@ -1,43 +1,43 @@
 package daw.ka.informejtycy.item;
 
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.component.type.ConsumableComponents;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 import java.util.List;
 
 public class CustomFoodComponents {
-	public static final FoodComponent LIGHT_FOOD = new FoodComponent.Builder()
+	public static final FoodProperties LIGHT_FOOD = new FoodProperties.Builder()
 			.nutrition(1)
 			.saturationModifier(0.25f)
 			.alwaysEdible()
 			.build();
-    public static final FoodComponent ZMYSIO_MILK = new FoodComponent.Builder()
+    public static final FoodProperties ZMYSIO_MILK = new FoodProperties.Builder()
             .nutrition(4)
             .saturationModifier(1.2f)
             .alwaysEdible()
             .build();
-	public static final FoodComponent ZARZYK_GEL = new FoodComponent.Builder()
+	public static final FoodProperties ZARZYK_GEL = new FoodProperties.Builder()
 			.nutrition(6)
 			.saturationModifier(0.2f)
 			.alwaysEdible()
 			.build();
 
-	public static final ConsumableComponent LIGHT_FOOD_CONSUMABLE = ConsumableComponents.food().consumeEffect(
-			new ApplyEffectsConsumeEffect(List.of(
-					new StatusEffectInstance(StatusEffects.SLOW_FALLING, 200)
+	public static final Consumable LIGHT_FOOD_CONSUMABLE = Consumables.defaultFood().onConsume(
+			new ApplyStatusEffectsConsumeEffect(List.of(
+					new MobEffectInstance(MobEffects.SLOW_FALLING, 200)
 			))).build();
-    public static final ConsumableComponent ZMYSIO_MILK_CONSUMABLE = ConsumableComponents.drink().consumeEffect(
-            new ApplyEffectsConsumeEffect(List.of(
-                    new StatusEffectInstance(StatusEffects.STRENGTH, 1200, 2),
-                    new StatusEffectInstance(StatusEffects.NAUSEA, 1200, 2)
+    public static final Consumable ZMYSIO_MILK_CONSUMABLE = Consumables.defaultDrink().onConsume(
+            new ApplyStatusEffectsConsumeEffect(List.of(
+                    new MobEffectInstance(MobEffects.STRENGTH, 1200, 2),
+                    new MobEffectInstance(MobEffects.NAUSEA, 1200, 2)
             ))).build();
-	public static final ConsumableComponent ZARZYK_GEL_CONSUMABLE = ConsumableComponents.drink().consumeEffect(
-				new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.LUCK, 6000, 0), 0.5f)
-			).consumeEffect(
-					new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.HASTE, 6000, 2), 0.5f)
+	public static final Consumable ZARZYK_GEL_CONSUMABLE = Consumables.defaultDrink().onConsume(
+				new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.LUCK, 6000, 0), 0.5f)
+			).onConsume(
+					new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.HASTE, 6000, 2), 0.5f)
 			).build();
 }

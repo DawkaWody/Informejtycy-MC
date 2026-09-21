@@ -1,38 +1,32 @@
 package daw.ka.informejtycy.block.custom;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.math.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.core.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class FacingBlock extends HorizontalFacingBlock {
-	public static final MapCodec<FacingBlock> CODEC = FacingBlock.createCodec(FacingBlock::new);
-	public static final Property<Direction> FACING = Properties.HORIZONTAL_FACING;
+public class FacingBlock extends HorizontalDirectionalBlock {
+	public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-	public FacingBlock(Settings settings) {
+	public FacingBlock(Properties settings) {
 		super(settings);
-		setDefaultState(getDefaultState().with(FACING, Direction.NORTH));
+		registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override
-	public @Nullable BlockState getPlacementState(ItemPlacementContext ctx) {
-		return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+	public @Nullable BlockState getStateForPlacement(BlockPlaceContext ctx) {
+		return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
 	}
 
 	@Override
-	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
-		super.appendProperties(builder);
+		super.createBlockStateDefinition(builder);
 	}
 
-	@Override
-	protected MapCodec<? extends HorizontalFacingBlock> getCodec() {
-		return CODEC;
-	}
 }

@@ -4,10 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import daw.ka.informejtycy.Informejtycy;
 import daw.ka.informejtycy.mixin.StructurePoolAccessor;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.structure.pool.StructurePool;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +19,8 @@ public class ZabkaHouses {
     private static final List<String> VILLAGE_TYPES = List.of("plains", "desert", "savanna", "snowy", "taiga");
     private static final Set<Identifier> HOUSE_POOLS = VILLAGE_TYPES.stream()
             .flatMap(type -> Stream.of(
-                    Identifier.ofVanilla("village/" + type + "/houses"),
-                    Identifier.ofVanilla("village/" + type + "/zombie/houses")
+                    Identifier.withDefaultNamespace("village/" + type + "/houses"),
+                    Identifier.withDefaultNamespace("village/" + type + "/zombie/houses")
             )).collect(Collectors.toSet());
     private static final List<String> ZABKA_HOUSES = List.of(
             "zabka1",
@@ -32,7 +32,7 @@ public class ZabkaHouses {
 
     public static void register() {
         DynamicRegistrySetupCallback.EVENT.register(view -> {
-            view.registerEntryAdded(RegistryKeys.TEMPLATE_POOL, ((rawId, id, pool) -> {
+            view.registerEntryAdded(Registries.TEMPLATE_POOL, ((rawId, id, pool) -> {
                 if (HOUSE_POOLS.contains(id)) {
                     addHouses(pool);
                 }
@@ -40,14 +40,14 @@ public class ZabkaHouses {
         });
     }
 
-    private static void addHouses(StructurePool pool) {
+    private static void addHouses(StructureTemplatePool pool) {
         StructurePoolAccessor accessor = (StructurePoolAccessor) pool;
-        List<Pair<StructurePoolElement, Integer>> weights = new ArrayList<>(pool.getElementWeights());
+        List<Pair<StructurePoolElement, Integer>> weights = new ArrayList<>(pool.getTemplates());
 
         for (String house : ZABKA_HOUSES) {
             String location = Informejtycy.MOD_ID + ":village/zabka/" + house;
-            StructurePoolElement element = StructurePoolElement.ofLegacySingle(location)
-                    .apply(StructurePool.Projection.RIGID);
+            StructurePoolElement element = StructurePoolElement.legacy(location)
+                    .apply(StructureTemplatePool.Projection.RIGID);
 
             weights.add(Pair.of(element, WEIGHT));
             for (int i = 0; i < WEIGHT; i++) {

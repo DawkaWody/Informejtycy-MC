@@ -3,15 +3,13 @@
   "criteria": {
     "zmysio_boss": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "type": "informejtycy:zmysio_boss"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "informejtycy:zmysio_boss"
           }
-        ]
+        }
       },
       "trigger": "minecraft:player_killed_entity"
     }

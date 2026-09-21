@@ -6,13 +6,13 @@ import daw.ka.informejtycy.block.custom.FacingBlock;
 import daw.ka.informejtycy.block.custom.RecyclerBlock;
 import daw.ka.informejtycy.block.custom.TheoryForgeBlock;
 import daw.ka.informejtycy.block.custom.ZmysioSummoningBlock;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.block.SoundType;
 
 public class CustomBlocks {
 	public static Block SILVER_WOLF_ORE;
@@ -31,98 +31,98 @@ public class CustomBlocks {
 	public static Block TUNG_TUNG_SAHUR;
 	public static Block CHIMPANZINI_BANANINI;
 
-	public static final AbstractBlock.Settings SILVER_WOLF_ORE_SETTINGS = AbstractBlock.Settings.create()
+	public static final BlockBehaviour.Properties SILVER_WOLF_ORE_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(4.0f, 1200f)
-			.requiresTool()
-			.mapColor(MapColor.PALE_YELLOW)
-			.luminance(state -> 7);
-	public static final AbstractBlock.Settings DARK_GLOWSTONE_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.mapColor(MapColor.SAND)
+			.lightLevel(state -> 7);
+	public static final BlockBehaviour.Properties DARK_GLOWSTONE_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(0.3F)
-			.sounds(BlockSoundGroup.GLASS)
-			.luminance(state -> 10)
-			.solidBlock(Blocks::never);
-	public static final AbstractBlock.Settings THEORY_FORGE_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+			.sound(SoundType.GLASS)
+			.lightLevel(state -> 10)
+			.isRedstoneConductor(Blocks::never);
+	public static final BlockBehaviour.Properties THEORY_FORGE_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(3.5f, 3.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.STONE)
-			.nonOpaque();
-	public static final AbstractBlock.Settings BRAINROT_TABLE_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.STONE)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties BRAINROT_TABLE_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(2f, 3.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.WOOD)
-			.nonOpaque();
-	public static final AbstractBlock.Settings RECYCLER_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.WOOD)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties RECYCLER_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(-1.0F, 3600000.0F)
-			.dropsNothing()
-			.sounds(BlockSoundGroup.STONE)
-			.nonOpaque();
-    public static final AbstractBlock.Settings GLINIANKA_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+			.noLootTable()
+			.sound(SoundType.STONE)
+			.noOcclusion();
+    public static final BlockBehaviour.Properties GLINIANKA_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
             .strength(0.6f)
-            .sounds(BlockSoundGroup.GRAVEL)
-            .mapColor(MapColor.BROWN);
-    public static final AbstractBlock.Settings TRASH_CAN_SETTINGS = AbstractBlock.Settings.create()
+            .sound(SoundType.GRAVEL)
+            .mapColor(MapColor.COLOR_BROWN);
+    public static final BlockBehaviour.Properties TRASH_CAN_SETTINGS = BlockBehaviour.Properties.of()
             .strength(2.0f)
-            .sounds(BlockSoundGroup.METAL)
-            .nonOpaque();
-    public static final AbstractBlock.Settings SILVER_WOLF_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+            .sound(SoundType.METAL)
+            .noOcclusion();
+    public static final BlockBehaviour.Properties SILVER_WOLF_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
             .strength(5f, 6.0f)
-            .requiresTool()
-            .sounds(BlockSoundGroup.METAL)
-            .nonOpaque();
-    public static final AbstractBlock.Settings GOLDEN_WOLF_BLOCK_SETTINGS = AbstractBlock.Settings.create()
+            .requiresCorrectToolForDrops()
+            .sound(SoundType.METAL)
+            .noOcclusion();
+    public static final BlockBehaviour.Properties GOLDEN_WOLF_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
             .strength(3f, 12.0f)
-            .requiresTool()
-            .sounds(BlockSoundGroup.METAL)
-            .nonOpaque();
+            .requiresCorrectToolForDrops()
+            .sound(SoundType.METAL)
+            .noOcclusion();
 	// Brainrots
-	public static final AbstractBlock.Settings BOMBARDINO_COCODRILO_SETTINGS = AbstractBlock.Settings.create()
+	public static final BlockBehaviour.Properties BOMBARDINO_COCODRILO_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(40f, 4.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.IRON)
-			.nonOpaque();
-	public static final AbstractBlock.Settings TRALALERO_TRALALA_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.IRON)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties TRALALERO_TRALALA_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(25f, 4.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.WET_SPONGE)
-			.nonOpaque();
-	public static final AbstractBlock.Settings TUNG_TUNG_SAHUR_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.WET_SPONGE)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties TUNG_TUNG_SAHUR_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(30f, 4.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.WOOD)
-			.nonOpaque();
-	public static final AbstractBlock.Settings CHIMPANZINI_BANANINI_SETTINGS = AbstractBlock.Settings.create()
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.WOOD)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties CHIMPANZINI_BANANINI_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(30f, 4.0f)
-			.requiresTool()
-			.sounds(BlockSoundGroup.BIG_DRIPLEAF)
-			.nonOpaque();
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.BIG_DRIPLEAF)
+			.noOcclusion();
 
-	public static final Item.Settings SILVER_WOLF_ORE_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(64);
-	public static final Item.Settings DARK_GLOWSTONE_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(64);
-	public static final Item.Settings THEORY_FORGE_BLOCK_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(64);
-	public static final Item.Settings BRAINROT_TABLE_BLOCK_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(64);
-	public static final Item.Settings RECYCLER_BLOCK_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(1);
-    public static final Item.Settings GLINIANKA_BLOCK_ITEM_SETTINGS = new Item.Settings()
-            .maxCount(64);
-    public static final Item.Settings TRASH_CAN_ITEM_SETTINGS = new Item.Settings()
-            .maxCount(1);
-    public static final Item.Settings SILVER_WOLF_BLOCK_ITEM_SETTINGS = new Item.Settings()
-            .maxCount(64);
-    public static final Item.Settings GOLDEN_WOLF_BLOCK_ITEM_SETTINGS = new Item.Settings()
-            .maxCount(64);
+	public static final Item.Properties SILVER_WOLF_ORE_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(64);
+	public static final Item.Properties DARK_GLOWSTONE_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(64);
+	public static final Item.Properties THEORY_FORGE_BLOCK_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(64);
+	public static final Item.Properties BRAINROT_TABLE_BLOCK_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(64);
+	public static final Item.Properties RECYCLER_BLOCK_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(1);
+    public static final Item.Properties GLINIANKA_BLOCK_ITEM_SETTINGS = new Item.Properties()
+            .stacksTo(64);
+    public static final Item.Properties TRASH_CAN_ITEM_SETTINGS = new Item.Properties()
+            .stacksTo(1);
+    public static final Item.Properties SILVER_WOLF_BLOCK_ITEM_SETTINGS = new Item.Properties()
+            .stacksTo(64);
+    public static final Item.Properties GOLDEN_WOLF_BLOCK_ITEM_SETTINGS = new Item.Properties()
+            .stacksTo(64);
 	// Brainrots
-	public static final Item.Settings BOMBARDINO_COCODRILO_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(16);
-	public static final Item.Settings TRALALERO_TRALALA_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(16);
-	public static final Item.Settings TUNG_TUNG_SAHUR_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(16);
-	public static final Item.Settings CHIMPANZINI_BANANINI_ITEM_SETTINGS = new Item.Settings()
-			.maxCount(16);
+	public static final Item.Properties BOMBARDINO_COCODRILO_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(16);
+	public static final Item.Properties TRALALERO_TRALALA_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(16);
+	public static final Item.Properties TUNG_TUNG_SAHUR_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(16);
+	public static final Item.Properties CHIMPANZINI_BANANINI_ITEM_SETTINGS = new Item.Properties()
+			.stacksTo(16);
 
 	public static void registerAll() {
 		SILVER_WOLF_ORE = InformejtycyRegistry.registerBlock("silver_wolf_ore",
@@ -167,8 +167,8 @@ public class CustomBlocks {
                 ZmysioSummoningBlock.class
         );
         ZMYSIO_SUMMON_ANCHOR = InformejtycyRegistry.registerBlock("zmysio_summon_anchor",
-                AbstractBlock.Settings.create(),
-                new Item.Settings()
+                BlockBehaviour.Properties.of(),
+                new Item.Properties()
         );
 		// Brainrots
 		BOMBARDINO_COCODRILO = InformejtycyRegistry.registerCustomBlock("bombardino_cocodrilo",
@@ -192,18 +192,18 @@ public class CustomBlocks {
 				FacingBlock.class
 		);
 
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.NATURAL, SILVER_WOLF_ORE);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.NATURAL, DARK_GLOWSTONE);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.FUNCTIONAL, THEORY_FORGE_BLOCK);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.FUNCTIONAL, BRAINROT_TABLE_BLOCK);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.BUILDING_BLOCKS, SILVER_WOLF_BLOCK);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.BUILDING_BLOCKS, GOLDEN_WOLF_BLOCK);
-        InformejtycyRegistry.registerMenuBlock(ItemGroups.FUNCTIONAL, GLINIANKA_BLOCK);
-        InformejtycyRegistry.registerMenuBlock(ItemGroups.FUNCTIONAL, TRASH_CAN);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, SILVER_WOLF_ORE);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, DARK_GLOWSTONE);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.FUNCTIONAL_BLOCKS, THEORY_FORGE_BLOCK);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.FUNCTIONAL_BLOCKS, BRAINROT_TABLE_BLOCK);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, SILVER_WOLF_BLOCK);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, GOLDEN_WOLF_BLOCK);
+        InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.FUNCTIONAL_BLOCKS, GLINIANKA_BLOCK);
+        InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.FUNCTIONAL_BLOCKS, TRASH_CAN);
 		// Brainrots
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.COLORED_BLOCKS, BOMBARDINO_COCODRILO);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.COLORED_BLOCKS, TRALALERO_TRALALA);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.COLORED_BLOCKS, TUNG_TUNG_SAHUR);
-		InformejtycyRegistry.registerMenuBlock(ItemGroups.COLORED_BLOCKS, CHIMPANZINI_BANANINI);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.COLORED_BLOCKS, BOMBARDINO_COCODRILO);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.COLORED_BLOCKS, TRALALERO_TRALALA);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.COLORED_BLOCKS, TUNG_TUNG_SAHUR);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.COLORED_BLOCKS, CHIMPANZINI_BANANINI);
 	}
 }

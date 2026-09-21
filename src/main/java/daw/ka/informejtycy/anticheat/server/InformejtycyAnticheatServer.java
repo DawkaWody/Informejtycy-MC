@@ -16,9 +16,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModOrigin;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -79,8 +79,8 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
     }
 
     private static void registerHandshakePayload() {
-        PayloadTypeRegistry.playS2C().register(HandshakePayload.ID, HandshakePayload.CODEC);
-        PayloadTypeRegistry.playC2S().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
+        PayloadTypeRegistry.clientboundPlay().register(HandshakePayload.ID, HandshakePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().registerLarge(HandshakePayload.ID, HandshakePayload.CODEC, Attestation.MAX_PACKET_BYTES);
     }
 
     private static void prepareAttestation() {
@@ -154,18 +154,18 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
 
     private static void registerHandshakeReceiver() {
         ServerPlayNetworking.registerGlobalReceiver(HandshakePayload.ID, (payload, context) -> {
-            ServerPlayerEntity player = context.player();
+            ServerPlayer player = context.player();
             MinecraftServer server = context.server();
             // Decompressing and verifying a report is too slow for the server thread.
             scheduler.execute(() -> handleReply(player, server, payload.data()));
         });
     }
 
-    private static void handleReply(ServerPlayerEntity player, MinecraftServer server, byte[] data) {
-        UUID playerId = player.getUuid();
+    private static void handleReply(ServerPlayer player, MinecraftServer server, byte[] data) {
+        UUID playerId = player.getUUID();
 
         HandshakeSession session = sessions.get(playerId);
-        if (session == null || session.handler() != player.networkHandler) {
+        if (session == null || session.handler() != player.connection) {
             return;
         }
 
@@ -211,12 +211,12 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
     // Too many unusable replies means the client will never produce a usable one; the report is
     // oversized, or someone is making us decompress rubbish on the server thread. Either way the
     // remaining resends are wasted, so settle it now instead of waiting out the whole timeout.
-    private static void rejectReply(ServerPlayerEntity player, MinecraftServer server, HandshakeSession session) {
+    private static void rejectReply(ServerPlayer player, MinecraftServer server, HandshakeSession session) {
         if (session.rejectedReplies().incrementAndGet() < MAX_REJECTED_REPLIES) {
             return;
         }
 
-        UUID playerId = player.getUuid();
+        UUID playerId = player.getUUID();
         if (!sessions.remove(playerId, session)) {
             return;
         }
@@ -230,8 +230,8 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         });
     }
 
-    private static void startHandshake(ServerPlayNetworkHandler handler, MinecraftServer server) {
-        ServerPlayerEntity player = handler.player;
+    private static void startHandshake(ServerGamePacketListenerImpl handler, MinecraftServer server) {
+        ServerPlayer player = handler.player;
         if (AnticheatConfig.usingFallback) {
             Informejtycy.LOGGER.warn("[Anticheat] allowed_mods.json could not be read at startup, so {} is checked "
                     + "against the defaults and nobody gets kicked", player.getName().getString());
@@ -255,7 +255,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
             }
 
             // A reconnect can land before the previous connection's chain has noticed it ended.
-            UUID playerId = player.getUuid();
+            UUID playerId = player.getUUID();
             sessions.remove(playerId);
             cancelTask(playerId);
             sessions.put(playerId, session);
@@ -263,7 +263,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         });
     }
 
-    private static void scheduleSend(ServerPlayerEntity player, MinecraftServer server, UUID playerId,
+    private static void scheduleSend(ServerPlayer player, MinecraftServer server, UUID playerId,
                                      HandshakeSession session, long delayMs, long nextGapMs) {
         ScheduledFuture<?> task = scheduler.schedule(() -> {
             // Identity, not presence: a reconnect installs a new session under the same uuid, and
@@ -287,7 +287,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
             }
 
             server.execute(() -> {
-                if (sessions.get(playerId) == session && player.networkHandler != null) {
+                if (sessions.get(playerId) == session && player.connection != null) {
                     ServerPlayNetworking.send(player, new HandshakePayload(session.challengePacket()));
                 }
             });
@@ -305,7 +305,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         }
     }
 
-    private static HandshakeSession createSession(ServerPlayNetworkHandler handler) {
+    private static HandshakeSession createSession(ServerGamePacketListenerImpl handler) {
         List<String> measure = pickMeasuredClasses();
         if (measure.isEmpty() || probeFactory == null || signingKey == null) {
             return null;
@@ -348,7 +348,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         return List.copyOf(measure);
     }
 
-    private static void report(ServerPlayerEntity player, Verdict verdict, long latencyMs) {
+    private static void report(ServerPlayer player, Verdict verdict, long latencyMs) {
         String name = player.getName().getString();
         String mods = formatModList(verdict.evidence());
 
@@ -365,7 +365,7 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         }
     }
 
-    private static void enforce(ServerPlayerEntity player, Verdict verdict) {
+    private static void enforce(ServerPlayer player, Verdict verdict) {
         AnticheatConfig.ConfigData config = AnticheatConfig.DATA;
         String message = null;
 
@@ -385,8 +385,8 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
         }
 
         String kickMessage = message;
-        if (player.networkHandler != null) {
-            player.networkHandler.disconnect(Text.literal(kickMessage));
+        if (player.connection != null) {
+            player.connection.disconnect(Component.literal(kickMessage));
         }
     }
 
@@ -460,8 +460,8 @@ public class InformejtycyAnticheatServer implements DedicatedServerModInitialize
 
     // Only ends the session of this connection: a late disconnect of an old connection must not end
     // the handshake of the new one.
-    private static void stopHandshake(ServerPlayNetworkHandler handler) {
-        UUID playerId = handler.player.getUuid();
+    private static void stopHandshake(ServerGamePacketListenerImpl handler) {
+        UUID playerId = handler.player.getUUID();
         HandshakeSession session = sessions.get(playerId);
         if (session != null && session.handler() == handler && sessions.remove(playerId, session)) {
             cancelTask(playerId);

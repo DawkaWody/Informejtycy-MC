@@ -7,42 +7,42 @@ import daw.ka.informejtycy.recipe.custom.TheoryForgeRecipe;
 import daw.ka.informejtycy.recipe.custom.TheoryForgeRecipeInput;
 import daw.ka.informejtycy.screen.handler.TheoryForgeScreenHandler;
 import daw.ka.informejtycy.util.ImplementedInventory;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
-	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
+public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedMenuProvider<BlockPos>, ImplementedInventory {
+	private final NonNullList<ItemStack> inventory = NonNullList.withSize(4, ItemStack.EMPTY);
 	private static final int FUEL_SLOT = 0;
 	private static final int INPUT_SLOT_1 = 1;
 	private static final int INPUT_SLOT_2 = 2;
@@ -55,7 +55,7 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	private static final int FUEL_PER_CRAFT = 2;
 	private static final int XP_DROP = 5;
 
-	protected final PropertyDelegate propertyDelegate;
+	protected final ContainerData propertyDelegate;
 	private int progress;
 	private int maxProgress = 140;
 	private int fuelLevel;
@@ -65,7 +65,7 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 
 	public TheoryForgeBlockEntity(BlockPos pos, BlockState state) {
 		super(CustomBlockEntities.THEORY_FORGE_BLOCK_ENTITY_TYPE, pos, state);
-		this.propertyDelegate = new PropertyDelegate() {
+		this.propertyDelegate = new ContainerData() {
 			@Override
 			public int get(int index) {
 				return switch (index) {
@@ -86,18 +86,18 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 				}
 			}
 			@Override
-			public int size() {
+			public int getCount() {
 				return 4;
 			}
 		};
 	}
 
-	public void tick(World world, BlockPos pos, BlockState state, TheoryForgeBlockEntity blockEntity) {
+	public void tick(Level world, BlockPos pos, BlockState state, TheoryForgeBlockEntity blockEntity) {
 		boolean hasFuel = blockEntity.fuelLevel > 0;
 		boolean isCrafting = blockEntity.progress > 0;
 
-		Item inputItem1 = this.getStack(INPUT_SLOT_1).getItem();
-		Item inputItem2 = this.getStack(INPUT_SLOT_2).getItem();
+		Item inputItem1 = this.getItem(INPUT_SLOT_1).getItem();
+		Item inputItem2 = this.getItem(INPUT_SLOT_2).getItem();
 		if (inputItem1 != craftingItem1 || inputItem2 != craftingItem2) {
 			craftingItem1 = inputItem1;
 			craftingItem2 = inputItem2;
@@ -106,7 +106,7 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 
 		if (hasRecipe() && hasEnoughFuel()) {
 			increaseCraftingProgress();
-			markDirty(world, pos, state);
+			setChanged(world, pos, state);
 			if (hasCraftingFinished()) {
 				craftItem();
 				resetProgress();
@@ -118,17 +118,17 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 			addFuel();
 		}
 		// Update block state based on fuel available.
-		if (!world.isClient()) {
-			if (state.get(TheoryForgeBlock.LIT) != hasFuel) {
-				world.setBlockState(pos, state.with(TheoryForgeBlock.LIT, hasFuel), 3);
+		if (!world.isClientSide()) {
+			if (state.getValue(TheoryForgeBlock.LIT) != hasFuel) {
+				world.setBlock(pos, state.setValue(TheoryForgeBlock.LIT, hasFuel), 3);
 			}
 		}
-		if (!world.isClient() && world.getTime() % 20 == 0) {
+		if (!world.isClientSide() && world.getGameTime() % 20 == 0) {
 			if (isCrafting) {
-				world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, pos, SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.BLOCKS, 1.0F, 1.0F);
 			}
-			else if (hasFuel && world.getTime() % 60 == 0) {
-				world.playSound(null, pos, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.25F, 1.0F);
+			else if (hasFuel && world.getGameTime() % 60 == 0) {
+				world.playSound(null, pos, SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS, 0.25F, 1.0F);
 			}
 		}
 	}
@@ -139,30 +139,30 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	private void craftItem() {
-		Optional<RecipeEntry<TheoryForgeRecipe>> recipe = getCurrentRecipe();
+		Optional<RecipeHolder<TheoryForgeRecipe>> recipe = getCurrentRecipe();
 
-		ItemStack output = recipe.get().value().output();
-		this.removeStack(INPUT_SLOT_1, 1);
-		this.removeStack(INPUT_SLOT_2, 1);
-		if (this.getStack(OUTPUT_SLOT).isEmpty()) {
-			this.setStack(OUTPUT_SLOT, output.copy());
+		ItemStack output = recipe.get().value().output().create();
+		this.removeItem(INPUT_SLOT_1, 1);
+		this.removeItem(INPUT_SLOT_2, 1);
+		if (this.getItem(OUTPUT_SLOT).isEmpty()) {
+			this.setItem(OUTPUT_SLOT, output.copy());
 		} else {
-			this.getStack(OUTPUT_SLOT).increment(output.getCount());
+			this.getItem(OUTPUT_SLOT).grow(output.getCount());
 		}
 		consumeFuel();
 
-		if (world != null && !world.isClient()) {
-			world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5, pos.getY() + 0.5,
-					pos.getZ() + 0.5, XP_DROP));
+		if (level != null && !level.isClientSide()) {
+			level.addFreshEntity(new ExperienceOrb(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5,
+					worldPosition.getZ() + 0.5, XP_DROP));
 		}
 	}
 
 	private void addFuel() {
 		if (this.fuelLevel >= maxFuelLevel) return;
 		this.fuelLevel += 1;
-		this.setStack(FUEL_SLOT, new ItemStack(Items.BUCKET, this.getStack(FUEL_SLOT).getCount()));
-		if (world != null && !world.isClient())
-			world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY_LAVA, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		this.setItem(FUEL_SLOT, new ItemStack(Items.BUCKET, this.getItem(FUEL_SLOT).getCount()));
+		if (level != null && !level.isClientSide())
+			level.playSound(null, worldPosition, SoundEvents.BUCKET_EMPTY_LAVA, SoundSource.BLOCKS, 1.0F, 1.0F);
 	}
 
 	private void consumeFuel() {
@@ -178,18 +178,18 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	private boolean hasRecipe() {
-		Optional<RecipeEntry<TheoryForgeRecipe>> recipe = getCurrentRecipe();
+		Optional<RecipeHolder<TheoryForgeRecipe>> recipe = getCurrentRecipe();
 		if (recipe.isEmpty()) return false;
 
-		ItemStack output = recipe.get().value().output();
+		ItemStack output = recipe.get().value().output().create();
 		return canInsertOutput(output, output.getCount());
 	}
 
-	private Optional<RecipeEntry<TheoryForgeRecipe>> getCurrentRecipe() {
-		ServerRecipeManager.MatchGetter<TheoryForgeRecipeInput, TheoryForgeRecipe> getter =
-				ServerRecipeManager.createCachedMatchGetter(CustomRecipes.THEORY_FORGE_RECIPE_TYPE);
+	private Optional<RecipeHolder<TheoryForgeRecipe>> getCurrentRecipe() {
+		RecipeManager.CachedCheck<TheoryForgeRecipeInput, TheoryForgeRecipe> getter =
+				RecipeManager.createCheck(CustomRecipes.THEORY_FORGE_RECIPE_TYPE);
 
-		return getter.getFirstMatch(new TheoryForgeRecipeInput(inventory.get(INPUT_SLOT_1), inventory.get(INPUT_SLOT_2)), (ServerWorld) this.getWorld());
+		return getter.getRecipeFor(new TheoryForgeRecipeInput(inventory.get(INPUT_SLOT_1), inventory.get(INPUT_SLOT_2)), (ServerLevel) this.getLevel());
 	}
 
 	private boolean hasEnoughFuel() {
@@ -197,17 +197,17 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	private boolean hasLavaBucket() {
-		return this.getStack(FUEL_SLOT).getItem() == Items.LAVA_BUCKET;
+		return this.getItem(FUEL_SLOT).getItem() == Items.LAVA_BUCKET;
 	}
 
 	private boolean canInsertOutput(ItemStack item, int count) {
-		int maxCount = this.getStack(OUTPUT_SLOT).isEmpty() ? 64 : this.getStack(OUTPUT_SLOT).getMaxCount();
-		return (this.getStack(OUTPUT_SLOT).isEmpty() || ItemStack.areItemsAndComponentsEqual(this.getStack(OUTPUT_SLOT), item)) &&
-				this.getStack(OUTPUT_SLOT).getCount() + count <= maxCount;
+		int maxCount = this.getItem(OUTPUT_SLOT).isEmpty() ? 64 : this.getItem(OUTPUT_SLOT).getMaxStackSize();
+		return (this.getItem(OUTPUT_SLOT).isEmpty() || ItemStack.isSameItemSameComponents(this.getItem(OUTPUT_SLOT), item)) &&
+				this.getItem(OUTPUT_SLOT).getCount() + count <= maxCount;
 	}
 
 	@Override
-	public boolean isValid(int slot, ItemStack stack) {
+	public boolean canPlaceItem(int slot, ItemStack stack) {
 		return switch (slot) {
 			case FUEL_SLOT -> stack.getItem() == Items.LAVA_BUCKET;
 			case INPUT_SLOT_1, INPUT_SLOT_2 -> stack.getItem() != Items.LAVA_BUCKET;
@@ -216,7 +216,7 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	@Override
-	public int[] getAvailableSlots(@Nullable Direction side) {
+	public int[] getSlotsForFace(@Nullable Direction side) {
 		if (side == null) return SIDE_SLOTS;
 
 		return switch (side) {
@@ -227,34 +227,34 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	@Override
-	public boolean canExtract(int slot, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
 		return slot == OUTPUT_SLOT || (slot == FUEL_SLOT && stack.getItem() == Items.BUCKET);
 	}
 
 	@Override
-	public DefaultedList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return inventory;
 	}
 
 	@Override
-	public BlockPos getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-		return this.pos;
+	public BlockPos getScreenOpeningData(ServerPlayer serverPlayerEntity) {
+		return this.worldPosition;
 	}
 
 	@Override
-	public Text getDisplayName() {
-		return Text.translatable("block.informejtycy.theory_forge");
+	public Component getDisplayName() {
+		return Component.translatable("block.informejtycy.theory_forge");
 	}
 
 	@Override
-	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+	public @Nullable AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
 		return new TheoryForgeScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
 	}
 
 	@Override
-	protected void writeData(WriteView view) {
-		super.writeData(view);
-		Inventories.writeData(view, inventory);
+	protected void saveAdditional(ValueOutput view) {
+		super.saveAdditional(view);
+		ContainerHelper.saveAllItems(view, inventory);
 		view.putInt("theory_forge.progress", progress);
 		view.putInt("theory_forge.max_progress", maxProgress);
 		view.putInt("theory_forge.fuel_level", fuelLevel);
@@ -262,24 +262,24 @@ public class TheoryForgeBlockEntity extends BlockEntity implements ExtendedScree
 	}
 
 	@Override
-	protected void readData(ReadView view) {
-		Inventories.readData(view, inventory);
-		progress = view.getInt("theory_forge.progress", 0);
-		maxProgress = view.getInt("theory_forge.max_progress", 140);
-		fuelLevel = view.getInt("theory_forge.fuel_level", 0);
-		maxFuelLevel = view.getInt("theory_forge.max_fuel_level", 8);
+	protected void loadAdditional(ValueInput view) {
+		ContainerHelper.loadAllItems(view, inventory);
+		progress = view.getIntOr("theory_forge.progress", 0);
+		maxProgress = view.getIntOr("theory_forge.max_progress", 140);
+		fuelLevel = view.getIntOr("theory_forge.fuel_level", 0);
+		maxFuelLevel = view.getIntOr("theory_forge.max_fuel_level", 8);
 		craftingItem1 = inventory.get(INPUT_SLOT_1).getItem();
 		craftingItem2 = inventory.get(INPUT_SLOT_2).getItem();
-		super.readData(view);
+		super.loadAdditional(view);
 	}
 
 	@Override
-	public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
-		return BlockEntityUpdateS2CPacket.create(this);
+	public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
-	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-		return createNbt(registries);
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return saveWithoutMetadata(registries);
 	}
 }

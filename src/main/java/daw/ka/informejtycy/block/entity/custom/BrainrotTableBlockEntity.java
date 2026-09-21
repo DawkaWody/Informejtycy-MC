@@ -1,5 +1,6 @@
 package daw.ka.informejtycy.block.entity.custom;
 
+import net.minecraft.world.item.DyeColor;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.entity.CustomBlockEntities;
 import daw.ka.informejtycy.item.CustomItems;
@@ -8,49 +9,49 @@ import daw.ka.informejtycy.recipe.custom.BrainrotTableRecipe;
 import daw.ka.informejtycy.recipe.custom.BrainrotTableRecipeInput;
 import daw.ka.informejtycy.screen.handler.BrainrotTableScreenHandler;
 import daw.ka.informejtycy.util.ImplementedInventory;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.ServerRecipeManager;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.text.Text;
-import net.minecraft.util.Rarity;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 
-public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<BlockPos>, ImplementedInventory {
-	private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(2, ItemStack.EMPTY);
+public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedMenuProvider<BlockPos>, ImplementedInventory {
+	private final NonNullList<ItemStack> inventory = NonNullList.withSize(2, ItemStack.EMPTY);
 	private static final int INPUT_SLOT = 0;
 	public static final int OUTPUT_SLOT = 1;
 
@@ -59,14 +60,14 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 
 	private static final int XP_DROP = 10;
 
-	protected final PropertyDelegate propertyDelegate;
+	protected final ContainerData propertyDelegate;
 	private int progress;
 	private int maxProgress = 280;
 	private Item craftingItem;
 
 	public BrainrotTableBlockEntity(BlockPos pos, BlockState state) {
 		super(CustomBlockEntities.BRAINROT_TABLE_BLOCK_ENTITY_TYPE, pos, state);
-		this.propertyDelegate = new PropertyDelegate() {
+		this.propertyDelegate = new ContainerData() {
 			@Override
 			public int get(int index) {
 				return switch (index) {
@@ -85,16 +86,16 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 			}
 
 			@Override
-			public int size() {
+			public int getCount() {
 				return 2;
 			}
 		};
 	}
 
-	public void tick(World world, BlockPos pos, BlockState state, BrainrotTableBlockEntity blockEntity) {
+	public void tick(Level world, BlockPos pos, BlockState state, BrainrotTableBlockEntity blockEntity) {
 		boolean isCrafting = blockEntity.progress > 0;
 
-		Item inputItem = this.getStack(INPUT_SLOT).getItem();
+		Item inputItem = this.getItem(INPUT_SLOT).getItem();
 		if (inputItem != craftingItem) {
 			craftingItem = inputItem;
 			resetProgress();
@@ -102,7 +103,7 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 
 		if (hasRecipe()) {
 			increaseCraftingProgress();
-			markDirty(world, pos, state);
+			setChanged(world, pos, state);
 			if (hasCraftingFinished()) {
 				craftItem();
 				resetProgress();
@@ -112,8 +113,8 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 			resetProgress();
 		}
 
-		if (isCrafting && !world.isClient() && world.getTime() % 20 == 0) {
-			world.playSound(null, pos, SoundEvents.ENTITY_GOAT_SCREAMING_MILK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		if (isCrafting && !world.isClientSide() && world.getGameTime() % 20 == 0) {
+			world.playSound(null, pos, SoundEvents.GOAT_SCREAMING_MILK, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 
@@ -123,53 +124,53 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 	}
 
 	private void craftItem() {
-		Optional<RecipeEntry<BrainrotTableRecipe>> recipe = getCurrentRecipe();
+		Optional<RecipeHolder<BrainrotTableRecipe>> recipe = getCurrentRecipe();
 
-		ItemStack output = recipe.get().value().output();
-		if (output.isOf(Items.PAINTING)) {
+		ItemStack output = recipe.get().value().output().create();
+		if (output.is(Items.PAINTING)) {
 			ItemStack painting = new ItemStack(Items.PAINTING);
-			if (this.getStack(INPUT_SLOT).isOf(Items.NETHERITE_INGOT)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("zmysio_kulturysta"));
-				painting.set(DataComponentTypes.RARITY, Rarity.UNCOMMON);
+			if (this.getItem(INPUT_SLOT).is(Items.NETHERITE_INGOT)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("zmysio_kulturysta"));
+				painting.set(DataComponents.RARITY, Rarity.UNCOMMON);
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(Items.GRAY_DYE)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("sigma"));
+			else if (this.getItem(INPUT_SLOT).is(Items.DYE.pick(DyeColor.GRAY))) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("sigma"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(CustomItems.LIGHT_FOOD)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("jacob"));
+			else if (this.getItem(INPUT_SLOT).is(CustomItems.LIGHT_FOOD)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("jacob"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(CustomItems.HOLY_WARS_MUSIC_DISC)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("surprise"));
+			else if (this.getItem(INPUT_SLOT).is(CustomItems.HOLY_WARS_MUSIC_DISC)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("surprise"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(Items.COPPER_INGOT)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("bialoleka"));
+			else if (this.getItem(INPUT_SLOT).is(Items.COPPER_INGOT)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("bialoleka"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(CustomItems.DARK_GLOWSTONE_DUST)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("hitla"));
+			else if (this.getItem(INPUT_SLOT).is(CustomItems.DARK_GLOWSTONE_DUST)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("hitla"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(Items.COOKIE)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("dzulian"));
+			else if (this.getItem(INPUT_SLOT).is(Items.COOKIE)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("dzulian"));
 			}
-			else if (this.getStack(INPUT_SLOT).isOf(Items.REINFORCED_DEEPSLATE)) {
-				painting.set(DataComponentTypes.PAINTING_VARIANT, paintingVariant("wuzini"));
+			else if (this.getItem(INPUT_SLOT).is(Items.REINFORCED_DEEPSLATE)) {
+				painting.set(DataComponents.PAINTING_VARIANT, paintingVariant("wuzini"));
 			}
-			this.setStack(OUTPUT_SLOT, painting);
-		} else if (this.getStack(OUTPUT_SLOT).isEmpty()) {
-			this.setStack(OUTPUT_SLOT, output.copy());
+			this.setItem(OUTPUT_SLOT, painting);
+		} else if (this.getItem(OUTPUT_SLOT).isEmpty()) {
+			this.setItem(OUTPUT_SLOT, output.copy());
 		} else {
-			this.getStack(OUTPUT_SLOT).increment(output.getCount());
+			this.getItem(OUTPUT_SLOT).grow(output.getCount());
 		}
-		this.removeStack(INPUT_SLOT, 1);
+		this.removeItem(INPUT_SLOT, 1);
 
-		if (world != null && !world.isClient()) {
-			world.spawnEntity(new ExperienceOrbEntity(world, pos.getX() + 0.5, pos.getY() + 0.5,
-					pos.getZ() + 0.5, XP_DROP));
+		if (level != null && !level.isClientSide()) {
+			level.addFreshEntity(new ExperienceOrb(level, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5,
+					worldPosition.getZ() + 0.5, XP_DROP));
 		}
 	}
 
-	RegistryEntry.Reference<PaintingVariant> paintingVariant(String name) {
-		return this.getWorld() != null ? this.getWorld().getRegistryManager().getOrThrow(RegistryKeys.PAINTING_VARIANT)
-				.getOrThrow(RegistryKey.of(RegistryKeys.PAINTING_VARIANT,
+	Holder.Reference<PaintingVariant> paintingVariant(String name) {
+		return this.getLevel() != null ? this.getLevel().registryAccess().lookupOrThrow(Registries.PAINTING_VARIANT)
+				.getOrThrow(ResourceKey.create(Registries.PAINTING_VARIANT,
 						InformejtycyRegistry.id(name))) : null;
 	}
 
@@ -182,86 +183,86 @@ public class BrainrotTableBlockEntity extends BlockEntity implements ExtendedScr
 	}
 
 	private boolean hasRecipe() {
-		Optional<RecipeEntry<BrainrotTableRecipe>> recipe = getCurrentRecipe();
+		Optional<RecipeHolder<BrainrotTableRecipe>> recipe = getCurrentRecipe();
 		if (recipe.isEmpty()) return false;
 
-		ItemStack output = recipe.get().value().output();
+		ItemStack output = recipe.get().value().output().create();
 		return canInsertOutput(output, output.getCount());
 	}
 
-	private Optional<RecipeEntry<BrainrotTableRecipe>> getCurrentRecipe() {
-		ServerRecipeManager.MatchGetter<BrainrotTableRecipeInput, BrainrotTableRecipe> getter =
-				ServerRecipeManager.createCachedMatchGetter(CustomRecipes.BRAINROT_TABLE_RECIPE_TYPE);
+	private Optional<RecipeHolder<BrainrotTableRecipe>> getCurrentRecipe() {
+		RecipeManager.CachedCheck<BrainrotTableRecipeInput, BrainrotTableRecipe> getter =
+				RecipeManager.createCheck(CustomRecipes.BRAINROT_TABLE_RECIPE_TYPE);
 
-		return getter.getFirstMatch(new BrainrotTableRecipeInput(inventory.get(INPUT_SLOT)), (ServerWorld) this.getWorld());
+		return getter.getRecipeFor(new BrainrotTableRecipeInput(inventory.get(INPUT_SLOT)), (ServerLevel) this.getLevel());
 	}
 
 	private boolean canInsertOutput(ItemStack item, int count) {
-		if (item.isOf(Items.PAINTING)) return this.getStack(OUTPUT_SLOT).isEmpty();
-		int maxCount = this.getStack(OUTPUT_SLOT).isEmpty() ? 64 : this.getStack(OUTPUT_SLOT).getMaxCount();
-		return (this.getStack(OUTPUT_SLOT).isEmpty() || ItemStack.areItemsAndComponentsEqual(this.getStack(OUTPUT_SLOT), item)) &&
-				this.getStack(OUTPUT_SLOT).getCount() + count <= maxCount;
+		if (item.is(Items.PAINTING)) return this.getItem(OUTPUT_SLOT).isEmpty();
+		int maxCount = this.getItem(OUTPUT_SLOT).isEmpty() ? 64 : this.getItem(OUTPUT_SLOT).getMaxStackSize();
+		return (this.getItem(OUTPUT_SLOT).isEmpty() || ItemStack.isSameItemSameComponents(this.getItem(OUTPUT_SLOT), item)) &&
+				this.getItem(OUTPUT_SLOT).getCount() + count <= maxCount;
 	}
 
 	@Override
-	public boolean isValid(int slot, ItemStack stack) {
+	public boolean canPlaceItem(int slot, ItemStack stack) {
 		return slot == INPUT_SLOT;
 	}
 
 	@Override
-	public int[] getAvailableSlots(Direction side) {
+	public int[] getSlotsForFace(Direction side) {
 		return side == Direction.DOWN ? BOTTOM_SLOTS : INPUT_SLOTS;
 	}
 
 	@Override
-	public boolean canExtract(int slot, ItemStack stack, Direction side) {
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction side) {
 		return slot == OUTPUT_SLOT;
 	}
 
 	@Override
-	public DefaultedList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return inventory;
 	}
 
 	@Override
-	public @NonNull BlockPos getScreenOpeningData(@NonNull ServerPlayerEntity serverPlayerEntity) {
-		return this.pos;
+	public @NonNull BlockPos getScreenOpeningData(@NonNull ServerPlayer serverPlayerEntity) {
+		return this.worldPosition;
 	}
 
 	@Override
-	public Text getDisplayName() {
-		return Text.translatable("block.informejtycy.brainrot_table");
+	public Component getDisplayName() {
+		return Component.translatable("block.informejtycy.brainrot_table");
 	}
 
 	@Override
-	public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+	public @Nullable AbstractContainerMenu createMenu(int syncId, Inventory playerInventory, Player player) {
 		return new BrainrotTableScreenHandler(syncId, playerInventory, this, this.propertyDelegate);
 	}
 
 	@Override
-	protected void writeData(WriteView view) {
-		super.writeData(view);
-		Inventories.writeData(view, inventory);
+	protected void saveAdditional(ValueOutput view) {
+		super.saveAdditional(view);
+		ContainerHelper.saveAllItems(view, inventory);
 		view.putInt("brainrot_table.progress", progress);
 		view.putInt("brainrot_table.max_progress", maxProgress);
 	}
 
 	@Override
-	protected void readData(ReadView view) {
-		Inventories.readData(view, inventory);
-		progress = view.getInt("brainrot_table.progress", 0);
-		maxProgress = view.getInt("brainrot_table.max_progress", 280);
+	protected void loadAdditional(ValueInput view) {
+		ContainerHelper.loadAllItems(view, inventory);
+		progress = view.getIntOr("brainrot_table.progress", 0);
+		maxProgress = view.getIntOr("brainrot_table.max_progress", 280);
 		craftingItem = inventory.get(INPUT_SLOT).getItem();
-		super.readData(view);
+		super.loadAdditional(view);
 	}
 
 	@Override
-	public @Nullable Packet<ClientPlayPacketListener> toUpdatePacket() {
-		return BlockEntityUpdateS2CPacket.create(this);
+	public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Override
-	public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-		return createNbt(registries);
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return saveWithoutMetadata(registries);
 	}
 }

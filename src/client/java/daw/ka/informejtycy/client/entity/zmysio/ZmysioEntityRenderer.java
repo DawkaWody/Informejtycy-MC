@@ -2,18 +2,18 @@ package daw.ka.informejtycy.client.entity.zmysio;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.entity.custom.boss.ZmysioEntity;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.MobEntityRenderer;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.Identifier;
 
-public class ZmysioEntityRenderer extends MobEntityRenderer<ZmysioEntity, ZmysioEntityRenderState, ZmysioEntityModel> {
-    public ZmysioEntityRenderer(EntityRendererFactory.Context context) {
-        super(context, new ZmysioEntityModel(context.getPart(ZmysioEntityModel.ZMYSIO)), 1.5f);
-        this.addFeature(new ZmysioArmorFeatureRenderer(this, context.getPart(ZmysioEntityModel.ZMYSIO)));
+public class ZmysioEntityRenderer extends MobRenderer<ZmysioEntity, ZmysioEntityRenderState, ZmysioEntityModel> {
+    public ZmysioEntityRenderer(EntityRendererProvider.Context context) {
+        super(context, new ZmysioEntityModel(context.bakeLayer(ZmysioEntityModel.ZMYSIO)), 1.5f);
+        this.addLayer(new ZmysioArmorFeatureRenderer(this, context.bakeLayer(ZmysioEntityModel.ZMYSIO)));
     }
 
     @Override
-    public Identifier getTexture(ZmysioEntityRenderState state) {
+    public Identifier getTextureLocation(ZmysioEntityRenderState state) {
         return InformejtycyRegistry.id("textures/entity/zmysio/zmysio.png");
     }
 
@@ -23,8 +23,8 @@ public class ZmysioEntityRenderer extends MobEntityRenderer<ZmysioEntity, Zmysio
     }
 
     @Override
-    public void updateRenderState(ZmysioEntity entity, ZmysioEntityRenderState renderState, float f) {
-        super.updateRenderState(entity, renderState, f);
+    public void extractRenderState(ZmysioEntity entity, ZmysioEntityRenderState renderState, float f) {
+        super.extractRenderState(entity, renderState, f);
         renderState.spawnAnimationState.copyFrom(entity.spawnAnimationState);
         renderState.idleAnimationState.copyFrom(entity.idleAnimationState);
         renderState.shootRightAnimationState.copyFrom(entity.shootRightAnimationState);

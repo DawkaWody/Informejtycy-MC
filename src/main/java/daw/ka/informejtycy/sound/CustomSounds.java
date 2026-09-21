@@ -1,10 +1,10 @@
 package daw.ka.informejtycy.sound;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
-import net.minecraft.block.jukebox.JukeboxSong;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.world.item.JukeboxSong;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvent;
 
 public class CustomSounds {
 	public static SoundEvent MENU_AUDIO;
@@ -19,19 +19,19 @@ public class CustomSounds {
 	public static SoundEvent STELLA;
 	public static SoundEvent MEGAMIKSKLASA2;
 
-	public static final RegistryKey<JukeboxSong> RIDE_THE_LIGHTNING_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> RIDE_THE_LIGHTNING_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("ride_the_lightning"));
-	public static final RegistryKey<JukeboxSong> HOLY_WARS_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> HOLY_WARS_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("holy_wars"));
-	public static final RegistryKey<JukeboxSong> YOU_MUST_BURN_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> YOU_MUST_BURN_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("you_must_burn"));
-	public static final RegistryKey<JukeboxSong> NO_MORE_TEARS_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> NO_MORE_TEARS_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("no_more_tears"));
-    public static final RegistryKey<JukeboxSong> ZALEWIX_BEAT_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+    public static final ResourceKey<JukeboxSong> ZALEWIX_BEAT_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
             InformejtycyRegistry.id("zalewix_beat"));
-	public static final RegistryKey<JukeboxSong> STELLA_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> STELLA_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("stella"));
-	public static final RegistryKey<JukeboxSong> MEGAMIKSKLASA2_KEY = RegistryKey.of(RegistryKeys.JUKEBOX_SONG,
+	public static final ResourceKey<JukeboxSong> MEGAMIKSKLASA2_KEY = ResourceKey.create(Registries.JUKEBOX_SONG,
 			InformejtycyRegistry.id("megamiksklasa2"));
 
 	public static void registerAll() {

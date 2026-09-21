@@ -1,7 +1,7 @@
 package daw.ka.informejtycy.item.material;
 
 import daw.ka.informejtycy.tag.CustomTags;
-import net.minecraft.item.ToolMaterial;
+import net.minecraft.world.item.ToolMaterial;
 
 public class CustomToolMaterials {
 	public static final ToolMaterial INFORMEJTYCY = new ToolMaterial(CustomTags.Blocks.INCORRECT_FOR_INFORMEJTYCY_TOOL,

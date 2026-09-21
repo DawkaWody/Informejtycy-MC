@@ -1,96 +1,96 @@
 package daw.ka.informejtycy.entity.custom.projectile;
 
 import daw.ka.informejtycy.entity.CustomEntities;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
 
-public class MilkProjectileEntity extends ProjectileEntity {
+public class MilkProjectileEntity extends Projectile {
     private static final float DAMAGE = 5.0f;
 
-    public MilkProjectileEntity(EntityType<? extends ProjectileEntity> entityType, World world) {
+    public MilkProjectileEntity(EntityType<? extends Projectile> entityType, Level world) {
         super(entityType, world);
     }
 
-    public MilkProjectileEntity(World world, LivingEntity owner, Vec3d pos) {
+    public MilkProjectileEntity(Level world, LivingEntity owner, Vec3 pos) {
         super(CustomEntities.MILK_PROJECTILE, world);
         this.setOwner(owner);
-        this.setPosition(pos.x, pos.y, pos.z);
+        this.setPos(pos.x, pos.y, pos.z);
     }
 
     @Override
-    protected double getGravity() {
+    protected double getDefaultGravity() {
         return 0.06;
     }
 
     @Override
     public void tick() {
         super.tick();
-        Vec3d velocity = this.getVelocity();
-        HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
-        this.hitOrDeflect(hitResult);
+        Vec3 velocity = this.getDeltaMovement();
+        HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+        this.hitTargetOrDeflectSelf(hitResult);
         this.updateRotation();
-        if (this.getEntityWorld().getStatesInBox(this.getBoundingBox()).noneMatch(AbstractBlock.AbstractBlockState::isAir)) {
+        if (this.level().getBlockStates(this.getBoundingBox()).noneMatch(BlockBehaviour.BlockStateBase::isAir)) {
             this.discard();
         }
         else {
-            this.setVelocity(velocity.multiply(0.99f));
+            this.setDeltaMovement(velocity.scale(0.99f));
             this.applyGravity();
-            this.setPosition(this.getX() + velocity.x, this.getY() + velocity.y, this.getZ() + velocity.z);
+            this.setPos(this.getX() + velocity.x, this.getY() + velocity.y, this.getZ() + velocity.z);
         }
 
-        if (this.getEntityWorld().isClient()) spawnParticles(velocity);
+        if (this.level().isClientSide()) spawnParticles(velocity);
     }
 
     @Override
-    protected void onEntityHit(EntityHitResult entityHitResult) {
-        super.onEntityHit(entityHitResult);
+    protected void onHitEntity(EntityHitResult entityHitResult) {
+        super.onHitEntity(entityHitResult);
         if (this.getOwner() instanceof LivingEntity livingEntity) {
             Entity entity = entityHitResult.getEntity();
-            DamageSource damageSource = this.getDamageSources().spit(this, livingEntity);
-            if (this.getEntityWorld() instanceof ServerWorld serverWorld && entity.damage(serverWorld, damageSource, DAMAGE)) {
-                EnchantmentHelper.onTargetDamaged(serverWorld, livingEntity, damageSource);
+            DamageSource damageSource = this.damageSources().spit(this, livingEntity);
+            if (this.level() instanceof ServerLevel serverWorld && entity.hurtServer(serverWorld, damageSource, DAMAGE)) {
+                EnchantmentHelper.doPostAttackEffects(serverWorld, livingEntity, damageSource);
             }
         }
     }
 
     @Override
-    protected void onBlockHit(BlockHitResult blockHitResult) {
-        super.onBlockHit(blockHitResult);
-        if (!this.getEntityWorld().isClient()) this.discard();
+    protected void onHitBlock(BlockHitResult blockHitResult) {
+        super.onHitBlock(blockHitResult);
+        if (!this.level().isClientSide()) this.discard();
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
 
     }
 
     @Override
-    public void onSpawnPacket(EntitySpawnS2CPacket packet) {
-        super.onSpawnPacket(packet);
-        Vec3d vec3d = packet.getVelocity();
+    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
+        super.recreateFromPacket(packet);
+        Vec3 vec3d = packet.getMovement();
         spawnParticles(vec3d);
-        this.setVelocity(vec3d);
+        this.setDeltaMovement(vec3d);
     }
 
-    private void spawnParticles(Vec3d vec3d) {
+    private void spawnParticles(Vec3 vec3d) {
         for (int i = 0; i < 7; i++) {
             double d = 0.4 + 0.1 * i;
-            this.getEntityWorld().addParticleClient(ParticleTypes.SPIT, this.getX(), this.getY(), this.getZ(), vec3d.x * d, vec3d.y, vec3d.z * d);
+            this.level().addParticle(ParticleTypes.SPIT, this.getX(), this.getY(), this.getZ(), vec3d.x * d, vec3d.y, vec3d.z * d);
         }
     }
 }
