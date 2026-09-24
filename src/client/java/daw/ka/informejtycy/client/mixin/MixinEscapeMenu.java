@@ -8,12 +8,16 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.Identifier;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.net.URI;
 
 @Mixin(value = PauseScreen.class)
 public abstract class MixinEscapeMenu {
@@ -27,6 +31,8 @@ public abstract class MixinEscapeMenu {
 
 	@Unique private static final int LOGO_MARGIN = 4;
 	@Unique private static final int MIN_LOGO_HEIGHT = 8;
+
+	@Unique private static final URI INFORMEJTYCY_URI = URI.create("https://patrykniemczyk.github.io/informejtycy/");
 
 	@Shadow protected abstract void createPauseMenu();
 	@Shadow public abstract boolean showsPauseMenu();
@@ -82,5 +88,15 @@ public abstract class MixinEscapeMenu {
 		context.blit(RenderPipelines.GUI_TEXTURED,
 				logo, 0, 0, 0, 0, width, height, width, height);
 		context.pose().popMatrix();
+	}
+
+	@Redirect(method = "createPauseMenu", at = @At(value = "FIELD", target = "Lnet/minecraft/util/CommonLinks;RELEASE_FEEDBACK:Ljava/net/URI;", opcode = Opcodes.GETSTATIC))
+	private URI feedbackUri() {
+		return INFORMEJTYCY_URI;
+	}
+
+	@Redirect(method = "createPauseMenu", at = @At(value = "FIELD", target = "Lnet/minecraft/util/CommonLinks;SNAPSHOT_BUGS_FEEDBACK:Ljava/net/URI;", opcode = Opcodes.GETSTATIC))
+	private URI bugReportUri() {
+		return INFORMEJTYCY_URI;
 	}
 }
