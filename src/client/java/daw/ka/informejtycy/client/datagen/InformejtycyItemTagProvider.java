@@ -5,6 +5,7 @@ import daw.ka.informejtycy.tag.CustomTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -80,6 +81,6 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 	}
 
 	private static ResourceKey<Item> key(Item item) {
-		return item.builtInRegistryHolder().key();
+		return BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow();
 	}
 }

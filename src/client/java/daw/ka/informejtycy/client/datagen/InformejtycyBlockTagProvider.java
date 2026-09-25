@@ -5,9 +5,11 @@ import daw.ka.informejtycy.tag.CustomTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,7 +19,7 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
 	}
 
 	@Override
-	protected void addTags(HolderLookup.Provider wrapperLookup) {
+	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
 		builder(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(key(CustomBlocks.THEORY_FORGE_BLOCK))
                 .add(key(CustomBlocks.TRASH_CAN))
@@ -42,6 +44,6 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
 	}
 
 	private static ResourceKey<Block> key(Block block) {
-		return block.builtInRegistryHolder().key();
+		return BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
 	}
 }

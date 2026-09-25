@@ -182,7 +182,7 @@
   "tag.item.informejtycy.reinforced_informejtycy_repair": "reinforced_informejtycy_repair",
   "tag.item.informejtycy.zmysio_repair": "zmysio_repair",
 
-  "menu.sendFeedback": "Informejtycy.pl",
+  "menu.sendFeedback": "GitHub",
   "menu.reportBugs": "Informejtycy.pl",
 
   "multiplayer.disconnect.handshake_timeout": "Mod verification timed out.",

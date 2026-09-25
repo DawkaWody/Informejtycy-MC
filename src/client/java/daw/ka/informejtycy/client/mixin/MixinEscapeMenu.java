@@ -33,6 +33,7 @@ public abstract class MixinEscapeMenu {
 	@Unique private static final int MIN_LOGO_HEIGHT = 8;
 
 	@Unique private static final URI INFORMEJTYCY_URI = URI.create("https://patrykniemczyk.github.io/informejtycy/");
+	@Unique private static final URI GITHUB_URI = URI.create("https://github.com/DawkaWody/Informejtycy-MC/");
 
 	@Shadow protected abstract void createPauseMenu();
 	@Shadow public abstract boolean showsPauseMenu();
@@ -92,7 +93,7 @@ public abstract class MixinEscapeMenu {
 
 	@Redirect(method = "createPauseMenu", at = @At(value = "FIELD", target = "Lnet/minecraft/util/CommonLinks;RELEASE_FEEDBACK:Ljava/net/URI;", opcode = Opcodes.GETSTATIC))
 	private URI feedbackUri() {
-		return INFORMEJTYCY_URI;
+		return GITHUB_URI;
 	}
 
 	@Redirect(method = "createPauseMenu", at = @At(value = "FIELD", target = "Lnet/minecraft/util/CommonLinks;SNAPSHOT_BUGS_FEEDBACK:Ljava/net/URI;", opcode = Opcodes.GETSTATIC))
