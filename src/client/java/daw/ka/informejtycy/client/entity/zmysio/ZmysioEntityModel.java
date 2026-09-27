@@ -12,6 +12,7 @@ import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.util.Mth;
+import org.jspecify.annotations.NonNull;
 
 public class ZmysioEntityModel extends EntityModel<ZmysioEntityRenderState> {
     public static final ModelLayerLocation ZMYSIO = new ModelLayerLocation(InformejtycyRegistry.id("zmysio"), "main");
@@ -98,7 +99,7 @@ public class ZmysioEntityModel extends EntityModel<ZmysioEntityRenderState> {
     }
 
     @Override
-    public void setupAnim(ZmysioEntityRenderState state) {
+    public void setupAnim(@NonNull ZmysioEntityRenderState state) {
         super.setupAnim(state);
         this.setHeadAngles(state.yRot, state.xRot);
 

@@ -15,7 +15,7 @@ public class CustomEntities {
 
     public static void registerAll() {
         ZMYSIO_BOSS = InformejtycyRegistry.registerMob("zmysio_boss", ZmysioEntity::new, MobCategory.MONSTER, 2.5f, 5);
-        ZARZYK = InformejtycyRegistry.registerMob("zarzyk", ZarzykEntity::new, MobCategory.MONSTER, 1.1f, 3.3f);
+        ZARZYK = InformejtycyRegistry.registerMob("zarzyk", ZarzykEntity::new, MobCategory.MONSTER, 2.25f, 7.75f);
         MILK_PROJECTILE = InformejtycyRegistry.registerMob("milk_projectile", MilkProjectileEntity::new, MobCategory.MISC, 0.5f, 0.5f);
 
         FabricDefaultAttributeRegistry.register(ZMYSIO_BOSS, ZmysioEntity.createZmysioAttributes());

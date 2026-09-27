@@ -51,6 +51,8 @@ public class ZarzykEntity extends Animal implements NeutralMob {
 
     private static final int idleAnimationDuration = 20;
     private static final int walkAnimationDuration = 20;
+    private static final int breedingAnimationInterval = 8;
+    private static final double breedingAnimationRange = 3.0;
 
    private long persistentAngerEndTime;
    private @Nullable EntityReference<LivingEntity> persistentAngerTarget;
@@ -62,10 +64,11 @@ public class ZarzykEntity extends Animal implements NeutralMob {
         super(type, level);
         this.setPersistenceRequired();
         this.startPersistentAngerTimer();
+        this.refreshDimensions();
     }
     
-    public @Nullable AgeableMob getBreedOffspring(final ServerLevel level, final AgeableMob partner) {
-        return (AgeableMob)CustomEntities.ZARZYK.create(level, EntitySpawnReason.BREEDING);
+    public @Nullable AgeableMob getBreedOffspring(final @NonNull ServerLevel level, final @NonNull AgeableMob partner) {
+        return CustomEntities.ZARZYK.create(level, EntitySpawnReason.BREEDING);
     }
 
     public boolean isFood(final ItemStack itemStack) {
@@ -82,6 +85,11 @@ public class ZarzykEntity extends Animal implements NeutralMob {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Sheep.class, true, true));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Villager.class, 0, false, false, ENTITY_IS_CHILD));
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(this.isBaby() ? null : target);
     }
 
     @Override
@@ -112,6 +120,14 @@ public class ZarzykEntity extends Animal implements NeutralMob {
                 }
             }
         }
+        else if (this.tickCount % breedingAnimationInterval == 0 && this.isInLove() && hasMateNearby()) {
+            this.level().broadcastEntityEvent(this, STATUS_ATTACK);
+        }
+    }
+
+    private boolean hasMateNearby() {
+        return !this.level().getEntitiesOfClass(ZarzykEntity.class, this.getBoundingBox().inflate(breedingAnimationRange),
+                this::canMate).isEmpty();
     }
 
     @Override

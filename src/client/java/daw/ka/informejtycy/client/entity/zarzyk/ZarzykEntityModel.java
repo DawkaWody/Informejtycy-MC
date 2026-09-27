@@ -8,6 +8,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshTransformer;
 import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,6 +16,10 @@ import net.minecraft.util.Mth;
 
 public class ZarzykEntityModel extends EntityModel<ZarzykEntityRenderState> {
 	public static final ModelLayerLocation ZARZYK = new ModelLayerLocation(InformejtycyRegistry.id("zarzyk"), "main");
+	public static final ModelLayerLocation ZARZYK_BABY = new ModelLayerLocation(InformejtycyRegistry.id("zarzyk"), "baby");
+
+	private static final float BABY_SCALE = 0.5f;
+	private static final float BABY_HEAD_SCALE = 1.5f;
 	
 	private final ModelPart zarzyk;
 	private final ModelPart head;
@@ -33,7 +38,7 @@ public class ZarzykEntityModel extends EntityModel<ZarzykEntityRenderState> {
 		walkAnimation = ZarzykEntityAnim.WALK.bake(root);
 	}
 
-	public static LayerDefinition getTexturedModelData() {
+	private static MeshDefinition createMesh() {
 		MeshDefinition modelData = new MeshDefinition();
 		PartDefinition geometry = modelData.getRoot();
 
@@ -107,7 +112,18 @@ public class ZarzykEntityModel extends EntityModel<ZarzykEntityRenderState> {
 		PartDefinition knaga = zarzyk.addOrReplaceChild("knaga", CubeListBuilder.create().texOffs(0, 18).addBox(3.0F, -53.0F, -7.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
 		.texOffs(0, 18).addBox(-5.0F, -53.0F, -7.0F, 4.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		return LayerDefinition.create(modelData, 256, 256);
+		return modelData;
+	}
+
+	public static LayerDefinition getTexturedModelData() {
+		return LayerDefinition.create(createMesh(), 256, 256);
+	}
+
+	public static LayerDefinition getBabyTexturedModelData() {
+		MeshDefinition modelData = createMesh();
+		PartDefinition zarzyk = modelData.getRoot().getChild("zarzyk");
+		zarzyk.addOrReplaceChild("glowa", zarzyk.getChild("glowa").transformed(pose -> pose.withScale(BABY_HEAD_SCALE)));
+		return LayerDefinition.create(modelData, 256, 256).apply(MeshTransformer.scaling(BABY_SCALE));
 	}
 
 	@Override

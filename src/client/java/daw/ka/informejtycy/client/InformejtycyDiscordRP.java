@@ -88,7 +88,7 @@ public class InformejtycyDiscordRP {
 			client.connect();
 		} catch (NoDiscordClientException | RuntimeException e) {
 			if (!loggedMissingDiscord) {
-				Informejtycy.LOGGER.warn("No opened Discord client found, will keep trying");
+				Informejtycy.LOGGER.warn("No opened Discord client found");
 				loggedMissingDiscord = true;
 			}
 		}

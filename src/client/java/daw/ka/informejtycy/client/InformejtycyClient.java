@@ -38,6 +38,7 @@ public class InformejtycyClient implements ClientModInitializer {
 
         ModelLayerRegistry.registerModelLayer(ZmysioEntityModel.ZMYSIO, ZmysioEntityModel::getTexturedModelData);
 		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK, ZarzykEntityModel::getTexturedModelData);
+		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK_BABY, ZarzykEntityModel::getBabyTexturedModelData);
         EntityRenderers.register(CustomEntities.ZMYSIO_BOSS, ZmysioEntityRenderer::new);
 		EntityRenderers.register(CustomEntities.ZARZYK, ZarzykEntityRenderer::new);
         EntityRenderers.register(CustomEntities.MILK_PROJECTILE, MilkProjectileRenderer::new);

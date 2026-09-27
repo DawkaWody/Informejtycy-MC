@@ -3,12 +3,13 @@ package daw.ka.informejtycy.client.entity.zarzyk;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.entity.custom.mob.ZarzykEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.AgeableMobRenderer;
 import net.minecraft.resources.Identifier;
 
-public class ZarzykEntityRenderer extends MobRenderer<ZarzykEntity, ZarzykEntityRenderState, ZarzykEntityModel> {
+public class ZarzykEntityRenderer extends AgeableMobRenderer<ZarzykEntity, ZarzykEntityRenderState, ZarzykEntityModel> {
     public ZarzykEntityRenderer(EntityRendererProvider.Context context) {
-        super(context, new ZarzykEntityModel(context.bakeLayer(ZarzykEntityModel.ZARZYK)), 1f);
+        super(context, new ZarzykEntityModel(context.bakeLayer(ZarzykEntityModel.ZARZYK)),
+                new ZarzykEntityModel(context.bakeLayer(ZarzykEntityModel.ZARZYK_BABY)), 1f);
     }
 
     @Override
