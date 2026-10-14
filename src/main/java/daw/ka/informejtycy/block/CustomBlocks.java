@@ -52,8 +52,8 @@ public class CustomBlocks {
 			.sound(SoundType.WOOD)
 			.noOcclusion();
 	public static final BlockBehaviour.Properties RECYCLER_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
-			.strength(-1.0F, 3600000.0F)
-			.noLootTable()
+			.strength(50.0F, 3600000.0F)
+			.requiresCorrectToolForDrops()
 			.sound(SoundType.STONE)
 			.noOcclusion();
     public static final BlockBehaviour.Properties GLINIANKA_BLOCK_SETTINGS = BlockBehaviour.Properties.of()

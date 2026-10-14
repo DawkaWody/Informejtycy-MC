@@ -1,6 +1,8 @@
 package daw.ka.informejtycy.item;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
+import daw.ka.informejtycy.item.component.CustomDataComponents;
+import daw.ka.informejtycy.item.component.custom.VapeContents;
 import daw.ka.informejtycy.item.custom.*;
 import daw.ka.informejtycy.item.material.CustomArmorMaterials;
 import daw.ka.informejtycy.item.material.CustomToolMaterials;
@@ -32,6 +34,7 @@ public class CustomItems {
 	public static Item CONCENTRATED_ZARZYK_GEL;
 	public static Item DARK_GLOWSTONE_DUST;
 	public static Item TALISMAN_OF_SHRIEK;
+    public static Item VAPE;
 	public static Item PLUS;
 	public static Item RECYCLABLE_BOTTLE;
 	// Music discs
@@ -81,6 +84,8 @@ public class CustomItems {
 	public static final Item.Properties CONCENTRATED_ZARZYK_GEL_SETTINGS = new Item.Properties().stacksTo(1).craftRemainder(Items.GLASS_BOTTLE);
 	public static final Item.Properties DARK_GLOWSTONE_DUST_SETTINGS = new Item.Properties().stacksTo(64);
     public static final Item.Properties TALISMAN_OF_SHRIEK_SETTINGS = new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON);
+    public static final Item.Properties VAPE_SETTINGS = new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON)
+            .component(CustomDataComponents.VAPE_CONTENTS, VapeContents.EMPTY);
     public static final Item.Properties PLUS_SETTINGS = new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON);
 	public static final Item.Properties RECYCLABLE_BOTTLE_SETTINGS = new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON);
     // Music discs
@@ -139,6 +144,7 @@ public class CustomItems {
 		LIGHT_FOOD = InformejtycyRegistry.registerItem("light_food", LIGHT_FOOD_SETTINGS);
         DARK_GLOWSTONE_DUST = InformejtycyRegistry.registerItem("dark_glowstone_dust", DARK_GLOWSTONE_DUST_SETTINGS);
         TALISMAN_OF_SHRIEK = InformejtycyRegistry.registerCustomItem("talisman_of_shriek", TALISMAN_OF_SHRIEK_SETTINGS, ShriekTalismanItem.class);
+        VAPE = InformejtycyRegistry.registerCustomItem("vape", VAPE_SETTINGS, VapeItem.class);
         PLUS = InformejtycyRegistry.registerItem("plus", PLUS_SETTINGS);
 		RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("recyclable_bottle", RECYCLABLE_BOTTLE_SETTINGS);
         // Music discs

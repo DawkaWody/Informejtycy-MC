@@ -7,6 +7,7 @@ import daw.ka.informejtycy.enchantment.CustomEnchantmentEffects;
 import daw.ka.informejtycy.entity.CustomEntities;
 import daw.ka.informejtycy.item.CustomItemGroups;
 import daw.ka.informejtycy.item.CustomItems;
+import daw.ka.informejtycy.item.component.CustomDataComponents;
 import daw.ka.informejtycy.particle.CustomParticles;
 import daw.ka.informejtycy.potion.CustomPotions;
 import daw.ka.informejtycy.potion.effect.CustomEffects;
@@ -15,6 +16,7 @@ import daw.ka.informejtycy.sound.CustomSounds;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -47,6 +49,7 @@ public class InformejtycyRegistry {
 		CustomBlocks.registerAll();
         CustomEntities.registerAll();
 		CustomBlockEntities.registerAll();
+		CustomDataComponents.registerAll();
 		CustomItems.registerAll();
 		CustomItemGroups.registerAll();
 		CustomSounds.registerAll();
@@ -168,6 +171,11 @@ public class InformejtycyRegistry {
             public @NonNull StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec() { return packetCodecGetter.apply(this); }
         });
     }
+
+	public static <T> DataComponentType<T> registerDataComponent(String name, DataComponentType.Builder<T> builder) {
+		Identifier id = id(name);
+		return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, id, builder.build());
+	}
 
 	public static Identifier id(String path) {
 		return Identifier.fromNamespaceAndPath(Informejtycy.MOD_ID, path);

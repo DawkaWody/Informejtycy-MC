@@ -2,6 +2,7 @@ package daw.ka.informejtycy.block.entity.custom;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.entity.CustomBlockEntities;
+import daw.ka.informejtycy.command.custom.RecycleScoreCommand;
 import daw.ka.informejtycy.item.CustomItems;
 import daw.ka.informejtycy.screen.handler.RecyclerScreenHandler;
 import daw.ka.informejtycy.util.ImplementedInventory;
@@ -121,6 +122,7 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedMenuProv
         level.addFreshEntity(new ItemEntity(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1.5, worldPosition.getZ() + 0.5,
                 new ItemStack(outputItem, 1)));
 
+        increaseRecycleScore();
         grantRecycleAdvancement();
     }
 
@@ -143,6 +145,15 @@ public class RecyclerBlockEntity extends BlockEntity implements ExtendedMenuProv
         for (String criterion : advancementProgress.getRemainingCriteria()) {
             player.getAdvancements().award(advancement, criterion);
         }
+    }
+
+    private void increaseRecycleScore() {
+        if (level == null || level.getServer() == null || lastOperator == null) return;
+
+        ServerPlayer player = level.getServer().getPlayerList().getPlayer(lastOperator);
+        if (player == null || player.level() != level) return;
+
+        RecycleScoreCommand.incrementScore(player);
     }
 
     void resetProgress() {

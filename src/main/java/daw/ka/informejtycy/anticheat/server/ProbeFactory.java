@@ -5,8 +5,8 @@ import daw.ka.informejtycy.anticheat.Attestation;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.commons.ClassRemapper;
-import org.objectweb.asm.commons.SimpleRemapper;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
@@ -100,8 +100,27 @@ public final class ProbeFactory {
 
         // Not COMPUTE_FRAMES: it would resolve supertypes, loading Minecraft classes here.
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        node.accept(new ClassRemapper(writer, new SimpleRemapper(buildRenameMap(node))));
+        node.accept(new ClassRemapper(writer, createRemapper(buildRenameMap(node))));
         return writer.toByteArray();
+    }
+
+    private static Remapper createRemapper(Map<String, String> renames) {
+        return new Remapper(Opcodes.ASM9) {
+            @Override
+            public String map(String internalName) {
+                return renames.getOrDefault(internalName, internalName);
+            }
+
+            @Override
+            public String mapMethodName(String owner, String name, String descriptor) {
+                return renames.getOrDefault(owner + "." + name + descriptor, name);
+            }
+
+            @Override
+            public String mapFieldName(String owner, String name, String descriptor) {
+                return renames.getOrDefault(owner + "." + name, name);
+            }
+        };
     }
 
     private static void replaceConstants(ClassNode node, Map<String, String> constants) {

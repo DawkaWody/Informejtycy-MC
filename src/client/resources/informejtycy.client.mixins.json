@@ -8,7 +8,8 @@
     "MixinSplashScreen",
     "MixinTitleScreen",
     "MixinMusicTracker",
-    "MixinPaintingRenderer"
+    "MixinPaintingRenderer",
+    "MixinVapeAnimation"
   ],
   "injectors": {
     "defaultRequire": 1

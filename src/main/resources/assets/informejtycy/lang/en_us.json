@@ -34,6 +34,7 @@
   "item.informejtycy.concentrated_zarzyk_gel_bottle": "Concentrated Hair Gel Bottle",
   "item.informejtycy.dark_glowstone_dust": "Dark Glowstone Dust",
   "item.informejtycy.talisman_of_shriek": "Talisman of Shriek",
+  "item.informejtycy.vape": "Vape",
   "item.informejtycy.plus": "Plus",
   "item.informejtycy.recyclable_bottle": "Recyclable Bottle",
   "item.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
@@ -142,6 +143,9 @@
   "tooltip.informejtycy.zarzyk_gel_bottle.line2": "udaj się pod S2",
   "tooltip.informejtycy.talisman_of_shriek": "Aka Talisman of Shrek",
   "tooltip.informejtycy.recyclable_bottle": "🎶 Kaucyjnyy michał otwórz drzwii 🎶",
+
+  "command.informejtycy.recycle_score.header": "Top 5 recyclers",
+  "command.informejtycy.recycle_score.player": "%s recycled %s bottles",
 
   "itemgroup.informejtycy.informejtycy": "Informejtycy mod",
 

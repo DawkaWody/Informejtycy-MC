@@ -1,5 +1,6 @@
 package daw.ka.informejtycy;
 
+import daw.ka.informejtycy.command.InformejtycyCommands;
 import daw.ka.informejtycy.event.InformejtycyEvents;
 import daw.ka.informejtycy.loot.InformejtycyLootTableModifiers;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
@@ -21,6 +22,7 @@ public class Informejtycy implements ModInitializer {
 		InformejtycyWorldGen.registerGenerators();
 		InformejtycyLootTableModifiers.registerAll();
 		InformejtycyScreenHandlers.registerAll();
+		InformejtycyCommands.registerAll();
 		InformejtycyEvents.registerAll();
 		InformejtycyStructureOverrides.registerAll();
 	}

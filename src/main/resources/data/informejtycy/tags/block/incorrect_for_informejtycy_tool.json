@@ -1,8 +1,5 @@
 {
   "values": [
     "#minecraft:incorrect_for_diamond_tool"
-  ],
-  "remove": [
-    "#informejtycy:needs_informejtycy_tool"
   ]
 }

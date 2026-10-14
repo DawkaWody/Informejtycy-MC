@@ -35,6 +35,7 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		itemModelGenerator.generateFlatItem(CustomItems.CONCENTRATED_ZARZYK_GEL, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.DARK_GLOWSTONE_DUST, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.TALISMAN_OF_SHRIEK, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.VAPE, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.PLUS, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.RECYCLABLE_BOTTLE, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC, ModelTemplates.FLAT_ITEM);

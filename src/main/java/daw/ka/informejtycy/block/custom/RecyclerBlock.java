@@ -31,6 +31,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
@@ -42,7 +43,7 @@ public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
     }
 
     @Override
-    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, BlockPos pos, boolean moved) {
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel world, @NonNull BlockPos pos, boolean moved) {
         if (state.getBlock() != world.getBlockState(pos).getBlock()) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof RecyclerBlockEntity) {
@@ -54,8 +55,9 @@ public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos,
-                                         Player player, InteractionHand hand, BlockHitResult hit) {
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, Level world,
+                                                   @NonNull BlockPos pos, @NonNull Player player,
+                                                   @NonNull InteractionHand hand, @NonNull BlockHitResult hit) {
         if (!world.isClientSide()) {
             MenuProvider screenHandlerFactory = (RecyclerBlockEntity) world.getBlockEntity(pos);
             if (screenHandlerFactory != null) {
@@ -67,19 +69,24 @@ public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
     }
 
     @Override
-    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> type) {
+    protected float getDestroyProgress(@NonNull BlockState state, Player player, @NonNull BlockGetter world, @NonNull BlockPos pos) {
+        return player.hasCorrectToolForDrops(state) ? super.getDestroyProgress(state, player, world, pos) : 0.0f;
+    }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, @NonNull BlockState state, @NonNull BlockEntityType<T> type) {
         if (world.isClientSide()) return null;
         return createTickerHelper(type, CustomBlockEntities.RECYCLER_BLOCK_ENTITY_TYPE,
                 (w, p, s, be) -> be.tick(w, p, s, be));
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
+    protected @NonNull BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    protected @NonNull BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
@@ -95,18 +102,19 @@ public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
     }
 
     @Override
-    protected VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+    protected @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter world,
+                                           @NonNull BlockPos pos, @NonNull CollisionContext context) {
         return SHAPE;
     }
 
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return CustomBlockEntities.RECYCLER_BLOCK_ENTITY_TYPE.create(pos, state);
     }
 
     @Override
-    protected RenderShape getRenderShape(BlockState state) {
+    protected @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
         return RenderShape.MODEL;
     }
 }

@@ -45,6 +45,7 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.TRALALERO_TRALALA);
 		dropSelf(CustomBlocks.TUNG_TUNG_SAHUR);
 		dropSelf(CustomBlocks.CHIMPANZINI_BANANINI);
+		dropSelf(CustomBlocks.RECYCLER_BLOCK);
 	}
 
 	protected LootTable.Builder glowstoneDrops(Block block, Item drop) {

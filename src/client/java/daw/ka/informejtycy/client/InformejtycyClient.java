@@ -13,13 +13,16 @@ import daw.ka.informejtycy.client.gui.screen.RecyclerScreen;
 import daw.ka.informejtycy.client.gui.screen.TheoryForgeScreen;
 import daw.ka.informejtycy.client.particle.StinkAreaParticle;
 import daw.ka.informejtycy.client.particle.StinkParticle;
+import daw.ka.informejtycy.client.gui.tooltip.ClientVapeTooltip;
 import daw.ka.informejtycy.entity.CustomEntities;
+import daw.ka.informejtycy.item.component.custom.VapeContents;
 import daw.ka.informejtycy.particle.CustomParticles;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -49,6 +52,9 @@ public class InformejtycyClient implements ClientModInitializer {
 		MenuScreens.register(InformejtycyScreenHandlers.THEORY_FORGE_SCREEN_HANDLER, TheoryForgeScreen::new);
 		MenuScreens.register(InformejtycyScreenHandlers.BRAINROT_TABLE_SCREEN_HANDLER, BrainrotTableScreen::new);
 		MenuScreens.register(InformejtycyScreenHandlers.RECYCLER_SCREEN_HANDLER, RecyclerScreen::new);
+
+		ClientTooltipComponentCallback.EVENT.register(component ->
+				component instanceof VapeContents contents ? new ClientVapeTooltip(contents) : null);
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (client.level != null && TitleScreenVideo.isPlaying()) {

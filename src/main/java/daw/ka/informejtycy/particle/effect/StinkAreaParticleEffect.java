@@ -7,6 +7,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import org.jspecify.annotations.NonNull;
 
 public class StinkAreaParticleEffect implements ParticleOptions {
     private final ParticleType<StinkAreaParticleEffect> type;
@@ -32,7 +33,7 @@ public class StinkAreaParticleEffect implements ParticleOptions {
     }
 
     @Override
-    public ParticleType<?> getType() {
+    public @NonNull ParticleType<?> getType() {
         return type;
     }
 }
