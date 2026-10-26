@@ -3,6 +3,7 @@ package daw.ka.informejtycy.client.datagen;
 import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.item.CustomItems;
 import daw.ka.informejtycy.potion.CustomPotions;
+import daw.ka.informejtycy.tag.CustomTags;
 import daw.ka.informejtycy.util.RecipeHelper;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider;
@@ -175,6 +176,30 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						.requires(CustomBlocks.GOLDEN_WOLF_BLOCK)
 						.unlockedBy(getHasName(CustomBlocks.GOLDEN_WOLF_BLOCK), has(CustomBlocks.GOLDEN_WOLF_BLOCK))
 						.save(this.output, "golden_wolf_from_block");
+
+				woodFromLogs(CustomBlocks.ISTANBUL_WOOD, CustomBlocks.ISTANBUL_LOG);
+				woodFromLogs(CustomBlocks.STRIPPED_ISTANBUL_WOOD, CustomBlocks.STRIPPED_ISTANBUL_LOG);
+				planksFromLogs(CustomBlocks.ISTANBUL_PLANKS, CustomTags.Items.ISTANBUL_LOGS, 3);
+				stairBuilder(CustomBlocks.ISTANBUL_STAIRS, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
+				slab(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.ISTANBUL_SLAB, CustomBlocks.ISTANBUL_PLANKS);
+				fenceBuilder(CustomBlocks.ISTANBUL_FENCE, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
+				fenceGateBuilder(CustomBlocks.ISTANBUL_FENCE_GATE, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
+				pressurePlate(CustomBlocks.ISTANBUL_PRESSURE_PLATE, CustomBlocks.ISTANBUL_PLANKS);
+				buttonBuilder(CustomBlocks.ISTANBUL_BUTTON, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
+				trapdoorBuilder(CustomBlocks.ISTANBUL_TRAPDOOR, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
+				doorBuilder(CustomBlocks.ISTANBUL_DOOR, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
+						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
+						.save(this.output);
 
 				RecipeHelper.createHelmetRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_HELMET, 1),
 						CustomItems.SILVER_WOLF)

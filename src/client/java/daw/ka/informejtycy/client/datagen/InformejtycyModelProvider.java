@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TexturedModel;
 
 import java.util.Map;
 
@@ -21,6 +22,22 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.DARK_GLOWSTONE);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_BLOCK);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.GOLDEN_WOLF_BLOCK);
+		blockStateModelGenerator.family(CustomBlocks.ISTANBUL_PLANKS)
+				.stairs(CustomBlocks.ISTANBUL_STAIRS)
+				.slab(CustomBlocks.ISTANBUL_SLAB)
+				.fence(CustomBlocks.ISTANBUL_FENCE)
+				.fenceGate(CustomBlocks.ISTANBUL_FENCE_GATE)
+				.pressurePlate(CustomBlocks.ISTANBUL_PRESSURE_PLATE)
+				.button(CustomBlocks.ISTANBUL_BUTTON);
+		blockStateModelGenerator.createOrientableTrapdoor(CustomBlocks.ISTANBUL_TRAPDOOR);
+		blockStateModelGenerator.createDoor(CustomBlocks.ISTANBUL_DOOR);
+
+		blockStateModelGenerator.createTrivialBlock(CustomBlocks.ISTANBUL_LEAVES, TexturedModel.LEAVES);
+
+		blockStateModelGenerator.woodProvider(CustomBlocks.ISTANBUL_LOG).log(CustomBlocks.ISTANBUL_LOG).wood(CustomBlocks.ISTANBUL_WOOD);
+		blockStateModelGenerator.woodProvider(CustomBlocks.STRIPPED_ISTANBUL_LOG).log(CustomBlocks.STRIPPED_ISTANBUL_LOG).wood(CustomBlocks.STRIPPED_ISTANBUL_WOOD);
+
+		blockStateModelGenerator.createPlantWithDefaultItem(CustomBlocks.ISTANBUL_SAPLING, CustomBlocks.POTTED_ISTANBUL_SAPLING, BlockModelGenerators.PlantType.NOT_TINTED);
 	}
 
 	@Override

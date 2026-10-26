@@ -19,6 +19,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -36,8 +37,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jspecify.annotations.NonNull;
 
@@ -69,20 +72,38 @@ public class InformejtycyRegistry {
 		return Registry.register(BuiltInRegistries.BLOCK, key, block);
 	}
 
-	public static <T extends Block> Block registerCustomBlock(String name, BlockBehaviour.Properties blockSettings, Item.Properties blockItemSettings, Class<T> customBlock) {
+	public static <T extends Block> Block registerCustomBlock(
+			String name,
+			BlockBehaviour.Properties blockSettings,
+			Item.Properties blockItemSettings,
+			Function<BlockBehaviour.Properties, T> customBlock
+	) {
 		Identifier id = id(name);
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
 		BlockBehaviour.Properties settings = blockSettings.setId(key);
-		try {
-			Block block = customBlock.getDeclaredConstructor(BlockBehaviour.Properties.class).newInstance(settings);
-			registerBlockItem(name, block, blockItemSettings);
-			return Registry.register(BuiltInRegistries.BLOCK, key, block);
-		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-			throw new RuntimeException(e);
-		}
+
+		Block block = customBlock.apply(settings);
+
+		registerBlockItem(name, block, blockItemSettings);
+		return Registry.register(BuiltInRegistries.BLOCK, key, block);
 	}
 
-    public static <T extends Entity> EntityType<T> registerMob(String name, EntityType.EntityFactory<T> factory,
+	public static <T extends Block> Block registerCustomBlockWithoutItem(
+			String name,
+			BlockBehaviour.Properties blockSettings,
+			Function<BlockBehaviour.Properties, T> customBlock
+	) {
+		Identifier id = id(name);
+		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
+		BlockBehaviour.Properties settings = blockSettings.setId(key);
+
+		Block block = customBlock.apply(settings);
+
+		return Registry.register(BuiltInRegistries.BLOCK, key, block);
+	}
+
+
+	public static <T extends Entity> EntityType<T> registerMob(String name, EntityType.EntityFactory<T> factory,
                                                                   MobCategory spawnGroup, float width, float height) {
         Identifier id = id(name);
         ResourceKey<EntityType<?>> key = ResourceKey.create(Registries.ENTITY_TYPE, id);

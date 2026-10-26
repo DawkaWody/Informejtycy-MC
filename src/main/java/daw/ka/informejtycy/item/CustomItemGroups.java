@@ -26,6 +26,20 @@ public class CustomItemGroups {
 				entries.accept(CustomBlocks.TRALALERO_TRALALA);
 				entries.accept(CustomBlocks.TUNG_TUNG_SAHUR);
 				entries.accept(CustomBlocks.CHIMPANZINI_BANANINI);
+				entries.accept(CustomBlocks.ISTANBUL_LOG);
+				entries.accept(CustomBlocks.STRIPPED_ISTANBUL_LOG);
+				entries.accept(CustomBlocks.ISTANBUL_WOOD);
+				entries.accept(CustomBlocks.STRIPPED_ISTANBUL_WOOD);
+				entries.accept(CustomBlocks.ISTANBUL_PLANKS);
+				entries.accept(CustomBlocks.ISTANBUL_LEAVES);
+				entries.accept(CustomBlocks.ISTANBUL_SAPLING);
+				entries.accept(CustomBlocks.ISTANBUL_STAIRS);
+				entries.accept(CustomBlocks.ISTANBUL_SLAB);
+				entries.accept(CustomBlocks.ISTANBUL_FENCE);
+				entries.accept(CustomBlocks.ISTANBUL_FENCE_GATE);
+				entries.accept(CustomBlocks.ISTANBUL_PRESSURE_PLATE);
+				entries.accept(CustomBlocks.ISTANBUL_BUTTON);
+				entries.accept(CustomBlocks.ISTANBUL_TRAPDOOR);
 				// Items
 				entries.accept(CustomItems.SILVER_WOLF);
 				entries.accept(CustomItems.GOLDEN_WOLF);

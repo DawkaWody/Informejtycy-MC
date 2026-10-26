@@ -1,5 +1,6 @@
 package daw.ka.informejtycy.client.datagen;
 
+import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.item.CustomItems;
 import daw.ka.informejtycy.tag.CustomTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
@@ -20,31 +21,31 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 
 	@Override
 	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
-		builder(CustomTags.Items.INFORMEJTYCY_REPAIR)
+		tag(CustomTags.Items.INFORMEJTYCY_REPAIR)
 				.add(key(CustomItems.SILVER_WOLF));
-		builder(CustomTags.Items.REINFORCED_INFORMEJTYCY_REPAIR)
+		tag(CustomTags.Items.REINFORCED_INFORMEJTYCY_REPAIR)
 				.add(key(CustomItems.GOLDEN_WOLF));
-        builder(CustomTags.Items.ZMYSIO_REPAIR)
+        tag(CustomTags.Items.ZMYSIO_REPAIR)
                 .add(key(CustomItems.ZMYSIO_MILK_BUCKET));
 
-		builder(ItemTags.SWORDS)
+		tag(ItemTags.SWORDS)
 				.add(key(CustomItems.INFORMEJTYCY_SWORD))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_SWORD))
                 .add(key(CustomItems.ZMYSIO_SWORD));
-		builder(ItemTags.PICKAXES)
+		tag(ItemTags.PICKAXES)
 				.add(key(CustomItems.INFORMEJTYCY_PICKAXE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_PICKAXE));
-		builder(ItemTags.SHOVELS)
+		tag(ItemTags.SHOVELS)
 				.add(key(CustomItems.INFORMEJTYCY_SHOVEL))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_SHOVEL));
-		builder(ItemTags.AXES)
+		tag(ItemTags.AXES)
 				.add(key(CustomItems.INFORMEJTYCY_AXE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_AXE));
-		builder(ItemTags.HOES)
+		tag(ItemTags.HOES)
 				.add(key(CustomItems.INFORMEJTYCY_HOE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_HOE));
 
-		builder(ItemTags.TRIMMABLE_ARMOR)
+		tag(ItemTags.TRIMMABLE_ARMOR)
 				.add(key(CustomItems.INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.INFORMEJTYCY_CHESTPLATE))
 				.add(key(CustomItems.INFORMEJTYCY_LEGGINGS))
@@ -55,20 +56,20 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS))
 				.add(key(CustomItems.PRESIDENT_HELMET));
 
-		builder(ItemTags.HEAD_ARMOR_ENCHANTABLE)
+		tag(ItemTags.HEAD_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.PRESIDENT_HELMET));
-		builder(ItemTags.CHEST_ARMOR_ENCHANTABLE)
+		tag(ItemTags.CHEST_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_CHESTPLATE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE));
-		builder(ItemTags.LEG_ARMOR_ENCHANTABLE)
+		tag(ItemTags.LEG_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_LEGGINGS))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS));
-		builder(ItemTags.FOOT_ARMOR_ENCHANTABLE)
+		tag(ItemTags.FOOT_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_BOOTS))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS));
-		builder(ItemTags.DURABILITY_ENCHANTABLE)
+		tag(ItemTags.DURABILITY_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.INFORMEJTYCY_CHESTPLATE))
 				.add(key(CustomItems.INFORMEJTYCY_LEGGINGS))
@@ -78,6 +79,36 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS))
 				.add(key(CustomItems.PRESIDENT_HELMET));
+
+		tag(CustomTags.Items.ISTANBUL_LOGS)
+				.add(key(CustomBlocks.ISTANBUL_LOG.asItem()))
+				.add(key(CustomBlocks.STRIPPED_ISTANBUL_LOG.asItem()))
+				.add(key(CustomBlocks.ISTANBUL_WOOD.asItem()))
+				.add(key(CustomBlocks.STRIPPED_ISTANBUL_WOOD.asItem()));
+		tag(ItemTags.LOGS_THAT_BURN)
+				.addTag(CustomTags.Items.ISTANBUL_LOGS);
+		tag(ItemTags.PLANKS)
+				.add(key(CustomBlocks.ISTANBUL_PLANKS.asItem()));
+		tag(ItemTags.WOODEN_STAIRS)
+				.add(key(CustomBlocks.ISTANBUL_STAIRS.asItem()));
+		tag(ItemTags.WOODEN_SLABS)
+				.add(key(CustomBlocks.ISTANBUL_SLAB.asItem()));
+		tag(ItemTags.WOODEN_FENCES)
+				.add(key(CustomBlocks.ISTANBUL_FENCE.asItem()));
+		tag(ItemTags.FENCE_GATES)
+				.add(key(CustomBlocks.ISTANBUL_FENCE_GATE.asItem()));
+		tag(ItemTags.WOODEN_PRESSURE_PLATES)
+				.add(key(CustomBlocks.ISTANBUL_PRESSURE_PLATE.asItem()));
+		tag(ItemTags.WOODEN_BUTTONS)
+				.add(key(CustomBlocks.ISTANBUL_BUTTON.asItem()));
+		tag(ItemTags.WOODEN_TRAPDOORS)
+				.add(key(CustomBlocks.ISTANBUL_TRAPDOOR.asItem()));
+		tag(ItemTags.WOODEN_DOORS)
+				.add(key(CustomBlocks.ISTANBUL_DOOR.asItem()));
+		tag(ItemTags.LEAVES)
+				.add(key(CustomBlocks.ISTANBUL_LEAVES.asItem()));
+		tag(ItemTags.SAPLINGS)
+				.add(key(CustomBlocks.ISTANBUL_SAPLING.asItem()));
 	}
 
 	private static ResourceKey<Item> key(Item item) {

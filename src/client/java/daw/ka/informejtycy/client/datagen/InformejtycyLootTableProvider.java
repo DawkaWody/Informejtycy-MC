@@ -35,10 +35,12 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 	public void generate() {
 		add(CustomBlocks.SILVER_WOLF_ORE, multipleOreDrops(CustomBlocks.SILVER_WOLF_ORE, CustomItems.SILVER_WOLF, 1.0f, 2.0f));
 		add(CustomBlocks.DARK_GLOWSTONE, glowstoneDrops(CustomBlocks.DARK_GLOWSTONE, CustomItems.DARK_GLOWSTONE_DUST));
+		add(CustomBlocks.ISTANBUL_LEAVES, block -> createLeavesDrops(block, CustomBlocks.ISTANBUL_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
+		add(CustomBlocks.POTTED_ISTANBUL_SAPLING, block -> createPotFlowerItemTable(CustomBlocks.ISTANBUL_SAPLING));
 		dropSelf(CustomBlocks.THEORY_FORGE_BLOCK);
 		dropSelf(CustomBlocks.BRAINROT_TABLE_BLOCK);
-        dropSelf(CustomBlocks.SILVER_WOLF_BLOCK);
-        dropSelf(CustomBlocks.GOLDEN_WOLF_BLOCK);
+		dropSelf(CustomBlocks.SILVER_WOLF_BLOCK);
+		dropSelf(CustomBlocks.GOLDEN_WOLF_BLOCK);
 		dropSelf(CustomBlocks.GLINIANKA_BLOCK);
 		dropSelf(CustomBlocks.TRASH_CAN);
 		dropSelf(CustomBlocks.BOMBARDINO_COCODRILO);
@@ -46,6 +48,20 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.TUNG_TUNG_SAHUR);
 		dropSelf(CustomBlocks.CHIMPANZINI_BANANINI);
 		dropSelf(CustomBlocks.RECYCLER_BLOCK);
+		dropSelf(CustomBlocks.ISTANBUL_LOG);
+		dropSelf(CustomBlocks.STRIPPED_ISTANBUL_LOG);
+		dropSelf(CustomBlocks.ISTANBUL_WOOD);
+		dropSelf(CustomBlocks.STRIPPED_ISTANBUL_WOOD);
+		dropSelf(CustomBlocks.ISTANBUL_PLANKS);
+		dropSelf(CustomBlocks.ISTANBUL_STAIRS);
+		add(CustomBlocks.ISTANBUL_SLAB, createSlabItemTable(CustomBlocks.ISTANBUL_SLAB));
+		dropSelf(CustomBlocks.ISTANBUL_FENCE);
+		dropSelf(CustomBlocks.ISTANBUL_FENCE_GATE);
+		dropSelf(CustomBlocks.ISTANBUL_PRESSURE_PLATE);
+		dropSelf(CustomBlocks.ISTANBUL_BUTTON);
+		dropSelf(CustomBlocks.ISTANBUL_TRAPDOOR);
+		add(CustomBlocks.ISTANBUL_DOOR, createDoorTable(CustomBlocks.ISTANBUL_DOOR));
+		dropSelf(CustomBlocks.ISTANBUL_SAPLING);
 	}
 
 	protected LootTable.Builder glowstoneDrops(Block block, Item drop) {
