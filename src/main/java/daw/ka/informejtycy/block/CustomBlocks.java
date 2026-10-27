@@ -54,6 +54,22 @@ public class CustomBlocks {
 	public static Block ISTANBUL_LEAVES;
 	public static Block ISTANBUL_SAPLING;
 	public static Block POTTED_ISTANBUL_SAPLING;
+	public static Block ZARZYK_LOG;
+	public static Block ZARZYK_WOOD;
+	public static Block STRIPPED_ZARZYK_LOG;
+	public static Block STRIPPED_ZARZYK_WOOD;
+	public static Block ZARZYK_PLANKS;
+	public static Block ZARZYK_STAIRS;
+	public static Block ZARZYK_SLAB;
+	public static Block ZARZYK_FENCE;
+	public static Block ZARZYK_FENCE_GATE;
+	public static Block ZARZYK_PRESSURE_PLATE;
+	public static Block ZARZYK_BUTTON;
+	public static Block ZARZYK_TRAPDOOR;
+	public static Block ZARZYK_DOOR;
+	public static Block ZARZYK_LEAVES;
+	public static Block ZARZYK_SAPLING;
+	public static Block POTTED_ZARZYK_SAPLING;
 
 	public static final BlockBehaviour.Properties SILVER_WOLF_ORE_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(4.0f, 1200f)
@@ -203,6 +219,89 @@ public class CustomBlocks {
 			.instabreak()
 			.noOcclusion()
 			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties ZARZYK_LOG_SETTINGS = Blocks.logProperties(MapColor.WOOD, MapColor.PODZOL, SoundType.WOOD);
+	public static final BlockBehaviour.Properties ZARZYK_WOOD_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+			.sound(SoundType.WOOD)
+			.noOcclusion()
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties STRIPPED_ZARZYK_LOG_SETTINGS = Blocks.logProperties(MapColor.WOOD, MapColor.WOOD, SoundType.WOOD);
+	public static final BlockBehaviour.Properties STRIPPED_ZARZYK_WOOD_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+			.sound(SoundType.WOOD)
+			.noOcclusion()
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_PLANKS_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F)
+			.sound(SoundType.WOOD)
+			.noOcclusion()
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_STAIRS_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+			.sound(SoundType.WOOD)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_SLAB_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+			.sound(SoundType.WOOD)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_FENCE_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+			.sound(SoundType.WOOD)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_FENCE_GATE_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(2.0F, 3.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_PRESSURE_PLATE_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(0.5F)
+			.ignitedByLava()
+			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties ZARZYK_BUTTON_SETTINGS = Blocks.buttonProperties();
+	public static final BlockBehaviour.Properties ZARZYK_TRAPDOOR_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(3.0F)
+			.noOcclusion()
+			.isValidSpawn(Blocks::never)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_DOOR_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.instrument(NoteBlockInstrument.BASS)
+			.strength(3.0F)
+			.noOcclusion()
+			.ignitedByLava()
+			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties ZARZYK_LEAVES_SETTINGS = Blocks.leavesProperties(SoundType.AZALEA_LEAVES);
+	public static final BlockBehaviour.Properties ZARZYK_SAPLING_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.PLANT)
+			.noCollision()
+			.randomTicks()
+			.instabreak()
+			.sound(SoundType.GRASS)
+			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties POTTED_ZARZYK_SAPLING_SETTINGS = BlockBehaviour.Properties.of()
+			.instabreak()
+			.noOcclusion()
+			.pushReaction(PushReaction.POPPED);
 
 	public static final Item.Properties SILVER_WOLF_ORE_ITEM_SETTINGS = new Item.Properties()
 			.stacksTo(64);
@@ -231,36 +330,8 @@ public class CustomBlocks {
 			.stacksTo(16);
 	public static final Item.Properties CHIMPANZINI_BANANINI_ITEM_SETTINGS = new Item.Properties()
 			.stacksTo(16);
-	// Wood
-	public static final Item.Properties ISTANBUL_LOG_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_WOOD_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties STRIPPED_ISTANBUL_LOG_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties STRIPPED_ISTANBUL_WOOD_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_PLANKS_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_STAIRS_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_SLAB_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_FENCE_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_FENCE_GATE_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_PRESSURE_PLATE_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_BUTTON_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_TRAPDOOR_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_DOOR_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_LEAVES_ITEM_SETTINGS = new Item.Properties()
-			.stacksTo(64);
-	public static final Item.Properties ISTANBUL_SAPLING_ITEM_SETTINGS = new Item.Properties()
+
+	public static final Item.Properties DEFAULT_ITEM_SETTINGS = new Item.Properties()
 			.stacksTo(64);
 
 	public static void registerAll() {
@@ -333,82 +404,161 @@ public class CustomBlocks {
 		// Wood
 		ISTANBUL_LOG = InformejtycyRegistry.registerCustomBlock("istanbul_log",
 				ISTANBUL_LOG_SETTINGS,
-				ISTANBUL_LOG_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				RotatedPillarBlock::new
 		);
 		STRIPPED_ISTANBUL_LOG = InformejtycyRegistry.registerCustomBlock("stripped_istanbul_log",
 				STRIPPED_ISTANBUL_LOG_SETTINGS,
-				STRIPPED_ISTANBUL_LOG_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				RotatedPillarBlock::new
 		);
 		ISTANBUL_WOOD = InformejtycyRegistry.registerCustomBlock("istanbul_wood",
 				ISTANBUL_WOOD_SETTINGS,
-				ISTANBUL_WOOD_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				RotatedPillarBlock::new
 		);
 		STRIPPED_ISTANBUL_WOOD = InformejtycyRegistry.registerCustomBlock("stripped_istanbul_wood",
 				STRIPPED_ISTANBUL_WOOD_SETTINGS,
-				STRIPPED_ISTANBUL_WOOD_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				RotatedPillarBlock::new
 		);
 		ISTANBUL_PLANKS = InformejtycyRegistry.registerBlock("istanbul_planks",
 				ISTANBUL_PLANKS_SETTINGS,
-				ISTANBUL_PLANKS_ITEM_SETTINGS
+				DEFAULT_ITEM_SETTINGS
 		);
 		ISTANBUL_STAIRS = InformejtycyRegistry.registerCustomBlock("istanbul_stairs",
 				ISTANBUL_STAIRS_SETTINGS,
-				ISTANBUL_STAIRS_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new StairBlock(ISTANBUL_PLANKS.defaultBlockState(), properties)
 		);
 		ISTANBUL_SLAB = InformejtycyRegistry.registerCustomBlock("istanbul_slab",
 				ISTANBUL_SLAB_SETTINGS,
-				ISTANBUL_SLAB_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				SlabBlock::new
 		);
 		ISTANBUL_FENCE = InformejtycyRegistry.registerCustomBlock("istanbul_fence",
 				ISTANBUL_FENCE_SETTINGS,
-				ISTANBUL_FENCE_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				FenceBlock::new
 		);
 		ISTANBUL_FENCE_GATE = InformejtycyRegistry.registerCustomBlock("istanbul_fence_gate",
 				ISTANBUL_FENCE_GATE_SETTINGS,
-				ISTANBUL_FENCE_GATE_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new FenceGateBlock(WoodType.BAMBOO, properties)
 		);
 		ISTANBUL_PRESSURE_PLATE = InformejtycyRegistry.registerCustomBlock("istanbul_pressure_plate",
 				ISTANBUL_PRESSURE_PLATE_SETTINGS,
-				ISTANBUL_PRESSURE_PLATE_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new PressurePlateBlock(BlockSetType.BAMBOO, properties)
 		);
 		ISTANBUL_BUTTON = InformejtycyRegistry.registerCustomBlock("istanbul_button",
 				ISTANBUL_BUTTON_SETTINGS,
-				ISTANBUL_BUTTON_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new ButtonBlock(BlockSetType.BAMBOO, 30, properties)
 		);
 		ISTANBUL_TRAPDOOR = InformejtycyRegistry.registerCustomBlock("istanbul_trapdoor",
 				ISTANBUL_TRAPDOOR_SETTINGS,
-				ISTANBUL_TRAPDOOR_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new TrapDoorBlock(BlockSetType.BAMBOO, properties)
 		);
 		ISTANBUL_DOOR = InformejtycyRegistry.registerCustomBlock("istanbul_door",
 				ISTANBUL_DOOR_SETTINGS,
-				ISTANBUL_DOOR_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new DoorBlock(BlockSetType.BAMBOO, properties)
 		);
 		ISTANBUL_LEAVES =InformejtycyRegistry.registerCustomBlock("istanbul_leaves",
 				ISTANBUL_LEAVES_SETTINGS,
-				ISTANBUL_LEAVES_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new UntintedParticleLeavesBlock(0.02F,
 						ParticleTypes.DRIPPING_OBSIDIAN_TEAR, AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties)
 		);
 		ISTANBUL_SAPLING = InformejtycyRegistry.registerCustomBlock("istanbul_sapling",
 				ISTANBUL_SAPLING_SETTINGS,
-				ISTANBUL_SAPLING_ITEM_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
 				properties -> new SaplingBlock(CustomTreeGrowers.ISTANBUL_TREE_GROWER, properties)
 		);
 		POTTED_ISTANBUL_SAPLING = InformejtycyRegistry.registerCustomBlockWithoutItem("potted_istanbul_sapling",
 				POTTED_ISTANBUL_SAPLING_SETTINGS,
 				properties -> new FlowerPotBlock(ISTANBUL_SAPLING, properties)
+		);
+		ZARZYK_LOG = InformejtycyRegistry.registerCustomBlock("zarzyk_log",
+				ZARZYK_LOG_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				RotatedPillarBlock::new
+		);
+		STRIPPED_ZARZYK_LOG = InformejtycyRegistry.registerCustomBlock("stripped_zarzyk_log",
+				STRIPPED_ZARZYK_LOG_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				RotatedPillarBlock::new
+		);
+		ZARZYK_WOOD = InformejtycyRegistry.registerCustomBlock("zarzyk_wood",
+				ZARZYK_WOOD_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				RotatedPillarBlock::new
+		);
+		STRIPPED_ZARZYK_WOOD = InformejtycyRegistry.registerCustomBlock("stripped_zarzyk_wood",
+				STRIPPED_ZARZYK_WOOD_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				RotatedPillarBlock::new
+		);
+		ZARZYK_PLANKS = InformejtycyRegistry.registerBlock("zarzyk_planks",
+				ZARZYK_PLANKS_SETTINGS,
+				DEFAULT_ITEM_SETTINGS
+		);
+		ZARZYK_STAIRS = InformejtycyRegistry.registerCustomBlock("zarzyk_stairs",
+				ZARZYK_STAIRS_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new StairBlock(ZARZYK_PLANKS.defaultBlockState(), properties)
+		);
+		ZARZYK_SLAB = InformejtycyRegistry.registerCustomBlock("zarzyk_slab",
+				ZARZYK_SLAB_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				SlabBlock::new
+		);
+		ZARZYK_FENCE = InformejtycyRegistry.registerCustomBlock("zarzyk_fence",
+				ZARZYK_FENCE_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				FenceBlock::new
+		);
+		ZARZYK_FENCE_GATE = InformejtycyRegistry.registerCustomBlock("zarzyk_fence_gate",
+				ZARZYK_FENCE_GATE_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new FenceGateBlock(WoodType.BAMBOO, properties)
+		);
+		ZARZYK_PRESSURE_PLATE = InformejtycyRegistry.registerCustomBlock("zarzyk_pressure_plate",
+				ZARZYK_PRESSURE_PLATE_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new PressurePlateBlock(BlockSetType.BAMBOO, properties)
+		);
+		ZARZYK_BUTTON = InformejtycyRegistry.registerCustomBlock("zarzyk_button",
+				ZARZYK_BUTTON_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new ButtonBlock(BlockSetType.BAMBOO, 30, properties)
+		);
+		ZARZYK_TRAPDOOR = InformejtycyRegistry.registerCustomBlock("zarzyk_trapdoor",
+				ZARZYK_TRAPDOOR_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new TrapDoorBlock(BlockSetType.BAMBOO, properties)
+		);
+		ZARZYK_DOOR = InformejtycyRegistry.registerCustomBlock("zarzyk_door",
+				ZARZYK_DOOR_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new DoorBlock(BlockSetType.BAMBOO, properties)
+		);
+		ZARZYK_LEAVES =InformejtycyRegistry.registerCustomBlock("zarzyk_leaves",
+				ZARZYK_LEAVES_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new UntintedParticleLeavesBlock(0.02F,
+						ParticleTypes.DRIPPING_OBSIDIAN_TEAR, AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties)
+		);
+		ZARZYK_SAPLING = InformejtycyRegistry.registerCustomBlock("zarzyk_sapling",
+				ZARZYK_SAPLING_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				properties -> new SaplingBlock(CustomTreeGrowers.ZARZYK_TREE_GROWER, properties)
+		);
+		POTTED_ZARZYK_SAPLING = InformejtycyRegistry.registerCustomBlockWithoutItem("potted_zarzyk_sapling",
+				POTTED_ZARZYK_SAPLING_SETTINGS,
+				properties -> new FlowerPotBlock(ZARZYK_SAPLING, properties)
 		);
 
 		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, SILVER_WOLF_ORE);
@@ -439,6 +589,21 @@ public class CustomBlocks {
 		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ISTANBUL_PRESSURE_PLATE);
 		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ISTANBUL_BUTTON);
 		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, ISTANBUL_LEAVES);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, ZARZYK_LOG);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, STRIPPED_ZARZYK_LOG);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, ZARZYK_WOOD);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, STRIPPED_ZARZYK_WOOD);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_PLANKS);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_STAIRS);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_SLAB);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_FENCE);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_FENCE_GATE);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_DOOR);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_TRAPDOOR);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_PRESSURE_PLATE);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.BUILDING_BLOCKS, ZARZYK_BUTTON);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, ZARZYK_LEAVES);
+		InformejtycyRegistry.registerMenuBlock(CreativeModeTabs.NATURAL_BLOCKS, ZARZYK_SAPLING);
 
         FlammableBlockRegistry.getDefaultInstance().add(ISTANBUL_LOG, 5, 5);
         FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_ISTANBUL_LOG, 5, 5);

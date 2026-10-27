@@ -20,6 +20,7 @@ import java.util.List;
 public class CustomPlacedFeatures {
 	public static final ResourceKey<PlacedFeature> SILVER_WOLF_ORE_PLACED_KEY = registerKey("silver_wolf_ore_placed");
 	public static final ResourceKey<PlacedFeature> ISTANBUL_TREE_PLACED_KEY = registerKey("istanbul_tree_placed");
+	public static final ResourceKey<PlacedFeature> ZARZYK_TREE_PLACED_KEY = registerKey("zarzyk_tree_placed");
 
 	public static void bootstrap(BootstrapContext<PlacedFeature> context) {
 		var configuredFeatures = context.lookup(Registries.FEATURE);
@@ -28,6 +29,8 @@ public class CustomPlacedFeatures {
 				PlacementModifiers.modifiersWithCount(5, HeightRangePlacement.uniform(VerticalAnchor.absolute(10), VerticalAnchor.absolute(40))));
 		register(context, ISTANBUL_TREE_PLACED_KEY, configuredFeatures.getOrThrow(CustomConfiguredFeatures.ISTANBUL_TREE_KEY),
 				VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f, 2), CustomBlocks.ISTANBUL_SAPLING));
+		register(context, ZARZYK_TREE_PLACED_KEY, configuredFeatures.getOrThrow(CustomConfiguredFeatures.ZARZYK_TREE_KEY),
+				VegetationPlacements.treePlacement(PlacementUtils.countExtra(3, 0.1f, 2), CustomBlocks.ZARZYK_SAPLING));
 	}
 
 	public static ResourceKey<PlacedFeature> registerKey(String name) {

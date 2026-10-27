@@ -59,30 +59,48 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
 				.add(key(CustomBlocks.STRIPPED_ISTANBUL_LOG))
 				.add(key(CustomBlocks.ISTANBUL_WOOD))
 				.add(key(CustomBlocks.STRIPPED_ISTANBUL_WOOD));
+		tag(CustomTags.Blocks.ZARZYK_LOGS)
+				.add(key(CustomBlocks.ZARZYK_LOG))
+				.add(key(CustomBlocks.STRIPPED_ZARZYK_LOG))
+				.add(key(CustomBlocks.ZARZYK_WOOD))
+				.add(key(CustomBlocks.STRIPPED_ZARZYK_WOOD));
+
 		tag(BlockTags.LOGS)
-				.addTag(CustomTags.Blocks.ISTANBUL_LOGS);
+				.addTag(CustomTags.Blocks.ISTANBUL_LOGS)
+				.addTag(CustomTags.Blocks.ZARZYK_LOGS);
 		tag(BlockTags.PLANKS)
-				.add(key(CustomBlocks.ISTANBUL_PLANKS));
+				.add(key(CustomBlocks.ISTANBUL_PLANKS))
+				.add(key(CustomBlocks.ZARZYK_PLANKS));
 		tag(BlockTags.LEAVES)
-				.add(key(CustomBlocks.ISTANBUL_LEAVES));
+				.add(key(CustomBlocks.ISTANBUL_LEAVES))
+				.add(key(CustomBlocks.ZARZYK_LEAVES));
 		tag(BlockTags.FLOWER_POTS)
-				.add(key(CustomBlocks.POTTED_ISTANBUL_SAPLING));
+				.add(key(CustomBlocks.POTTED_ISTANBUL_SAPLING))
+				.add(key(CustomBlocks.POTTED_ZARZYK_SAPLING));
 		tag(BlockTags.WOODEN_STAIRS)
-				.add(key(CustomBlocks.ISTANBUL_STAIRS));
+				.add(key(CustomBlocks.ISTANBUL_STAIRS))
+				.add(key(CustomBlocks.ZARZYK_STAIRS));
 		tag(BlockTags.WOODEN_SLABS)
-				.add(key(CustomBlocks.ISTANBUL_SLAB));
+				.add(key(CustomBlocks.ISTANBUL_SLAB))
+				.add(key(CustomBlocks.ZARZYK_SLAB));
 		tag(BlockTags.WOODEN_FENCES)
-				.add(key(CustomBlocks.ISTANBUL_FENCE));
+				.add(key(CustomBlocks.ISTANBUL_FENCE))
+				.add(key(CustomBlocks.ZARZYK_FENCE));
 		tag(BlockTags.FENCE_GATES)
-				.add(key(CustomBlocks.ISTANBUL_FENCE_GATE));
+				.add(key(CustomBlocks.ISTANBUL_FENCE_GATE))
+				.add(key(CustomBlocks.ZARZYK_FENCE_GATE));
 		tag(BlockTags.WOODEN_PRESSURE_PLATES)
-				.add(key(CustomBlocks.ISTANBUL_PRESSURE_PLATE));
+				.add(key(CustomBlocks.ISTANBUL_PRESSURE_PLATE))
+				.add(key(CustomBlocks.ZARZYK_PRESSURE_PLATE));
 		tag(BlockTags.WOODEN_BUTTONS)
-				.add(key(CustomBlocks.ISTANBUL_BUTTON));
+				.add(key(CustomBlocks.ISTANBUL_BUTTON))
+				.add(key(CustomBlocks.ZARZYK_BUTTON));
 		tag(BlockTags.WOODEN_TRAPDOORS)
-				.add(key(CustomBlocks.ISTANBUL_TRAPDOOR));
+				.add(key(CustomBlocks.ISTANBUL_TRAPDOOR))
+				.add(key(CustomBlocks.ZARZYK_TRAPDOOR));
 		tag(BlockTags.WOODEN_DOORS)
-				.add(key(CustomBlocks.ISTANBUL_DOOR));
+				.add(key(CustomBlocks.ISTANBUL_DOOR))
+				.add(key(CustomBlocks.ZARZYK_DOOR));
 	}
 
 	private static ResourceKey<Block> key(Block block) {

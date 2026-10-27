@@ -37,6 +37,7 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		add(CustomBlocks.DARK_GLOWSTONE, glowstoneDrops(CustomBlocks.DARK_GLOWSTONE, CustomItems.DARK_GLOWSTONE_DUST));
 		add(CustomBlocks.ISTANBUL_LEAVES, block -> createLeavesDrops(block, CustomBlocks.ISTANBUL_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
 		add(CustomBlocks.POTTED_ISTANBUL_SAPLING, block -> createPotFlowerItemTable(CustomBlocks.ISTANBUL_SAPLING));
+		add(CustomBlocks.POTTED_ZARZYK_SAPLING, block -> createPotFlowerItemTable(CustomBlocks.ZARZYK_SAPLING));
 		dropSelf(CustomBlocks.THEORY_FORGE_BLOCK);
 		dropSelf(CustomBlocks.BRAINROT_TABLE_BLOCK);
 		dropSelf(CustomBlocks.SILVER_WOLF_BLOCK);
@@ -62,6 +63,20 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.ISTANBUL_TRAPDOOR);
 		add(CustomBlocks.ISTANBUL_DOOR, createDoorTable(CustomBlocks.ISTANBUL_DOOR));
 		dropSelf(CustomBlocks.ISTANBUL_SAPLING);
+		dropSelf(CustomBlocks.ZARZYK_LOG);
+		dropSelf(CustomBlocks.STRIPPED_ZARZYK_LOG);
+		dropSelf(CustomBlocks.ZARZYK_WOOD);
+		dropSelf(CustomBlocks.STRIPPED_ZARZYK_WOOD);
+		dropSelf(CustomBlocks.ZARZYK_PLANKS);
+		dropSelf(CustomBlocks.ZARZYK_STAIRS);
+		add(CustomBlocks.ZARZYK_SLAB, createSlabItemTable(CustomBlocks.ZARZYK_SLAB));
+		dropSelf(CustomBlocks.ZARZYK_FENCE);
+		dropSelf(CustomBlocks.ZARZYK_FENCE_GATE);
+		dropSelf(CustomBlocks.ZARZYK_PRESSURE_PLATE);
+		dropSelf(CustomBlocks.ZARZYK_BUTTON);
+		dropSelf(CustomBlocks.ZARZYK_TRAPDOOR);
+		add(CustomBlocks.ZARZYK_DOOR, createDoorTable(CustomBlocks.ZARZYK_DOOR));
+		dropSelf(CustomBlocks.ZARZYK_SAPLING);
 	}
 
 	protected LootTable.Builder glowstoneDrops(Block block, Item drop) {

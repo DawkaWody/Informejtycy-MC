@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBrewingProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.data.recipes.BrewingRecipeBuilder;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -21,6 +22,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -177,70 +179,23 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						.unlockedBy(getHasName(CustomBlocks.GOLDEN_WOLF_BLOCK), has(CustomBlocks.GOLDEN_WOLF_BLOCK))
 						.save(this.output, "golden_wolf_from_block");
 
-				woodFromLogs(CustomBlocks.ISTANBUL_WOOD, CustomBlocks.ISTANBUL_LOG);
-				woodFromLogs(CustomBlocks.STRIPPED_ISTANBUL_WOOD, CustomBlocks.STRIPPED_ISTANBUL_LOG);
-				planksFromLogs(CustomBlocks.ISTANBUL_PLANKS, CustomTags.Items.ISTANBUL_LOGS, 3);
-				stairBuilder(CustomBlocks.ISTANBUL_STAIRS, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
-				slab(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.ISTANBUL_SLAB, CustomBlocks.ISTANBUL_PLANKS);
-				fenceBuilder(CustomBlocks.ISTANBUL_FENCE, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
-				fenceGateBuilder(CustomBlocks.ISTANBUL_FENCE_GATE, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
-				pressurePlate(CustomBlocks.ISTANBUL_PRESSURE_PLATE, CustomBlocks.ISTANBUL_PLANKS);
-				buttonBuilder(CustomBlocks.ISTANBUL_BUTTON, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
-				trapdoorBuilder(CustomBlocks.ISTANBUL_TRAPDOOR, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
-				doorBuilder(CustomBlocks.ISTANBUL_DOOR, Ingredient.of(CustomBlocks.ISTANBUL_PLANKS))
-						.unlockedBy(getHasName(CustomBlocks.ISTANBUL_PLANKS), has(CustomBlocks.ISTANBUL_PLANKS))
-						.save(this.output);
+				buildWoodSetRecipes(CustomBlocks.ISTANBUL_LOG, CustomBlocks.ISTANBUL_WOOD, CustomBlocks.STRIPPED_ISTANBUL_LOG,
+						CustomBlocks.STRIPPED_ISTANBUL_WOOD, CustomBlocks.ISTANBUL_PLANKS, CustomBlocks.ISTANBUL_STAIRS,
+						CustomBlocks.ISTANBUL_SLAB, CustomBlocks.ISTANBUL_FENCE, CustomBlocks.ISTANBUL_FENCE_GATE,
+						CustomBlocks.ISTANBUL_PRESSURE_PLATE, CustomBlocks.ISTANBUL_BUTTON,
+						CustomBlocks.ISTANBUL_TRAPDOOR, CustomBlocks.ISTANBUL_DOOR, CustomTags.Items.ISTANBUL_LOGS);
+				buildWoodSetRecipes(CustomBlocks.ZARZYK_LOG, CustomBlocks.ISTANBUL_WOOD, CustomBlocks.STRIPPED_ZARZYK_LOG,
+						CustomBlocks.STRIPPED_ZARZYK_WOOD, CustomBlocks.ZARZYK_PLANKS, CustomBlocks.ZARZYK_STAIRS,
+						CustomBlocks.ZARZYK_SLAB, CustomBlocks.ZARZYK_FENCE, CustomBlocks.ZARZYK_FENCE_GATE,
+						CustomBlocks.ZARZYK_PRESSURE_PLATE, CustomBlocks.ZARZYK_BUTTON,
+						CustomBlocks.ZARZYK_TRAPDOOR, CustomBlocks.ZARZYK_DOOR, CustomTags.Items.ZARZYK_LOGS);
 
-				RecipeHelper.createHelmetRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_HELMET, 1),
-						CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-
-				RecipeHelper.createChestplateRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_CHESTPLATE, 1),
-						CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-
-				RecipeHelper.createLeggingsRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_LEGGINGS, 1),
-						CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-
-				RecipeHelper.createBootsRecipe(shaped(RecipeCategory.COMBAT, CustomItems.INFORMEJTYCY_BOOTS, 1),
-						CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-
-				RecipeHelper.createSwordRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SWORD, 1),
-						CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-				RecipeHelper.createPickaxeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_PICKAXE, 1),
-								CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-				RecipeHelper.createShovelRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_SHOVEL, 1),
-								CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-				RecipeHelper.createAxeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_AXE, 1),
-								CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
-				RecipeHelper.createHoeRecipe(shaped(RecipeCategory.TOOLS, CustomItems.INFORMEJTYCY_HOE, 1),
-								CustomItems.SILVER_WOLF)
-						.unlockedBy(getHasName(CustomItems.SILVER_WOLF), has(CustomItems.SILVER_WOLF))
-						.save(this.output);
+				buildArmorRecipes(CustomItems.SILVER_WOLF, CustomItems.INFORMEJTYCY_HELMET,
+						CustomItems.INFORMEJTYCY_CHESTPLATE, CustomItems.INFORMEJTYCY_LEGGINGS,
+						CustomItems.INFORMEJTYCY_BOOTS);
+				buildToolsetRecipes(CustomItems.SILVER_WOLF, CustomItems.INFORMEJTYCY_SWORD,
+						CustomItems.INFORMEJTYCY_PICKAXE, CustomItems.INFORMEJTYCY_SHOVEL,
+						CustomItems.INFORMEJTYCY_AXE, CustomItems.INFORMEJTYCY_HOE);
 
 				SmithingTransformRecipeBuilder.smithing(
 						Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
@@ -328,7 +283,7 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 				new FabricBrewingProvider(this.output) {
 					@Override
 					protected void buildMixes() {
-						buildStartMix(Item.byBlock(CustomBlocks.SILVER_WOLF_ORE), CustomPotions.AURA_POTION);
+						buildStartMix(CustomBlocks.SILVER_WOLF_ORE.asItem(), CustomPotions.AURA_POTION);
 					}
 
 					@Override
@@ -339,6 +294,67 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 								Items.SPLASH_POTION, CustomPotions.AURA_POTION, Items.DRAGON_BREATH, Items.LINGERING_POTION));
 					}
 				}.buildRecipes();
+			}
+
+			private void buildArmorRecipes(Item material, Item helmet, Item chestplate, Item leggings, Item boots) {
+				RecipeHelper.createHelmetRecipe(shaped(RecipeCategory.COMBAT, helmet, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createChestplateRecipe(shaped(RecipeCategory.COMBAT, chestplate, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createLeggingsRecipe(shaped(RecipeCategory.COMBAT, leggings, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createBootsRecipe(shaped(RecipeCategory.COMBAT, boots, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+			}
+
+			private void buildToolsetRecipes(Item material, Item sword, Item pickaxe, Item shovel, Item axe, Item hoe) {
+				RecipeHelper.createSwordRecipe(shaped(RecipeCategory.COMBAT, sword, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createPickaxeRecipe(shaped(RecipeCategory.TOOLS, pickaxe, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createShovelRecipe(shaped(RecipeCategory.TOOLS, shovel, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createAxeRecipe(shaped(RecipeCategory.TOOLS, axe, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+				RecipeHelper.createHoeRecipe(shaped(RecipeCategory.TOOLS, hoe, 1), material)
+						.unlockedBy(getHasName(material), has(material))
+						.save(this.output);
+			}
+
+			private void buildWoodSetRecipes(Block wood, Block log, Block strippedWood, Block strippedLog, Block planks,
+			                                 Block stairs, Block slab, Block fence, Block fenceGate, Block pressurePlate,
+			                                 Block button, Block trapdoor, Block door, TagKey<Item> logTag) {
+				woodFromLogs(wood, log);
+				woodFromLogs(strippedWood, strippedLog);
+				planksFromLogs(planks, logTag, 4);
+				stairBuilder(stairs, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				slab(RecipeCategory.BUILDING_BLOCKS, slab, planks);
+				fenceBuilder(fence, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				fenceGateBuilder(fenceGate, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				pressurePlate(pressurePlate, planks);
+				buttonBuilder(button, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				trapdoorBuilder(trapdoor, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				doorBuilder(door, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
 			}
 		};
 	}

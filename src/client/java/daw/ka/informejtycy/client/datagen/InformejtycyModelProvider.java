@@ -22,6 +22,7 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.DARK_GLOWSTONE);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_BLOCK);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.GOLDEN_WOLF_BLOCK);
+
 		blockStateModelGenerator.family(CustomBlocks.ISTANBUL_PLANKS)
 				.stairs(CustomBlocks.ISTANBUL_STAIRS)
 				.slab(CustomBlocks.ISTANBUL_SLAB)
@@ -29,15 +30,29 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 				.fenceGate(CustomBlocks.ISTANBUL_FENCE_GATE)
 				.pressurePlate(CustomBlocks.ISTANBUL_PRESSURE_PLATE)
 				.button(CustomBlocks.ISTANBUL_BUTTON);
+		blockStateModelGenerator.family(CustomBlocks.ZARZYK_PLANKS)
+				.stairs(CustomBlocks.ZARZYK_STAIRS)
+				.slab(CustomBlocks.ZARZYK_SLAB)
+				.fence(CustomBlocks.ZARZYK_FENCE)
+				.fenceGate(CustomBlocks.ZARZYK_FENCE_GATE)
+				.pressurePlate(CustomBlocks.ZARZYK_PRESSURE_PLATE)
+				.button(CustomBlocks.ZARZYK_BUTTON);
+
 		blockStateModelGenerator.createOrientableTrapdoor(CustomBlocks.ISTANBUL_TRAPDOOR);
+		blockStateModelGenerator.createOrientableTrapdoor(CustomBlocks.ZARZYK_TRAPDOOR);
 		blockStateModelGenerator.createDoor(CustomBlocks.ISTANBUL_DOOR);
+		blockStateModelGenerator.createDoor(CustomBlocks.ZARZYK_DOOR);
 
 		blockStateModelGenerator.createTrivialBlock(CustomBlocks.ISTANBUL_LEAVES, TexturedModel.LEAVES);
+		blockStateModelGenerator.createTrivialBlock(CustomBlocks.ZARZYK_LEAVES, TexturedModel.LEAVES);
 
 		blockStateModelGenerator.woodProvider(CustomBlocks.ISTANBUL_LOG).log(CustomBlocks.ISTANBUL_LOG).wood(CustomBlocks.ISTANBUL_WOOD);
 		blockStateModelGenerator.woodProvider(CustomBlocks.STRIPPED_ISTANBUL_LOG).log(CustomBlocks.STRIPPED_ISTANBUL_LOG).wood(CustomBlocks.STRIPPED_ISTANBUL_WOOD);
+		blockStateModelGenerator.woodProvider(CustomBlocks.ZARZYK_LOG).log(CustomBlocks.ZARZYK_LOG).wood(CustomBlocks.ZARZYK_WOOD);
+		blockStateModelGenerator.woodProvider(CustomBlocks.STRIPPED_ZARZYK_LOG).log(CustomBlocks.STRIPPED_ZARZYK_LOG).wood(CustomBlocks.STRIPPED_ZARZYK_WOOD);
 
 		blockStateModelGenerator.createPlantWithDefaultItem(CustomBlocks.ISTANBUL_SAPLING, CustomBlocks.POTTED_ISTANBUL_SAPLING, BlockModelGenerators.PlantType.NOT_TINTED);
+		blockStateModelGenerator.createPlantWithDefaultItem(CustomBlocks.ZARZYK_SAPLING, CustomBlocks.POTTED_ZARZYK_SAPLING, BlockModelGenerators.PlantType.NOT_TINTED);
 	}
 
 	@Override

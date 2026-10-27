@@ -14,6 +14,7 @@ public class CustomTags {
 		public static final TagKey<Block> INCORRECT_FOR_REINFORCED_INFORMEJTYCY_TOOL = createTag("incorrect_for_reinforced_informejtycy_tool");
 
 		public static final TagKey<Block> ISTANBUL_LOGS = createTag("istanbul_logs");
+		public static final TagKey<Block> ZARZYK_LOGS = createTag("zarzyk_logs");
 
 		private static TagKey<Block> createTag(String name) {
 			return TagKey.create(Registries.BLOCK, InformejtycyRegistry.id(name));
@@ -26,6 +27,7 @@ public class CustomTags {
         public static final TagKey<Item> ZMYSIO_REPAIR = createTag("zmysio_repair");
 
 		public static final TagKey<Item> ISTANBUL_LOGS = createTag("istanbul_logs");
+		public static final TagKey<Item> ZARZYK_LOGS = createTag("zarzyk_logs");
 
 		private static TagKey<Item> createTag(String name) {
 			return TagKey.create(Registries.ITEM, InformejtycyRegistry.id(name));

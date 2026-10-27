@@ -85,30 +85,47 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 				.add(key(CustomBlocks.STRIPPED_ISTANBUL_LOG.asItem()))
 				.add(key(CustomBlocks.ISTANBUL_WOOD.asItem()))
 				.add(key(CustomBlocks.STRIPPED_ISTANBUL_WOOD.asItem()));
+		tag(CustomTags.Items.ZARZYK_LOGS)
+				.add(key(CustomBlocks.ZARZYK_LOG.asItem()))
+				.add(key(CustomBlocks.STRIPPED_ZARZYK_LOG.asItem()))
+				.add(key(CustomBlocks.ZARZYK_WOOD.asItem()))
+				.add(key(CustomBlocks.STRIPPED_ZARZYK_WOOD.asItem()));
 		tag(ItemTags.LOGS_THAT_BURN)
-				.addTag(CustomTags.Items.ISTANBUL_LOGS);
+				.addTag(CustomTags.Items.ISTANBUL_LOGS)
+				.addTag(CustomTags.Items.ZARZYK_LOGS);
 		tag(ItemTags.PLANKS)
-				.add(key(CustomBlocks.ISTANBUL_PLANKS.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_PLANKS.asItem()))
+				.add(key(CustomBlocks.ZARZYK_PLANKS.asItem()));
 		tag(ItemTags.WOODEN_STAIRS)
-				.add(key(CustomBlocks.ISTANBUL_STAIRS.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_STAIRS.asItem()))
+				.add(key(CustomBlocks.ZARZYK_STAIRS.asItem()));
 		tag(ItemTags.WOODEN_SLABS)
-				.add(key(CustomBlocks.ISTANBUL_SLAB.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_SLAB.asItem()))
+				.add(key(CustomBlocks.ZARZYK_SLAB.asItem()));
 		tag(ItemTags.WOODEN_FENCES)
-				.add(key(CustomBlocks.ISTANBUL_FENCE.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_FENCE.asItem()))
+				.add(key(CustomBlocks.ZARZYK_FENCE.asItem()));
 		tag(ItemTags.FENCE_GATES)
-				.add(key(CustomBlocks.ISTANBUL_FENCE_GATE.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_FENCE_GATE.asItem()))
+				.add(key(CustomBlocks.ZARZYK_FENCE_GATE.asItem()));
 		tag(ItemTags.WOODEN_PRESSURE_PLATES)
-				.add(key(CustomBlocks.ISTANBUL_PRESSURE_PLATE.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_PRESSURE_PLATE.asItem()))
+				.add(key(CustomBlocks.ZARZYK_PRESSURE_PLATE.asItem()));
 		tag(ItemTags.WOODEN_BUTTONS)
-				.add(key(CustomBlocks.ISTANBUL_BUTTON.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_BUTTON.asItem()))
+				.add(key(CustomBlocks.ZARZYK_BUTTON.asItem()));
 		tag(ItemTags.WOODEN_TRAPDOORS)
-				.add(key(CustomBlocks.ISTANBUL_TRAPDOOR.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_TRAPDOOR.asItem()))
+				.add(key(CustomBlocks.ZARZYK_TRAPDOOR.asItem()));
 		tag(ItemTags.WOODEN_DOORS)
-				.add(key(CustomBlocks.ISTANBUL_DOOR.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_DOOR.asItem()))
+				.add(key(CustomBlocks.ZARZYK_DOOR.asItem()));
 		tag(ItemTags.LEAVES)
-				.add(key(CustomBlocks.ISTANBUL_LEAVES.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_LEAVES.asItem()))
+				.add(key(CustomBlocks.ZARZYK_LEAVES.asItem()));
 		tag(ItemTags.SAPLINGS)
-				.add(key(CustomBlocks.ISTANBUL_SAPLING.asItem()));
+				.add(key(CustomBlocks.ISTANBUL_SAPLING.asItem()))
+				.add(key(CustomBlocks.ZARZYK_SAPLING.asItem()));
 	}
 
 	private static ResourceKey<Item> key(Item item) {
