@@ -179,13 +179,13 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						.unlockedBy(getHasName(CustomBlocks.GOLDEN_WOLF_BLOCK), has(CustomBlocks.GOLDEN_WOLF_BLOCK))
 						.save(this.output, "golden_wolf_from_block");
 
-				buildWoodSetRecipes(CustomBlocks.ISTANBUL_LOG, CustomBlocks.ISTANBUL_WOOD, CustomBlocks.STRIPPED_ISTANBUL_LOG,
-						CustomBlocks.STRIPPED_ISTANBUL_WOOD, CustomBlocks.ISTANBUL_PLANKS, CustomBlocks.ISTANBUL_STAIRS,
+				buildWoodSetRecipes(CustomBlocks.ISTANBUL_WOOD, CustomBlocks.ISTANBUL_LOG, CustomBlocks.STRIPPED_ISTANBUL_WOOD,
+						CustomBlocks.STRIPPED_ISTANBUL_LOG, CustomBlocks.ISTANBUL_PLANKS, CustomBlocks.ISTANBUL_STAIRS,
 						CustomBlocks.ISTANBUL_SLAB, CustomBlocks.ISTANBUL_FENCE, CustomBlocks.ISTANBUL_FENCE_GATE,
 						CustomBlocks.ISTANBUL_PRESSURE_PLATE, CustomBlocks.ISTANBUL_BUTTON,
 						CustomBlocks.ISTANBUL_TRAPDOOR, CustomBlocks.ISTANBUL_DOOR, CustomTags.Items.ISTANBUL_LOGS);
-				buildWoodSetRecipes(CustomBlocks.ZARZYK_LOG, CustomBlocks.ISTANBUL_WOOD, CustomBlocks.STRIPPED_ZARZYK_LOG,
-						CustomBlocks.STRIPPED_ZARZYK_WOOD, CustomBlocks.ZARZYK_PLANKS, CustomBlocks.ZARZYK_STAIRS,
+				buildWoodSetRecipes(CustomBlocks.ZARZYK_WOOD, CustomBlocks.ZARZYK_LOG, CustomBlocks.STRIPPED_ZARZYK_WOOD,
+						CustomBlocks.STRIPPED_ZARZYK_LOG, CustomBlocks.ZARZYK_PLANKS, CustomBlocks.ZARZYK_STAIRS,
 						CustomBlocks.ZARZYK_SLAB, CustomBlocks.ZARZYK_FENCE, CustomBlocks.ZARZYK_FENCE_GATE,
 						CustomBlocks.ZARZYK_PRESSURE_PLATE, CustomBlocks.ZARZYK_BUTTON,
 						CustomBlocks.ZARZYK_TRAPDOOR, CustomBlocks.ZARZYK_DOOR, CustomTags.Items.ZARZYK_LOGS);
