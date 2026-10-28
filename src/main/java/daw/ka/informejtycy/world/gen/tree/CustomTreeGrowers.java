@@ -1,4 +1,4 @@
-package daw.ka.informejtycy.world.tree;
+package daw.ka.informejtycy.world.gen.tree;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.world.CustomConfiguredFeatures;

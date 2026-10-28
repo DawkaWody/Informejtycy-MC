@@ -4,7 +4,7 @@ Projekt Informejtycy to darmowa platforma online, oferująca edukację informaty
 ## PLANOWANE DODATKI / ZMIANY (v 2.0)
 ### Stambuł
 - [x] Zestawy drewna - istanbul, zarzyk
-- [ ] Generacja drzew
+- [x] Generacja drzew
 - [ ] Features (nwm jakie)
 - [ ] Biomy (nwm jakie)
 - [ ] Generacja

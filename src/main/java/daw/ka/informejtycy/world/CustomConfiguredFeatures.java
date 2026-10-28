@@ -2,23 +2,23 @@ package daw.ka.informejtycy.world;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.CustomBlocks;
+import daw.ka.informejtycy.world.gen.tree.placer.foliage.custom.ZarzykBushFoliagePlacer;
+import daw.ka.informejtycy.world.gen.tree.placer.trunk.custom.ZarzykWoodTrunkPlacer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BlockStateProviders;
-import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.levelgen.feature.TreeFeature;
-import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
-import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.BendingTrunkPlacer;
-import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
-import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class CustomConfiguredFeatures {
 				new StraightTrunkPlacer(5, 2, 0),
 				BlockStateProvider.of(CustomBlocks.ISTANBUL_LEAVES),
 
-				new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+				new AcaciaFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0)),
 				new TwoLayersFeatureSize(1, 0, 2),
 
 				context.lookup(Registries.BLOCK_STATE_PROVIDER).getOrThrow(BlockStateProviders.SOIL_BENEATH_TREE)
@@ -45,10 +45,10 @@ public class CustomConfiguredFeatures {
 
 		register(context, ZARZYK_TREE_KEY, new TreeFeature.Builder(
 				BlockStateProvider.of(CustomBlocks.ZARZYK_LOG),
-				new BendingTrunkPlacer(4, 2, 0, 1, ConstantInt.of(2)),
+				new ZarzykWoodTrunkPlacer(2, 2, 4),
 				BlockStateProvider.of(CustomBlocks.ZARZYK_LEAVES),
 
-				new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+				new ZarzykBushFoliagePlacer(ConstantInt.of(1), ConstantInt.of(1)),
 				new TwoLayersFeatureSize(1, 0, 2),
 
 				context.lookup(Registries.BLOCK_STATE_PROVIDER).getOrThrow(BlockStateProviders.SOIL_BENEATH_TREE)

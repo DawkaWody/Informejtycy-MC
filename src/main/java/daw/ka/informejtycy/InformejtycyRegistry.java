@@ -19,7 +19,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -37,10 +36,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jspecify.annotations.NonNull;
 
@@ -63,12 +60,13 @@ public class InformejtycyRegistry {
         CustomParticles.registerAll();
 	}
 
-	public static Block registerBlock(String name, BlockBehaviour.Properties blockSettings, Item.Properties blockItemSettings) {
+	public static Block registerBlock(String name, BlockBehaviour.Properties blockSettings, Item.Properties blockItemSettings, ResourceKey<CreativeModeTab> tab) {
 		Identifier id = id(name);
 		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
 		BlockBehaviour.Properties settings = blockSettings.setId(key);
 		Block block = new Block(settings);
 		registerBlockItem(name, block, blockItemSettings);
+		if (tab != null) registerMenuBlock(tab, block);
 		return Registry.register(BuiltInRegistries.BLOCK, key, block);
 	}
 
@@ -76,6 +74,7 @@ public class InformejtycyRegistry {
 			String name,
 			BlockBehaviour.Properties blockSettings,
 			Item.Properties blockItemSettings,
+			ResourceKey<CreativeModeTab> tab,
 			Function<BlockBehaviour.Properties, T> customBlock
 	) {
 		Identifier id = id(name);
@@ -85,6 +84,7 @@ public class InformejtycyRegistry {
 		Block block = customBlock.apply(settings);
 
 		registerBlockItem(name, block, blockItemSettings);
+		if (tab != null) registerMenuBlock(tab, block);
 		return Registry.register(BuiltInRegistries.BLOCK, key, block);
 	}
 
@@ -98,7 +98,6 @@ public class InformejtycyRegistry {
 		BlockBehaviour.Properties settings = blockSettings.setId(key);
 
 		Block block = customBlock.apply(settings);
-
 		return Registry.register(BuiltInRegistries.BLOCK, key, block);
 	}
 
@@ -124,19 +123,23 @@ public class InformejtycyRegistry {
 		Registry.register(BuiltInRegistries.ITEM, key, new BlockItem(block, settings));
 	}
 
-	public static Item registerItem(String name, Item.Properties itemSettings) {
+	public static Item registerItem(String name, Item.Properties itemSettings, ResourceKey<CreativeModeTab> tab) {
 		Identifier id = id(name);
 		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
 		Item.Properties settings = itemSettings.setId(key);
-		return Registry.register(BuiltInRegistries.ITEM, key, new Item(settings));
+		Item item = new Item(settings);
+		if (tab != null) registerMenuItem(tab, item);
+		return Registry.register(BuiltInRegistries.ITEM, key, item);
 	}
 
-	public static <T extends Item> Item registerCustomItem(String name, Item.Properties itemSettings, Class<T> customItem) {
+	public static <T extends Item> Item registerCustomItem(String name, Item.Properties itemSettings, ResourceKey<CreativeModeTab> tab, Class<T> customItem) {
 		Identifier id = id(name);
 		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
 		Item.Properties settings = itemSettings.setId(key);
 		try {
-			return Registry.register(BuiltInRegistries.ITEM, key, customItem.getDeclaredConstructor(Item.Properties.class).newInstance(settings));
+			Item item = customItem.getDeclaredConstructor(Item.Properties.class).newInstance(settings);
+			if (tab != null) registerMenuItem(tab, item);
+			return Registry.register(BuiltInRegistries.ITEM, key, item);
 		} catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
 			throw new RuntimeException(e);
 		}

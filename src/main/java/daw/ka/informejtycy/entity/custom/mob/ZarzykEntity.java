@@ -44,7 +44,7 @@ public class ZarzykEntity extends Animal implements NeutralMob {
     private static final byte STATUS_ATTACK = 116;
 
     private static final TargetingConditions.Selector ENTITY_IS_CHILD =
-            (entity, world) -> entity.isBaby();
+            (entity, _) -> entity.isBaby();
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
