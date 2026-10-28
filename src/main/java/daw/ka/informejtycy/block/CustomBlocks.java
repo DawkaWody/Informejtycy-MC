@@ -618,5 +618,7 @@ public class CustomBlocks {
 
 		BlockTransformerHelper.registerStripping(ISTANBUL_LOG, STRIPPED_ISTANBUL_LOG);
 		BlockTransformerHelper.registerStripping(ISTANBUL_WOOD, STRIPPED_ISTANBUL_WOOD);
+		BlockTransformerHelper.registerStripping(ZARZYK_LOG, STRIPPED_ZARZYK_LOG);
+		BlockTransformerHelper.registerStripping(ZARZYK_WOOD, STRIPPED_ZARZYK_WOOD);
 	}
 }
