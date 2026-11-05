@@ -70,6 +70,7 @@ public class CustomItemGroups {
 				entries.accept(CustomItems.TALISMAN_OF_SHRIEK);
 				entries.accept(CustomItems.PLUS);
 				entries.accept(CustomItems.RECYCLABLE_BOTTLE);
+				entries.accept(CustomItems.RARE_RECYCLABLE_BOTTLE);
 				entries.accept(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC);
 				entries.accept(CustomItems.HOLY_WARS_MUSIC_DISC);
 				entries.accept(CustomItems.YOU_MUST_BURN_MUSIC_DISC);

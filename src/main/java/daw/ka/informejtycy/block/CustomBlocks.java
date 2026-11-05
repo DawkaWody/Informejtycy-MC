@@ -31,6 +31,8 @@ public class CustomBlocks {
     public static Block TRASH_CAN;
     public static Block SILVER_WOLF_BLOCK;
     public static Block GOLDEN_WOLF_BLOCK;
+	public static Block BIDON_BLOCK;
+	public static Block BIDON_CAP_BLOCK;
     public static Block ZMYSIO_SUMMON_ANCHOR;
 	// Brainrots
 	public static Block BOMBARDINO_COCODRILO;
@@ -114,6 +116,12 @@ public class CustomBlocks {
             .requiresCorrectToolForDrops()
             .sound(SoundType.METAL)
             .noOcclusion();
+	public static final BlockBehaviour.Properties BIDON_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
+			.strength(1.0f, 1.0f)
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.METAL)
+			.noOcclusion();
+	public static final BlockBehaviour.Properties BIDON_CAP_BLOCK_SETTINGS = BIDON_BLOCK_SETTINGS;
 	// Brainrots
 	public static final BlockBehaviour.Properties BOMBARDINO_COCODRILO_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(40f, 4.0f)
@@ -355,6 +363,14 @@ public class CustomBlocks {
 				DEFAULT_ITEM_SETTINGS,
 				CreativeModeTabs.BUILDING_BLOCKS
 		);
+		BIDON_BLOCK = InformejtycyRegistry.registerBlock("bidon_block",
+				BIDON_BLOCK_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				CreativeModeTabs.BUILDING_BLOCKS);
+		BIDON_CAP_BLOCK = InformejtycyRegistry.registerBlock("bidon_cap_block",
+				BIDON_CAP_BLOCK_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				CreativeModeTabs.BUILDING_BLOCKS);
         GLINIANKA_BLOCK = InformejtycyRegistry.registerCustomBlock("glinianka_block",
                 GLINIANKA_BLOCK_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,

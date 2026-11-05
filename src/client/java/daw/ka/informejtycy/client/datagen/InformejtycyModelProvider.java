@@ -70,6 +70,7 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		itemModelGenerator.generateFlatItem(CustomItems.VAPE, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.PLUS, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.RECYCLABLE_BOTTLE, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(CustomItems.RARE_RECYCLABLE_BOTTLE, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.RIDE_THE_LIGHTNING_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.HOLY_WARS_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.YOU_MUST_BURN_MUSIC_DISC, ModelTemplates.FLAT_ITEM);

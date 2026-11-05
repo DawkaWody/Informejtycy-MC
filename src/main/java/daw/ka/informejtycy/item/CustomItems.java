@@ -4,8 +4,8 @@ import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.item.component.CustomDataComponents;
 import daw.ka.informejtycy.item.component.custom.VapeContents;
 import daw.ka.informejtycy.item.custom.*;
-import daw.ka.informejtycy.item.material.CustomArmorMaterials;
-import daw.ka.informejtycy.item.material.CustomToolMaterials;
+import daw.ka.informejtycy.item.custom.material.CustomArmorMaterials;
+import daw.ka.informejtycy.item.custom.material.CustomToolMaterials;
 import daw.ka.informejtycy.sound.CustomSounds;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -37,6 +37,7 @@ public class CustomItems {
     public static Item VAPE;
 	public static Item PLUS;
 	public static Item RECYCLABLE_BOTTLE;
+	public static Item RARE_RECYCLABLE_BOTTLE;
 	// Music discs
 	public static Item RIDE_THE_LIGHTNING_MUSIC_DISC;
 	public static Item HOLY_WARS_MUSIC_DISC;
@@ -88,6 +89,7 @@ public class CustomItems {
             .component(CustomDataComponents.VAPE_CONTENTS, VapeContents.EMPTY);
     public static final Item.Properties PLUS_SETTINGS = new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON);
 	public static final Item.Properties RECYCLABLE_BOTTLE_SETTINGS = new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON);
+	public static final Item.Properties RARE_RECYCLABLE_BOTTLE_SETTINGS = new Item.Properties().stacksTo(1).rarity(Rarity.RARE);
     // Music discs
 	public static final Item.Properties RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS = new Item.Properties().jukeboxPlayable(CustomSounds.RIDE_THE_LIGHTNING_KEY).stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON);
 	public static final Item.Properties HOLY_WARS_MUSIC_DISC_SETTINGS = new Item.Properties().jukeboxPlayable(CustomSounds.HOLY_WARS_KEY).stacksTo(1).rarity(Rarity.UNCOMMON);
@@ -147,6 +149,7 @@ public class CustomItems {
         VAPE = InformejtycyRegistry.registerCustomItem("vape", VAPE_SETTINGS, CreativeModeTabs.TOOLS_AND_UTILITIES, VapeItem.class);
         PLUS = InformejtycyRegistry.registerItem("plus", PLUS_SETTINGS, CreativeModeTabs.INGREDIENTS);
 		RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("recyclable_bottle", RECYCLABLE_BOTTLE_SETTINGS, CreativeModeTabs.INGREDIENTS);
+		RARE_RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("rare_recyclable_bottle", RARE_RECYCLABLE_BOTTLE_SETTINGS, CreativeModeTabs.INGREDIENTS);
         // Music discs
 		RIDE_THE_LIGHTNING_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_ride_the_lightning", RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS, CreativeModeTabs.TOOLS_AND_UTILITIES);
 		HOLY_WARS_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_holy_wars", HOLY_WARS_MUSIC_DISC_SETTINGS, CreativeModeTabs.TOOLS_AND_UTILITIES);

@@ -5,6 +5,7 @@ Projekt Informejtycy to darmowa platforma online, oferująca edukację informaty
 ### Stambuł
 - [x] Zestawy drewna - istanbul, zarzyk
 - [x] Generacja drzew
+- [ ] Boss - Wilk Alfa
 - [ ] Features (nwm jakie)
 - [ ] Biomy (nwm jakie)
 - [ ] Generacja

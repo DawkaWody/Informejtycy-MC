@@ -99,6 +99,7 @@
   "item.informejtycy.vape": "Vape",
   "item.informejtycy.plus": "Plus",
   "item.informejtycy.recyclable_bottle": "Recyclable Bottle",
+  "item.informejtycy.rare_recyclable_bottle": "Rare Recyclable Bottle",
   "item.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
   "item.informejtycy.tralalero_tralala": "Tralalero Tralala",
   "item.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
@@ -152,6 +153,7 @@
   "enchantment.informejtycy.thunderstruck": "Thunderstruck",
 
   "entity.informejtycy.zmysio_boss": "Zmysio",
+  "entity.informejtycy.alpha_wolf_boss": "Alpha Wolf",
   "entity.informejtycy.zarzyk": "Zarzyk",
 
   "painting.informejtycy.zmysio.title": "Zmysio",

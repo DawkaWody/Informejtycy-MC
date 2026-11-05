@@ -1,4 +1,4 @@
-package daw.ka.informejtycy.item.material;
+package daw.ka.informejtycy.item.custom.material;
 
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.tag.CustomTags;

@@ -81,7 +81,7 @@ public class ZmysioEntity extends Monster implements RangedAttackMob {
     private static final byte STATUS_DEATH = 71;
     private static final byte STATUS_SPAWN = 72;
 
-    private static final TargetingConditions.Selector CAN_ATTACK_PREDICTATE = (entity, world) -> entity.isAlwaysTicking();
+    private static final TargetingConditions.Selector CAN_ATTACK_PREDICTATE = (entity, _) -> entity.isAlwaysTicking();
     private final ZmysioProjectileScheduler projectileScheduler = new ZmysioProjectileScheduler(this.level());
     private final ServerBossEvent bossBar = (ServerBossEvent) new ServerBossEvent(UUID.randomUUID(), this.getDisplayName(), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.PROGRESS).setDarkenScreen(true);
     private AreaEffectCloud stinkCloud;
