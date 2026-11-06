@@ -29,6 +29,8 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
                 .add(key(CustomBlocks.SILVER_WOLF_ORE))
                 .add(key(CustomBlocks.SILVER_WOLF_BLOCK))
                 .add(key(CustomBlocks.GOLDEN_WOLF_BLOCK))
+                .add(key(CustomBlocks.BIDON_BLOCK))
+                .add(key(CustomBlocks.BIDON_CAP_BLOCK))
                 .add(key(CustomBlocks.BOMBARDINO_COCODRILO))
                 .add(key(CustomBlocks.RECYCLER_BLOCK));
 

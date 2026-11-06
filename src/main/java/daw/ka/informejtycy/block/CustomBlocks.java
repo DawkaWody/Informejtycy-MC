@@ -4,6 +4,7 @@ import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.custom.BrainrotTableBlock;
 import daw.ka.informejtycy.block.custom.FacingBlock;
 import daw.ka.informejtycy.block.custom.RecyclerBlock;
+import daw.ka.informejtycy.block.custom.ShapedBlock;
 import daw.ka.informejtycy.block.custom.TheoryForgeBlock;
 import daw.ka.informejtycy.block.custom.ZmysioSummoningBlock;
 import daw.ka.informejtycy.world.gen.tree.CustomTreeGrowers;
@@ -121,7 +122,11 @@ public class CustomBlocks {
 			.requiresCorrectToolForDrops()
 			.sound(SoundType.METAL)
 			.noOcclusion();
-	public static final BlockBehaviour.Properties BIDON_CAP_BLOCK_SETTINGS = BIDON_BLOCK_SETTINGS;
+	public static final BlockBehaviour.Properties BIDON_CAP_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
+			.strength(1.0f, 1.0f)
+			.requiresCorrectToolForDrops()
+			.sound(SoundType.METAL)
+			.noOcclusion();
 	// Brainrots
 	public static final BlockBehaviour.Properties BOMBARDINO_COCODRILO_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(40f, 4.0f)
@@ -367,10 +372,11 @@ public class CustomBlocks {
 				BIDON_BLOCK_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
 				CreativeModeTabs.BUILDING_BLOCKS);
-		BIDON_CAP_BLOCK = InformejtycyRegistry.registerBlock("bidon_cap_block",
+		BIDON_CAP_BLOCK = InformejtycyRegistry.registerCustomBlock("bidon_cap_block",
 				BIDON_CAP_BLOCK_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
-				CreativeModeTabs.BUILDING_BLOCKS);
+				CreativeModeTabs.BUILDING_BLOCKS,
+				properties -> new ShapedBlock(properties, CustomShapes.BIDON_CAP));
         GLINIANKA_BLOCK = InformejtycyRegistry.registerCustomBlock("glinianka_block",
                 GLINIANKA_BLOCK_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
@@ -381,7 +387,7 @@ public class CustomBlocks {
                 TRASH_CAN_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
 				CreativeModeTabs.FUNCTIONAL_BLOCKS,
-                ZmysioSummoningBlock::new
+                properties -> new ZmysioSummoningBlock(properties, CustomShapes.TRASH_CAN)
         );
         ZMYSIO_SUMMON_ANCHOR = InformejtycyRegistry.registerBlock("zmysio_summon_anchor",
                 BlockBehaviour.Properties.of(),
@@ -393,25 +399,25 @@ public class CustomBlocks {
 				BOMBARDINO_COCODRILO_SETTINGS,
 				BOMBARDINO_COCODRILO_ITEM_SETTINGS,
 				CreativeModeTabs.COLORED_BLOCKS,
-				FacingBlock::new
+				properties -> new FacingBlock(properties, CustomShapes.BOMBARDINO_COCODRILO)
 		);
 		TRALALERO_TRALALA = InformejtycyRegistry.registerCustomBlock("tralalero_tralala",
 				TRALALERO_TRALALA_SETTINGS,
 				TRALALERO_TRALALA_ITEM_SETTINGS,
 				CreativeModeTabs.COLORED_BLOCKS,
-				FacingBlock::new
+				properties -> new FacingBlock(properties, CustomShapes.TRALALERO_TRALALA)
 		);
 		TUNG_TUNG_SAHUR = InformejtycyRegistry.registerCustomBlock("tung_tung_sahur",
 				TUNG_TUNG_SAHUR_SETTINGS,
 				TUNG_TUNG_SAHUR_ITEM_SETTINGS,
 				CreativeModeTabs.COLORED_BLOCKS,
-				FacingBlock::new
+				properties -> new FacingBlock(properties, CustomShapes.TUNG_TUNG_SAHUR)
 		);
 		CHIMPANZINI_BANANINI = InformejtycyRegistry.registerCustomBlock("chimpanzini_bananini",
 				CHIMPANZINI_BANANINI_SETTINGS,
 				CHIMPANZINI_BANANINI_ITEM_SETTINGS,
 				CreativeModeTabs.COLORED_BLOCKS,
-				FacingBlock::new
+				properties -> new FacingBlock(properties, CustomShapes.CHIMPANZINI_BANANINI)
 		);
 		// Wood
 		ISTANBUL_LOG = InformejtycyRegistry.registerCustomBlock("istanbul_log",

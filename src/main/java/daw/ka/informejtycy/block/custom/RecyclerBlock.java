@@ -1,5 +1,6 @@
 package daw.ka.informejtycy.block.custom;
 
+import daw.ka.informejtycy.block.CustomShapes;
 import daw.ka.informejtycy.block.entity.CustomBlockEntities;
 import daw.ka.informejtycy.block.entity.custom.RecyclerBlockEntity;
 import net.minecraft.world.level.block.Block;
@@ -28,14 +29,17 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Map;
+
 public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
-    public static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 24, 14);
+    private static final Map<Direction, VoxelShape> SHAPES = Shapes.rotateHorizontal(CustomShapes.clampToInteractionBounds(CustomShapes.RECYCLER));
     public static final Property<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public RecyclerBlock(Properties settings) {
@@ -104,7 +108,7 @@ public class RecyclerBlock extends BaseEntityBlock implements EntityBlock {
     @Override
     protected @NonNull VoxelShape getShape(@NonNull BlockState state, @NonNull BlockGetter world,
                                            @NonNull BlockPos pos, @NonNull CollisionContext context) {
-        return SHAPE;
+        return SHAPES.get(state.getValue(FACING));
     }
 
 

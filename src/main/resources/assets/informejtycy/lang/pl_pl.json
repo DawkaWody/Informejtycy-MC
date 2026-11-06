@@ -8,6 +8,8 @@
   "block.informejtycy.trash_can": "Kosz na Śmieci",
   "block.informejtycy.silver_wolf_block": "Blok Srebrnego Wilka",
   "block.informejtycy.golden_wolf_block": "Blok Złotego Wilka",
+  "block.informejtycy.bidon_block": "Blok Bidonu",
+  "block.informejtycy.bidon_cap_block": "Nakrętka Bidonu",
   "block.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
   "block.informejtycy.tralalero_tralala": "Tralalero Tralala",
   "block.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
@@ -84,6 +86,8 @@
   "item.informejtycy.zarzyk_door": "Drzwi Zarzykowe",
   "item.informejtycy.zarzyk_leaves": "Liście Zarzykowe",
   "item.informejtycy.zarzyk_sapling": "Sadzonka Zarzykowa",
+  "item.informejtycy.bidon_block": "Blok Bidonu",
+  "item.informejtycy.bidon_cap_block": "Nakrętka Bidonu",
 
   "item.informejtycy.silver_wolf": "Srebrny Wilk",
   "item.informejtycy.golden_wolf": "Złoty Wilk",

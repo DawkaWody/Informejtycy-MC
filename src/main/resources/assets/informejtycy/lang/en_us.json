@@ -8,6 +8,8 @@
   "block.informejtycy.trash_can": "Trash Can",
   "block.informejtycy.silver_wolf_block": "Silver Wolf Block",
   "block.informejtycy.golden_wolf_block": "Golden Wolf Block",
+  "block.informejtycy.bidon_block": "Bidon Block",
+  "block.informejtycy.bidon_cap_block": "Bidon Cap",
   "block.informejtycy.bombardino_cocodrilo": "Bombardino Cocodrilo",
   "block.informejtycy.tralalero_tralala": "Tralalero Tralala",
   "block.informejtycy.tung_tung_sahur": "Tung Tung Sahur",
@@ -84,6 +86,8 @@
   "item.informejtycy.trash_can": "Trash Can",
   "item.informejtycy.silver_wolf_block": "Silver Wolf Block",
   "item.informejtycy.golden_wolf_block": "Golden Wolf Block",
+  "item.informejtycy.bidon_block": "Bidon Block",
+  "item.informejtycy.bidon_cap_block": "Bidon Cap",
 
   "item.informejtycy.silver_wolf": "Silver Wolf",
   "item.informejtycy.golden_wolf": "Golden Wolf",

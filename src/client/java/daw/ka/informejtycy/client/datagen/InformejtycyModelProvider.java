@@ -1,17 +1,42 @@
 package daw.ka.informejtycy.client.datagen;
 
+import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.CustomBlocks;
 import daw.ka.informejtycy.item.CustomItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.data.models.model.TexturedModel;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class InformejtycyModelProvider extends FabricModelProvider {
+	private static final TexturedModel.Provider CUBE_PER_FACE = TexturedModel.createDefault(block -> new TextureMapping()
+			.put(TextureSlot.PARTICLE, TextureMapping.getBlockTexture(block, "_north"))
+			.put(TextureSlot.NORTH, TextureMapping.getBlockTexture(block, "_north"))
+			.put(TextureSlot.EAST, TextureMapping.getBlockTexture(block, "_east"))
+			.put(TextureSlot.SOUTH, TextureMapping.getBlockTexture(block, "_south"))
+			.put(TextureSlot.WEST, TextureMapping.getBlockTexture(block, "_west"))
+			.put(TextureSlot.UP, TextureMapping.getBlockTexture(block, "_top"))
+			.put(TextureSlot.DOWN, TextureMapping.getBlockTexture(block, "_bottom")), ModelTemplates.CUBE);
+	private static final TexturedModel.Provider BIDON_CAP = TexturedModel.createDefault(block -> new TextureMapping()
+			.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(block, "_side"))
+			.put(TextureSlot.TOP, TextureMapping.getBlockTexture(block, "_top"))
+			.put(TextureSlot.BOTTOM, TextureMapping.getBlockTexture(CustomBlocks.BIDON_BLOCK, "_top")),
+			new ModelTemplate(Optional.of(InformejtycyRegistry.id("block/template_bidon_cap")), Optional.empty(),
+					TextureSlot.SIDE, TextureSlot.TOP, TextureSlot.BOTTOM));
+
 	public InformejtycyModelProvider(FabricPackOutput output) {
 		super(output);
 	}
@@ -22,6 +47,8 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.DARK_GLOWSTONE);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_BLOCK);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.GOLDEN_WOLF_BLOCK);
+		blockStateModelGenerator.createTrivialBlock(CustomBlocks.BIDON_BLOCK, TexturedModel.COLUMN);
+		blockStateModelGenerator.createTrivialBlock(CustomBlocks.BIDON_CAP_BLOCK, BIDON_CAP);
 
 		blockStateModelGenerator.family(CustomBlocks.ISTANBUL_PLANKS)
 				.stairs(CustomBlocks.ISTANBUL_STAIRS)
@@ -53,6 +80,23 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 
 		blockStateModelGenerator.createPlantWithDefaultItem(CustomBlocks.ISTANBUL_SAPLING, CustomBlocks.POTTED_ISTANBUL_SAPLING, BlockModelGenerators.PlantType.NOT_TINTED);
 		blockStateModelGenerator.createPlantWithDefaultItem(CustomBlocks.ZARZYK_SAPLING, CustomBlocks.POTTED_ZARZYK_SAPLING, BlockModelGenerators.PlantType.NOT_TINTED);
+
+		blockStateModelGenerator.createFurnace(CustomBlocks.THEORY_FORGE_BLOCK, TexturedModel.ORIENTABLE_ONLY_TOP);
+		blockStateModelGenerator.createHorizontallyRotatedBlock(CustomBlocks.BRAINROT_TABLE_BLOCK, CUBE_PER_FACE);
+		blockStateModelGenerator.createHorizontallyRotatedBlock(CustomBlocks.GLINIANKA_BLOCK, CUBE_PER_FACE);
+
+		blockStateModelGenerator.createNonTemplateHorizontalBlock(CustomBlocks.RECYCLER_BLOCK);
+		blockStateModelGenerator.createNonTemplateHorizontalBlock(CustomBlocks.BOMBARDINO_COCODRILO);
+		blockStateModelGenerator.createNonTemplateHorizontalBlock(CustomBlocks.TRALALERO_TRALALA);
+		blockStateModelGenerator.createNonTemplateHorizontalBlock(CustomBlocks.TUNG_TUNG_SAHUR);
+		blockStateModelGenerator.createNonTemplateHorizontalBlock(CustomBlocks.CHIMPANZINI_BANANINI);
+		blockStateModelGenerator.blockStateOutput.accept(MultiVariantGenerator.dispatch(CustomBlocks.TRASH_CAN,
+						BlockModelGenerators.plainVariant(ModelLocationUtils.getModelLocation(CustomBlocks.TRASH_CAN)))
+				.with(PropertyDispatch.modify(BlockStateProperties.HORIZONTAL_FACING)
+						.select(Direction.NORTH, BlockModelGenerators.Y_ROT_90)
+						.select(Direction.EAST, BlockModelGenerators.Y_ROT_180)
+						.select(Direction.SOUTH, BlockModelGenerators.Y_ROT_270)
+						.select(Direction.WEST, BlockModelGenerators.NOP)));
 	}
 
 	@Override

@@ -42,6 +42,8 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.BRAINROT_TABLE_BLOCK);
 		dropSelf(CustomBlocks.SILVER_WOLF_BLOCK);
 		dropSelf(CustomBlocks.GOLDEN_WOLF_BLOCK);
+		dropSelf(CustomBlocks.BIDON_BLOCK);
+		dropSelf(CustomBlocks.BIDON_CAP_BLOCK);
 		dropSelf(CustomBlocks.GLINIANKA_BLOCK);
 		dropSelf(CustomBlocks.TRASH_CAN);
 		dropSelf(CustomBlocks.BOMBARDINO_COCODRILO);

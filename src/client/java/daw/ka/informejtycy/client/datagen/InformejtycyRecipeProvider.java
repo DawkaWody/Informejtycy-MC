@@ -121,6 +121,22 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						.unlockedBy(getHasName(CustomItems.GOLDEN_WOLF), has(CustomItems.GOLDEN_WOLF))
 						.save(this.output, "golden_wolf_block");
 
+				shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.BIDON_BLOCK, 1)
+						.pattern("BB")
+						.pattern("BB")
+						.define('B', CustomItems.RARE_RECYCLABLE_BOTTLE)
+						.unlockedBy(getHasName(CustomItems.RARE_RECYCLABLE_BOTTLE), has(CustomItems.RARE_RECYCLABLE_BOTTLE))
+						.save(this.output, "bidon_block");
+
+				shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.BIDON_CAP_BLOCK, 1)
+						.pattern(" B ")
+						.pattern("BIB")
+						.pattern(" B ")
+						.define('B', CustomItems.RARE_RECYCLABLE_BOTTLE)
+						.define('I', Items.IRON_INGOT)
+						.unlockedBy(getHasName(CustomItems.RARE_RECYCLABLE_BOTTLE), has(CustomItems.RARE_RECYCLABLE_BOTTLE))
+						.save(this.output, "bidon_cap_block");
+
                 shaped(RecipeCategory.BUILDING_BLOCKS, CustomBlocks.GLINIANKA_BLOCK, 1)
                         .pattern("CS")
                         .pattern("SC")

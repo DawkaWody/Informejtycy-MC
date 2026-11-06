@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "informejtycy:block/trash_can" , "y": 90},
-    "facing=south": { "model": "informejtycy:block/trash_can", "y": 270 },
-    "facing=west": { "model": "informejtycy:block/trash_can", "y": 0 },
-    "facing=east": { "model": "informejtycy:block/trash_can", "y": 180 }
-  }
-}
