@@ -57,6 +57,9 @@ dependencies {
     implementation 'com.kohlschutter.junixsocket:junixsocket-common:2.6.2'
     include 'com.kohlschutter.junixsocket:junixsocket-native-common:2.6.2'
     implementation 'com.kohlschutter.junixsocket:junixsocket-native-common:2.6.2'
+    // Title screen video decoding
+    implementation 'org.jcodec:jcodec:0.2.5'
+    include 'org.jcodec:jcodec:0.2.5'
 }
 
 processResources {

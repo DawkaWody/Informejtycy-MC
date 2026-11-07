@@ -1,6 +1,5 @@
 package daw.ka.informejtycy.client.gui;
 
-import daw.ka.informejtycy.Informejtycy;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.client.sound.MenuMusicSound;
 import daw.ka.informejtycy.sound.CustomSounds;
@@ -11,39 +10,24 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.client.sounds.SoundEngine;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Util;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 public class TitleScreenVideo {
-	private static final int FRAME_COUNT = 4313;
+	private static final int FRAME_COUNT = 4314;
 	private static final int FRAME_RATE = 24;
 	private static final int FRAME_WIDTH = 200;
-	private static final int FRAME_HEIGHT = 113;
-	private static final int SHEET_COLUMNS = 10;
-	private static final int SHEET_ROWS = 10;
-	private static final int FRAMES_PER_SHEET = SHEET_COLUMNS * SHEET_ROWS;
-	private static final int SHEET_COUNT = (FRAME_COUNT + FRAMES_PER_SHEET - 1) / FRAMES_PER_SHEET;
+	private static final int FRAME_HEIGHT = 112;
 	private static final Identifier TEXTURE_ID = InformejtycyRegistry.id("title_video");
+	private static final Identifier VIDEO_ID = InformejtycyRegistry.id("textures/gui/video/title.mp4");
 	private static final long AUDIO_RETRY_MS = 5000;
-	private static final long SHEET_RETRY_MS = 1000;
 
 	private static DynamicTexture texture;
-	private static int currentSheet = -1;
-	private static CompletableFuture<NativeImage> nextSheet;
-	private static int nextSheetIndex = -1;
+	private static TitleVideoDecoder decoder;
 
 	private static MenuMusicSound audio;
 	private static boolean audioStarted = false;
 	private static boolean audioFailed = false;
 	private static long audioRetryAt = 0;
-	private static long sheetRetryAt = 0;
 	private static long startTime = -1;
 
 	public static void render(GuiGraphicsExtractor context, int width, int height) {
@@ -61,13 +45,11 @@ public class TitleScreenVideo {
 			frame %= FRAME_COUNT;
 		}
 
-		updateSheet(client, frame / FRAMES_PER_SHEET);
+		updateTexture(client, frame);
 		if (texture == null) return;
 
-		int u = (frame % SHEET_COLUMNS) * FRAME_WIDTH;
-		int v = (frame % FRAMES_PER_SHEET / SHEET_COLUMNS) * FRAME_HEIGHT;
-		context.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_ID, 0, 0, u, v, width, height,
-				FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH * SHEET_COLUMNS, FRAME_HEIGHT * SHEET_ROWS);
+		context.blit(RenderPipelines.GUI_TEXTURED, TEXTURE_ID, 0, 0, 0, 0, width, height,
+				FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT);
 	}
 
 	public static boolean isPlaying() {
@@ -81,21 +63,20 @@ public class TitleScreenVideo {
 		client.getSoundManager().stop(audio);
 		audio = null;
 
+		if (decoder != null) {
+			decoder.stop();
+			decoder = null;
+		}
 		if (texture != null) {
 			client.getTextureManager().release(TEXTURE_ID);
 			texture = null;
 		}
-		currentSheet = -1;
 		startTime = -1;
-		if (nextSheet != null) {
-			nextSheet.thenAccept(NativeImage::close);
-			nextSheet = null;
-			nextSheetIndex = -1;
-		}
 	}
 
 	private static void start(Minecraft client) {
 		client.getMusicManager().stopPlaying();
+		decoder = new TitleVideoDecoder(client.getResourceManager(), VIDEO_ID, FRAME_COUNT);
 		playAudio(client.getSoundManager());
 	}
 
@@ -107,7 +88,7 @@ public class TitleScreenVideo {
 			audioRetryAt = System.currentTimeMillis() + AUDIO_RETRY_MS;
 			if (startTime < 0) startTime = System.currentTimeMillis();
 		} else {
-			startTime = System.currentTimeMillis();
+			restartVideo();
 		}
 	}
 
@@ -122,56 +103,32 @@ public class TitleScreenVideo {
 		boolean playing = soundManager.isActive(audio);
 		if (playing && !audioStarted) {
 			audioStarted = true;
-			startTime = System.currentTimeMillis();
+			restartVideo();
 		} else if (!playing && audioStarted) {
 			playAudio(soundManager);
 		}
 	}
 
-	private static void updateSheet(Minecraft client, int sheet) {
-		if (sheet == currentSheet || System.currentTimeMillis() < sheetRetryAt) return;
-		if (nextSheet == null || nextSheetIndex != sheet) {
-			requestSheet(client.getResourceManager(), sheet);
-		}
-
-		NativeImage image;
-		try {
-			image = nextSheet.join();
-		} catch (CompletionException e) {
-			Informejtycy.LOGGER.error("Failed to load title video sheet {}", sheet, e);
-			sheetRetryAt = System.currentTimeMillis() + SHEET_RETRY_MS;
-			nextSheet = null;
-			nextSheetIndex = -1;
-			return;
-		}
-		currentSheet = sheet;
-		nextSheet = null;
-		nextSheetIndex = -1;
-
-		if (texture == null) {
-			texture = new DynamicTexture(() -> "Informejtycy title video", image);
-			client.getTextureManager().register(TEXTURE_ID, texture);
-		} else {
-			texture.setPixels(image);
-			texture.upload();
-		}
-
-		requestSheet(client.getResourceManager(), (sheet + 1) % SHEET_COUNT);
+	private static void restartVideo() {
+		startTime = System.currentTimeMillis();
+		decoder.restart();
 	}
 
-	private static void requestSheet(ResourceManager resourceManager, int sheet) {
-		if (nextSheet != null) {
-			nextSheet.thenAccept(NativeImage::close);
+	private static void updateTexture(Minecraft client, int frame) {
+		int[] pixels = decoder.poll(frame);
+		if (pixels == null) return;
+
+		if (texture == null) {
+			texture = new DynamicTexture(() -> "Informejtycy title video", FRAME_WIDTH, FRAME_HEIGHT, false);
+			client.getTextureManager().register(TEXTURE_ID, texture);
 		}
 
-		Identifier sheetId = InformejtycyRegistry.id(String.format("textures/gui/video/sheet_%02d.png", sheet));
-		nextSheetIndex = sheet;
-		nextSheet = CompletableFuture.supplyAsync(() -> {
-			try (InputStream stream = resourceManager.open(sheetId)) {
-				return NativeImage.read(stream);
-			} catch (IOException e) {
-				throw new UncheckedIOException(e);
+		NativeImage image = texture.getPixels();
+		for (int y = 0; y < FRAME_HEIGHT; y++) {
+			for (int x = 0; x < FRAME_WIDTH; x++) {
+				image.setPixel(x, y, pixels[y * FRAME_WIDTH + x]);
 			}
-		}, Util.backgroundExecutor());
+		}
+		texture.upload();
 	}
 }
