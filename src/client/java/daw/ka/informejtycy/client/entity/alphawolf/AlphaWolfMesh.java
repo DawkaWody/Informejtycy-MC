@@ -1,8 +1,12 @@
 package daw.ka.informejtycy.client.entity.alphawolf;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Direction;
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.jspecify.annotations.NonNull;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -15,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Builds a vanilla ModelPart tree from a generated .bin mesh.
@@ -108,8 +113,7 @@ public final class AlphaWolfMesh {
 		}
 
 		// the constructor sizes the polygon array; its box UV polygons are then overwritten
-		ModelPart.Cube cube = new ModelPart.Cube(0, 0, x0, y0, z0, x1 - x0, y1 - y0, z1 - z0,
-				0, 0, 0, false, 1, 1, visible);
+		ModelPart.Cube cube = new FaceUvCube(x0, y0, z0, x1, y1, z1, visible);
 		for (int f = 0; f < faceCount; f++) {
 			cube.polygons[f] = polygon(dir[f], uv[f], x0, y0, z0, x1, y1, z1, texWidth, texHeight);
 		}
@@ -136,5 +140,29 @@ public final class AlphaWolfMesh {
 			vertices[i] = new ModelPart.Vertex(p[c][0], p[c][1], p[c][2], t[c][0], t[c][1]);
 		}
 		return new ModelPart.Polygon(vertices, NORMALS[dir]);
+	}
+
+	/**
+	 * Sodium replaces Cube.compile with its own copy of the cube, built from the box UV
+	 * constructor arguments, so the replaced polygons would be ignored. Overriding compile keeps them.
+	 */
+	private static final class FaceUvCube extends ModelPart.Cube {
+		private FaceUvCube(float x0, float y0, float z0, float x1, float y1, float z1, Set<Direction> visible) {
+			super(0, 0, x0, y0, z0, x1 - x0, y1 - y0, z1 - z0, 0, 0, 0, false, 1, 1, visible);
+		}
+
+		@Override
+		public void compile(PoseStack.Pose pose, @NonNull VertexConsumer buffer, int light, int overlay, int color) {
+			Matrix4f matrix = pose.pose();
+			Vector3f scratch = new Vector3f();
+			for (ModelPart.Polygon polygon : polygons) {
+				Vector3f normal = pose.transformNormal(polygon.normal(), scratch);
+				float nx = normal.x(), ny = normal.y(), nz = normal.z();
+				for (ModelPart.Vertex vertex : polygon.vertices()) {
+					Vector3f pos = matrix.transformPosition(vertex.worldX(), vertex.worldY(), vertex.worldZ(), scratch);
+					buffer.addVertex(pos.x(), pos.y(), pos.z(), color, vertex.u(), vertex.v(), overlay, light, nx, ny, nz);
+				}
+			}
+		}
 	}
 }
