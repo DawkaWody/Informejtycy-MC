@@ -3,6 +3,8 @@ package daw.ka.informejtycy.entity.custom.boss.alphawolf;
 public enum AlphaWolfAction {
 	WALK(0, 0),
 	SLASH(28, 8),
+	KICK(21, 8),
+	GRAB_THROW(32, 7),
 	GROUND_PUNCH(40, 16),
 	ROAR(64, 18),
 	THROW_ROCK(34, 16),

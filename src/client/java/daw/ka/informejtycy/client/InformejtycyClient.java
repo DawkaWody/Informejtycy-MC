@@ -4,6 +4,7 @@ import daw.ka.informejtycy.Informejtycy;
 import daw.ka.informejtycy.client.anticheat.InformejtycyAnticheatClient;
 import daw.ka.informejtycy.client.entity.alphawolf.AlphaWolfRenderer;
 import daw.ka.informejtycy.client.entity.projectile.cigarette.CigaretteProjectileRenderer;
+import daw.ka.informejtycy.client.entity.projectile.meteor.MeteorProjectileRenderer;
 import daw.ka.informejtycy.client.entity.projectile.milk.MilkProjectileRenderer;
 import daw.ka.informejtycy.client.entity.projectile.rock.RockProjectileRenderer;
 import daw.ka.informejtycy.client.entity.zarzyk.ZarzykEntityModel;
@@ -45,12 +46,7 @@ public class InformejtycyClient implements ClientModInitializer {
         ModelLayerRegistry.registerModelLayer(ZmysioEntityModel.ZMYSIO, ZmysioEntityModel::getTexturedModelData);
 		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK, ZarzykEntityModel::getTexturedModelData);
 		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK_BABY, ZarzykEntityModel::getBabyTexturedModelData);
-        EntityRenderers.register(CustomEntities.ZMYSIO_BOSS, ZmysioEntityRenderer::new);
-		EntityRenderers.register(CustomEntities.ALPHA_WOLF_BOSS, AlphaWolfRenderer::new);
-		EntityRenderers.register(CustomEntities.ZARZYK, ZarzykEntityRenderer::new);
-        EntityRenderers.register(CustomEntities.MILK_PROJECTILE, MilkProjectileRenderer::new);
-		EntityRenderers.register(CustomEntities.ROCK_PROJECTILE, RockProjectileRenderer::new);
-		EntityRenderers.register(CustomEntities.CIGARETTE_PROJECTILE, CigaretteProjectileRenderer::new);
+        registerEntityRenderers();
 
         ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_PARTICLE, StinkParticle.Factory::new);
         ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_AREA_PARTICLE, StinkAreaParticle.Factory::new);
@@ -68,7 +64,7 @@ public class InformejtycyClient implements ClientModInitializer {
 			}
 		});
 
-		ItemTooltipCallback.EVENT.register((ItemStack stack, Item.TooltipContext context, TooltipFlag type, java.util.List<Component> lines) -> {
+		ItemTooltipCallback.EVENT.register((ItemStack stack, Item.TooltipContext _, TooltipFlag _, java.util.List<Component> lines) -> {
 			Item item = stack.getItem();
 			String translationKey = item.getDescriptionId();
 			int lastDot = translationKey.lastIndexOf('.');
@@ -152,7 +148,21 @@ public class InformejtycyClient implements ClientModInitializer {
 			}
 		});
 
-        InformejtycyAnticheatClient.init();
+		InformejtycyAnticheatClient.init();
+		initializeDiscord();
+	}
+
+	private static void registerEntityRenderers() {
+		EntityRenderers.register(CustomEntities.ZMYSIO_BOSS, ZmysioEntityRenderer::new);
+		EntityRenderers.register(CustomEntities.ALPHA_WOLF_BOSS, AlphaWolfRenderer::new);
+		EntityRenderers.register(CustomEntities.ZARZYK, ZarzykEntityRenderer::new);
+		EntityRenderers.register(CustomEntities.MILK_PROJECTILE, MilkProjectileRenderer::new);
+		EntityRenderers.register(CustomEntities.ROCK_PROJECTILE, RockProjectileRenderer::new);
+		EntityRenderers.register(CustomEntities.CIGARETTE_PROJECTILE, CigaretteProjectileRenderer::new);
+		EntityRenderers.register(CustomEntities.METEOR_PROJECTILE, MeteorProjectileRenderer::new);
+	}
+
+	private static void initializeDiscord() {
 		InformejtycyDiscordRP.init();
 		Thread discordThread = new Thread(() -> {
 			while (true) {

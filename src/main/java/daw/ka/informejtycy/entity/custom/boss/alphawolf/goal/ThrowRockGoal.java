@@ -8,6 +8,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Comparator;
+
 public class ThrowRockGoal extends ActionGoal {
 	private static final int COOLDOWN = 100;
 	private static final float MIN_RANGE = 8.0f;
@@ -17,6 +19,13 @@ public class ThrowRockGoal extends ActionGoal {
 
 	public ThrowRockGoal(AlphaWolfEntity wolf) {
 		super(wolf, AlphaWolfAction.THROW_ROCK, COOLDOWN);
+	}
+
+	@Override
+	protected LivingEntity chooseTarget() {
+		return wolf.nearbyTargets().stream()
+				.filter(player -> !isWithin(player, MIN_RANGE) && wolf.hasLineOfSight(player))
+				.max(Comparator.comparingDouble(wolf::distanceToSqr)).orElse(null);
 	}
 
 	@Override

@@ -22,6 +22,8 @@ public class AlphaWolfRenderer extends MobRenderer<AlphaWolfEntity, AlphaWolfRen
 	private static final Map<AlphaWolfAction, AnimationDefinition> FIGHT_ANIMATIONS = Map.of(
 			AlphaWolfAction.WALK, AlphaWolfAnim.WALK,
 			AlphaWolfAction.SLASH, AlphaWolfAnim.SLASH,
+			AlphaWolfAction.KICK, AlphaWolfAnim.KICK,
+			AlphaWolfAction.GRAB_THROW, AlphaWolfAnim.GRAB_THROW,
 			AlphaWolfAction.GROUND_PUNCH, AlphaWolfAnim.GROUND_PUNCH,
 			AlphaWolfAction.ROAR, AlphaWolfAnim.ROAR,
 			AlphaWolfAction.THROW_ROCK, AlphaWolfAnim.THROW_ROCK,

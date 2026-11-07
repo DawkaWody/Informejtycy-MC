@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-/** A ring from the ground punch that grows outward; anything standing on the ground when it passes is hit. */
 public class AlphaWolfShockwave {
 	private static final float SPEED = 0.6f;
 	private static final float WIDTH = 1.5f;
@@ -26,15 +25,17 @@ public class AlphaWolfShockwave {
 	private final AlphaWolfEntity wolf;
 	private final Vec3 origin;
 	private final Set<UUID> struck = new HashSet<>();
+	private int delay;
 	private float radius;
 
-	public AlphaWolfShockwave(AlphaWolfEntity wolf) {
+	public AlphaWolfShockwave(AlphaWolfEntity wolf, int delay) {
 		this.wolf = wolf;
 		this.origin = wolf.position();
+		this.delay = delay;
 	}
 
-	/** @return true once the ring has reached its full size */
 	public boolean tick(ServerLevel level) {
+		if (delay-- > 0) return false;
 		radius += SPEED;
 		spawnParticles(level);
 

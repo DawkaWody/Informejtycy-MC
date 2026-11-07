@@ -38,6 +38,7 @@ public class CustomItems {
 	public static Item PLUS;
 	public static Item RECYCLABLE_BOTTLE;
 	public static Item RARE_RECYCLABLE_BOTTLE;
+	public static Item ALPHA_WOLF_MASK;
 	// Music discs
 	public static Item RIDE_THE_LIGHTNING_MUSIC_DISC;
 	public static Item HOLY_WARS_MUSIC_DISC;
@@ -132,6 +133,11 @@ public class CustomItems {
                             .setDamageOnHurt(false)
                             .build()
             );
+	public static final Item.Properties ALPHA_WOLF_MASK_SETTINGS = new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)
+			.component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.HEAD)
+					.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
+					.setDamageOnHurt(false)
+					.build());
 	public static final Item.Properties PRESIDENT_HELMET_SETTINGS = new Item.Properties().humanoidArmor(CustomArmorMaterials.PRESIDENT_HELMET, ArmorType.HELMET);
 
 	public static void registerAll() {
@@ -150,6 +156,7 @@ public class CustomItems {
         PLUS = InformejtycyRegistry.registerItem("plus", PLUS_SETTINGS, CreativeModeTabs.INGREDIENTS);
 		RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("recyclable_bottle", RECYCLABLE_BOTTLE_SETTINGS, CreativeModeTabs.INGREDIENTS);
 		RARE_RECYCLABLE_BOTTLE = InformejtycyRegistry.registerItem("rare_recyclable_bottle", RARE_RECYCLABLE_BOTTLE_SETTINGS, CreativeModeTabs.INGREDIENTS);
+		ALPHA_WOLF_MASK = InformejtycyRegistry.registerItem("alpha_wolf_mask", ALPHA_WOLF_MASK_SETTINGS, CreativeModeTabs.COMBAT);
         // Music discs
 		RIDE_THE_LIGHTNING_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_ride_the_lightning", RIDE_THE_LIGHTNING_MUSIC_DISC_SETTINGS, CreativeModeTabs.TOOLS_AND_UTILITIES);
 		HOLY_WARS_MUSIC_DISC = InformejtycyRegistry.registerItem("music_disc_holy_wars", HOLY_WARS_MUSIC_DISC_SETTINGS, CreativeModeTabs.TOOLS_AND_UTILITIES);

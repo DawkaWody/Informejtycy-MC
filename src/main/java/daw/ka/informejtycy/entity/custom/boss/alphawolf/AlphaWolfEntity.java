@@ -1,10 +1,16 @@
 package daw.ka.informejtycy.entity.custom.boss.alphawolf;
 
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ChaseTargetGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.GrabThrowGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.GroundPunchGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.KickGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.MeteorRainGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.RoarGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.SlashGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThrowCigaretteGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThreatTargetGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThrowRockGoal;
+import daw.ka.informejtycy.item.CustomItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -12,6 +18,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
@@ -31,11 +38,11 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -43,7 +50,9 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -56,17 +65,18 @@ public class AlphaWolfEntity extends Monster {
 	private static final float SITTING_ENDS_AT = 2f / 3f;
 	private static final float STANDING_ENDS_AT = 1f / 3f;
 
+	private static final Vec3 MASK_DROP_OFFSET = new Vec3(0, 0.2, 0.8);
+
 	private static final byte EVENT_ACTION_BASE = 70;
 
 	private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), this.getDisplayName(),
 			BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_6);
-	private final TargetingConditions.Selector CAN_ATTACK_PREDICATE = (entity, _) -> entity instanceof Player
-			&& distanceToSqr(entity) <= ATTACK_RADIUS * ATTACK_RADIUS;
 
 	private final Map<AlphaWolfAction, AnimationState> animationStates = new EnumMap<>(AlphaWolfAction.class);
 	private final Map<AlphaWolfAction, Integer> stopTicks = new EnumMap<>(AlphaWolfAction.class);
 	private int phaseTicks;
-	private AlphaWolfShockwave shockwave;
+	private final List<AlphaWolfShockwave> shockwaves = new ArrayList<>();
+	private final AlphaWolfThreat threat = new AlphaWolfThreat();
 	private DamageSource killer;
 	private UUID killerId;
 
@@ -79,14 +89,18 @@ public class AlphaWolfEntity extends Monster {
 	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
+		this.goalSelector.addGoal(1, new MeteorRainGoal(this));
 		this.goalSelector.addGoal(1, new GroundPunchGoal(this));
+		this.goalSelector.addGoal(1, new RoarGoal(this));
+		this.goalSelector.addGoal(2, new GrabThrowGoal(this));
 		this.goalSelector.addGoal(2, new ThrowRockGoal(this));
 		this.goalSelector.addGoal(2, new ThrowCigaretteGoal(this));
+		this.goalSelector.addGoal(3, new KickGoal(this));
 		this.goalSelector.addGoal(3, new SlashGoal(this));
 		this.goalSelector.addGoal(4, new ChaseTargetGoal(this, 1.0));
 		this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, ATTACK_RADIUS));
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 0, false, false, CAN_ATTACK_PREDICATE));
+		this.targetSelector.addGoal(1, new ThreatTargetGoal(this));
 	}
 
 	@Override
@@ -101,7 +115,6 @@ public class AlphaWolfEntity extends Monster {
 		if (!PHASE.equals(accessor)) return;
 
 		phaseTicks = 0;
-		// set on both sides so the scale changes on the same frame as the model
 		getAttribute(Attributes.SCALE).setBaseValue(getPhase().scale);
 		refreshDimensions();
 		animationStates.values().forEach(AnimationState::stop);
@@ -143,7 +156,8 @@ public class AlphaWolfEntity extends Monster {
 	protected void customServerAiStep(@NonNull ServerLevel level) {
 		super.customServerAiStep(level);
 
-		if (shockwave != null && shockwave.tick(level)) shockwave = null;
+		shockwaves.removeIf(shockwave -> shockwave.tick(level));
+		threat.tick(tickCount);
 
 		AlphaWolfPhase phase = getPhase();
 		if (phase.ticks > 0 && phaseTicks >= phase.ticks) {
@@ -155,7 +169,10 @@ public class AlphaWolfEntity extends Monster {
 				case AWAKENING -> AlphaWolfPhase.SITTING;
 				case RISING_1 -> AlphaWolfPhase.RISING_2;
 				case RISING_2 -> AlphaWolfPhase.STANDING;
-				case MASK_OFF -> AlphaWolfPhase.UNMASKED;
+				case MASK_OFF -> {
+					dropMask(level);
+					yield AlphaWolfPhase.UNMASKED;
+				}
 				default -> phase;
 			});
 		}
@@ -170,7 +187,6 @@ public class AlphaWolfEntity extends Monster {
 		phaseTicks++;
 
 		if (level().isClientSide()) {
-			// vanilla holds the last frame of a finished animation until it is stopped
 			stopTicks.entrySet().removeIf(entry -> {
 				if (tickCount < entry.getValue()) return false;
 				animationStates.get(entry.getKey()).stop();
@@ -197,9 +213,13 @@ public class AlphaWolfEntity extends Monster {
 
 		if (phase != AlphaWolfPhase.UNMASKED) amount = Math.min(amount, getHealth() - 1f);
 		boolean hurt = super.hurtServer(level, source, amount);
+		if (hurt && source.getEntity() instanceof Player player) threat.add(player, amount);
 
 		float health = getHealth() / getMaxHealth();
-		if (phase == AlphaWolfPhase.SITTING && health <= SITTING_ENDS_AT) setPhase(AlphaWolfPhase.RISING_1);
+		if (phase == AlphaWolfPhase.SITTING && health <= SITTING_ENDS_AT) {
+			setPhase(AlphaWolfPhase.RISING_1);
+			playSound(SoundEvents.RAVAGER_ROAR, 3.0f, 0.6f);
+		}
 		if (phase == AlphaWolfPhase.STANDING && health <= STANDING_ENDS_AT) setPhase(AlphaWolfPhase.MASK_OFF);
 		return hurt;
 	}
@@ -207,7 +227,10 @@ public class AlphaWolfEntity extends Monster {
 	@Override
 	protected @NonNull InteractionResult mobInteract(@NonNull Player player, @NonNull InteractionHand hand) {
 		if (getPhase() != AlphaWolfPhase.STATUE) return super.mobInteract(player, hand);
-		if (!level().isClientSide()) setPhase(AlphaWolfPhase.AWAKENING);
+		if (!level().isClientSide()) {
+			setPhase(AlphaWolfPhase.AWAKENING);
+			playSound(SoundEvents.WARDEN_EMERGE, 3.0f, 0.8f);
+		}
 		return InteractionResult.SUCCESS;
 	}
 
@@ -250,11 +273,9 @@ public class AlphaWolfEntity extends Monster {
 
 	@Override
 	protected void tickDeath() {
-		// the death animation already played before the killing blow
 		if (!level().isClientSide()) remove(RemovalReason.KILLED);
 	}
 
-	/** Server side. Plays an attack on every client; do the gameplay effect action.hitTick ticks later. */
 	public void playAction(AlphaWolfAction action) {
 		level().broadcastEntityEvent(this, (byte) (EVENT_ACTION_BASE + action.ordinal()));
 	}
@@ -264,12 +285,10 @@ public class AlphaWolfEntity extends Monster {
 		if (action.ticks > 0) stopTicks.put(action, tickCount + action.ticks);
 	}
 
-	/** Where a point given at scale 1 (x left, y up, z forward) is in the world right now. */
 	public Vec3 releasePosition(Vec3 offset) {
 		return position().add(offset.scale(getScale()).yRot(-yBodyRot * Mth.DEG_TO_RAD));
 	}
 
-	/** Centres the projectile on its position and sends it in an arc that lands on aim. */
 	public void launch(Projectile projectile, Vec3 aim, float speed, double gravity) {
 		projectile.setPos(projectile.position().subtract(0, projectile.getBbHeight() / 2, 0));
 		Vec3 distance = aim.subtract(projectile.getBoundingBox().getCenter());
@@ -280,8 +299,37 @@ public class AlphaWolfEntity extends Monster {
 		level().addFreshEntity(projectile);
 	}
 
-	public void startShockwave() {
-		shockwave = new AlphaWolfShockwave(this);
+	public void startShockwave(int delayTicks) {
+		shockwaves.add(new AlphaWolfShockwave(this, delayTicks));
+	}
+
+	public boolean isValidTarget(LivingEntity entity) {
+		return entity instanceof Player && entity.isAlive() && canAttack(entity)
+				&& distanceToSqr(entity) <= ATTACK_RADIUS * ATTACK_RADIUS;
+	}
+
+	public List<Player> nearbyTargets() {
+		return nearbyTargets(ATTACK_RADIUS);
+	}
+
+	public List<Player> nearbyTargets(float radius) {
+		return level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(radius),
+				player -> isValidTarget(player) && distanceToSqr(player) <= radius * radius);
+	}
+
+	public void retarget() {
+		setTarget(threat.pick(nearbyTargets(), this));
+	}
+
+	public void onAttackFinished(@Nullable LivingEntity target) {
+		if (target != null) threat.attacked(target);
+		retarget();
+	}
+
+	private void dropMask(ServerLevel level) {
+		ItemEntity mask = spawnAtLocation(level, new ItemStack(CustomItems.ALPHA_WOLF_MASK),
+				releasePosition(MASK_DROP_OFFSET).subtract(position()));
+		if (mask != null) mask.setExtendedLifetime();
 	}
 
 	@Override
@@ -328,7 +376,6 @@ public class AlphaWolfEntity extends Monster {
 	@Override
 	protected void updateControlFlags() {
 		super.updateControlFlags();
-		// outside the fight stages the goals stay off, but the sitting wolf still picks targets
 		AlphaWolfPhase phase = getPhase();
 		goalSelector.setControlFlag(Goal.Flag.MOVE, phase.canAct());
 		goalSelector.setControlFlag(Goal.Flag.JUMP, phase.canAct());

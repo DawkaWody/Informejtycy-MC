@@ -4,6 +4,7 @@ import daw.ka.informejtycy.entity.custom.boss.alphawolf.AlphaWolfAction;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.AlphaWolfEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
@@ -13,6 +14,7 @@ public abstract class ActionGoal extends Goal {
 	private final int cooldown;
 	private int readyTick;
 	protected int ticks;
+	protected @Nullable LivingEntity target;
 
 	protected ActionGoal(AlphaWolfEntity wolf, AlphaWolfAction action, int cooldown) {
 		this.wolf = wolf;
@@ -25,10 +27,15 @@ public abstract class ActionGoal extends Goal {
 
 	protected abstract void hit(LivingEntity target);
 
+	protected @Nullable LivingEntity chooseTarget() {
+		return wolf.getTarget();
+	}
+
 	@Override
 	public boolean canUse() {
-		LivingEntity target = wolf.getTarget();
-		return wolf.getPhase().canAct() && wolf.tickCount >= readyTick && target != null && canStart(target);
+		if (!wolf.getPhase().canAct() || wolf.tickCount < readyTick) return false;
+		target = chooseTarget();
+		return target != null && canStart(target);
 	}
 
 	@Override
@@ -46,6 +53,8 @@ public abstract class ActionGoal extends Goal {
 	@Override
 	public void stop() {
 		readyTick = wolf.tickCount + cooldown;
+		wolf.onAttackFinished(target);
+		target = null;
 	}
 
 	@Override
@@ -56,8 +65,7 @@ public abstract class ActionGoal extends Goal {
 	@Override
 	public void tick() {
 		ticks++;
-		LivingEntity target = wolf.getTarget();
-		if (target == null) return;
+		if (target == null || !target.isAlive()) return;
 
 		wolf.lookAt(target, 10.0f, 30.0f);
 		wolf.yBodyRot = wolf.getYRot();

@@ -17,7 +17,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.entity.AnimationState;
 import org.jspecify.annotations.NonNull;
 
-/** What the wolf holds in its right hand until a throw animation releases it. */
 public class AlphaWolfHeldProjectileLayer extends RenderLayer<AlphaWolfRenderState, AlphaWolfModel> {
 	private static final String[] ARM = {"wolf_root", "pelvis", "chest", "arm_upper_r", "arm_lower_r"};
 	private static final float HAND_X = -0.2f / 16f;
@@ -53,7 +52,6 @@ public class AlphaWolfHeldProjectileLayer extends RenderLayer<AlphaWolfRenderSta
 		}
 		poseStack.translate(HAND_X, HAND_Y, HAND_Z);
 		poseStack.rotateDegrees(Axis.YP, yRotation);
-		// undoes the wolf's scale, so the held projectile matches the thrown one
 		float scale = Math.min(ticks / Math.min(GROW_TICKS, action.hitTick), 1f) / state.scale;
 		poseStack.scale(scale, scale, scale);
 		collector.submitModel(model, Unit.INSTANCE, poseStack, model.renderType(texture),

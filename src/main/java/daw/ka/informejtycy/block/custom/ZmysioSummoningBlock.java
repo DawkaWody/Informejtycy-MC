@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 public class ZmysioSummoningBlock extends FacingBlock {
 
@@ -21,7 +22,7 @@ public class ZmysioSummoningBlock extends FacingBlock {
 	}
 
 	@Override
-	public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
+	public void setPlacedBy(@NonNull Level world, @NonNull BlockPos pos, @NonNull BlockState state, @Nullable LivingEntity placer, @NonNull ItemStack itemStack) {
 		super.setPlacedBy(world, pos, state, placer, itemStack);
 		if (world instanceof ServerLevel serverWorld) {
 			ZmysioSpawnEvent.trySummonZmysio(serverWorld, pos, this);

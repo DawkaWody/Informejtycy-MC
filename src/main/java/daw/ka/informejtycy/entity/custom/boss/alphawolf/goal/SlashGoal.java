@@ -29,7 +29,6 @@ public class SlashGoal extends ActionGoal {
 	@Override
 	public void tick() {
 		super.tick();
-		LivingEntity target = wolf.getTarget();
-		if (ticks == SECOND_HIT_TICK && target != null) hit(target);
+		if (ticks == SECOND_HIT_TICK && target != null && target.isAlive()) hit(target);
 	}
 }
