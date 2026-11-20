@@ -41,7 +41,7 @@ public class AlphaWolfShockwave {
 
 		AABB box = new AABB(origin, origin).inflate(radius, MAX_HEIGHT_DIFFERENCE, radius);
 		for (LivingEntity entity : level.getEntitiesOfClass(LivingEntity.class, box,
-				entity -> entity.onGround() && wolf.canAttack(entity))) {
+				entity -> entity != wolf && !(entity instanceof AlphaWolfMinionEntity) && entity.onGround() && wolf.canAttack(entity))) {
 			Vec3 away = entity.position().subtract(origin).multiply(1, 0, 1);
 			double distance = away.length();
 			if (distance >= radius - WIDTH && distance <= radius && struck.add(entity.getUUID())) {

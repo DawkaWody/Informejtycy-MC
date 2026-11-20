@@ -10,6 +10,10 @@ public class CustomSounds {
 	public static SoundEvent MENU_AUDIO;
     public static SoundEvent ZALES;
 	public static SoundEvent THUNDERSTRUCK;
+	// Alpha Wolf
+	public static SoundEvent WOLF_VOICE;
+	public static SoundEvent WOLF_UNMASK;
+	public static SoundEvent WOLF_DIE;
     // Music Discs
 	public static SoundEvent RIDE_THE_LIGHTNING;
 	public static SoundEvent HOLY_WARS;
@@ -37,6 +41,10 @@ public class CustomSounds {
 	public static void registerAll() {
 		MENU_AUDIO = InformejtycyRegistry.registerSoundEvent("menu_audio");
         ZALES = InformejtycyRegistry.registerSoundEvent("zales");
+		// Alpha Wolf
+		WOLF_VOICE = InformejtycyRegistry.registerSoundEvent("wolf_voice");
+		WOLF_UNMASK = InformejtycyRegistry.registerSoundEvent("wolf_unmask");
+		WOLF_DIE = InformejtycyRegistry.registerSoundEvent("wolf_die");
         // Music Discs
 		THUNDERSTRUCK = InformejtycyRegistry.registerSoundEvent("thunderstruck");
 		RIDE_THE_LIGHTNING = InformejtycyRegistry.registerSoundEvent("ride_the_lightning");

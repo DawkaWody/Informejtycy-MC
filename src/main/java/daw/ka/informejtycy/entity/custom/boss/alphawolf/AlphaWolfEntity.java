@@ -7,11 +7,18 @@ import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.KickGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.MeteorRainGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.RoarGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.SlashGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.StealItemGoal;
+import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.SummonPackGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThrowCigaretteGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThreatTargetGoal;
 import daw.ka.informejtycy.entity.custom.boss.alphawolf.goal.ThrowRockGoal;
 import daw.ka.informejtycy.item.CustomItems;
+import daw.ka.informejtycy.sound.CustomSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -38,6 +45,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -59,6 +67,10 @@ import java.util.UUID;
 public class AlphaWolfEntity extends Monster {
 	private static final EntityDataAccessor<Integer> PHASE =
 			SynchedEntityData.defineId(AlphaWolfEntity.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Boolean> SHIELDED =
+			SynchedEntityData.defineId(AlphaWolfEntity.class, EntityDataSerializers.BOOLEAN);
+	private static final EntityDataAccessor<ItemStack> STOLEN_ITEM =
+			SynchedEntityData.defineId(AlphaWolfEntity.class, EntityDataSerializers.ITEM_STACK);
 
 	public static final int AWAKEN_TICKS_PER_FRAME = 4;
 	private static final float ATTACK_RADIUS = 25.0f;
@@ -66,8 +78,19 @@ public class AlphaWolfEntity extends Monster {
 	private static final float STANDING_ENDS_AT = 1f / 3f;
 
 	private static final Vec3 MASK_DROP_OFFSET = new Vec3(0, 0.2, 0.8);
+	private static final Vec3 STOLEN_ITEM_OFFSET = new Vec3(-0.3, 0, 0.75);
+	private static final int FRAME_SEARCH_RADIUS = 2;
+	private static final int[] FRAME_SEARCH_HEIGHTS = {0, 1, -1, 2, -2, -3};
+
+	private static final float MINION_SEARCH_RADIUS = 48.0f;
+	private static final int MINION_CHECK_INTERVAL = 10;
+	private static final int MINION_LOAD_TICKS = 40;
 
 	private static final byte EVENT_ACTION_BASE = 70;
+
+	// Longer than the longest voice line, so they never overlap
+	private static final int VOICE_COOLDOWN = 140;
+	private static final int VOICE_CHANCE = 60;
 
 	private final ServerBossEvent bossBar = new ServerBossEvent(UUID.randomUUID(), this.getDisplayName(),
 			BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_6);
@@ -79,6 +102,8 @@ public class AlphaWolfEntity extends Monster {
 	private final AlphaWolfThreat threat = new AlphaWolfThreat();
 	private DamageSource killer;
 	private UUID killerId;
+	private boolean carryingStolenItem;
+	private int nextVoiceTick;
 
 	public AlphaWolfEntity(EntityType<? extends Monster> entityType, Level level) {
 		super(entityType, level);
@@ -90,9 +115,11 @@ public class AlphaWolfEntity extends Monster {
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new MeteorRainGoal(this));
+		this.goalSelector.addGoal(1, new SummonPackGoal(this));
 		this.goalSelector.addGoal(1, new GroundPunchGoal(this));
 		this.goalSelector.addGoal(1, new RoarGoal(this));
 		this.goalSelector.addGoal(2, new GrabThrowGoal(this));
+		this.goalSelector.addGoal(2, new StealItemGoal(this));
 		this.goalSelector.addGoal(2, new ThrowRockGoal(this));
 		this.goalSelector.addGoal(2, new ThrowCigaretteGoal(this));
 		this.goalSelector.addGoal(3, new KickGoal(this));
@@ -107,6 +134,8 @@ public class AlphaWolfEntity extends Monster {
 	protected void defineSynchedData(SynchedEntityData.@NonNull Builder builder) {
 		super.defineSynchedData(builder);
 		builder.define(PHASE, AlphaWolfPhase.STATUE.ordinal());
+		builder.define(SHIELDED, false);
+		builder.define(STOLEN_ITEM, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -128,6 +157,8 @@ public class AlphaWolfEntity extends Monster {
 	protected void addAdditionalSaveData(@NonNull ValueOutput output) {
 		super.addAdditionalSaveData(output);
 		output.putInt("Phase", entityData.get(PHASE));
+		output.putBoolean("Shielded", isShielded());
+		if (!getStolenItem().isEmpty()) output.store("StolenItem", ItemStack.CODEC, getStolenItem());
 		if (getPhase() == AlphaWolfPhase.DEAD && getKillerId() != null) {
 			output.putString("KillerId", getKillerId().toString());
 		}
@@ -137,6 +168,8 @@ public class AlphaWolfEntity extends Monster {
 	protected void readAdditionalSaveData(@NonNull ValueInput input) {
 		super.readAdditionalSaveData(input);
 		setPhase(AlphaWolfPhase.values()[input.getIntOr("Phase", 0)]);
+		setShielded(input.getBooleanOr("Shielded", false));
+		entityData.set(STOLEN_ITEM, input.read("StolenItem", ItemStack.CODEC).orElse(ItemStack.EMPTY));
 		if (hasCustomName()) {
 			bossBar.setName(getDisplayName());
 		}
@@ -158,8 +191,19 @@ public class AlphaWolfEntity extends Monster {
 
 		shockwaves.removeIf(shockwave -> shockwave.tick(level));
 		threat.tick(tickCount);
+		if (!carryingStolenItem && !getStolenItem().isEmpty()) placeStolenItem(level);
+		if (isShielded() && tickCount > MINION_LOAD_TICKS && tickCount % MINION_CHECK_INTERVAL == 0 && minions().isEmpty()) {
+			setShielded(false);
+			playSound(SoundEvents.WOLF_ARMOR_BREAK.value(), 3.0f, 0.6f);
+		}
 
 		AlphaWolfPhase phase = getPhase();
+		if (!phase.invulnerable && tickCount >= nextVoiceTick && random.nextInt(VOICE_CHANCE) == 0
+				&& nearbyTargets().stream().anyMatch(this::hasLineOfSight)) {
+			playSound(CustomSounds.WOLF_VOICE, 3.0f, 1.0f);
+			nextVoiceTick = tickCount + VOICE_COOLDOWN;
+		}
+
 		if (phase.ticks > 0 && phaseTicks >= phase.ticks) {
 			if (phase == AlphaWolfPhase.DEAD) {
 				die(level);
@@ -203,11 +247,11 @@ public class AlphaWolfEntity extends Monster {
 		if (phase == AlphaWolfPhase.DEAD) return false;
 
 		boolean forced = source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
-		if (phase.invulnerable && !forced) return false;
+		if ((phase.invulnerable || isShielded() || source.getEntity() == this) && !forced) return false;
 
 		if (forced || (phase == AlphaWolfPhase.UNMASKED && getHealth() - amount <= 0)) {
 			killer = source;
-			initiateDeath();
+			initiateDeath(level);
 			return false;
 		}
 
@@ -220,7 +264,11 @@ public class AlphaWolfEntity extends Monster {
 			setPhase(AlphaWolfPhase.RISING_1);
 			playSound(SoundEvents.RAVAGER_ROAR, 3.0f, 0.6f);
 		}
-		if (phase == AlphaWolfPhase.STANDING && health <= STANDING_ENDS_AT) setPhase(AlphaWolfPhase.MASK_OFF);
+		if (phase == AlphaWolfPhase.STANDING && health <= STANDING_ENDS_AT) {
+			setPhase(AlphaWolfPhase.MASK_OFF);
+			stopVoice(level);
+			playSound(CustomSounds.WOLF_UNMASK, 3.0f, 1.0f);
+		}
 		return hurt;
 	}
 
@@ -244,9 +292,20 @@ public class AlphaWolfEntity extends Monster {
 		}
 	}
 
-	private void initiateDeath() {
+	private void initiateDeath(ServerLevel level) {
 		bossBar.removeAllPlayers();
+		setShielded(false);
+		minions().forEach(minion -> minion.kill(level));
 		setPhase(AlphaWolfPhase.DEAD);
+		stopVoice(level);
+		playSound(CustomSounds.WOLF_DIE, 3.0f, 1.0f);
+	}
+
+	private void stopVoice(ServerLevel level) {
+		ClientboundStopSoundPacket packet = new ClientboundStopSoundPacket(CustomSounds.WOLF_VOICE.location(), getSoundSource());
+		for (ServerPlayer player : level.players()) {
+			if (distanceToSqr(player) <= ATTACK_RADIUS * ATTACK_RADIUS * 4) player.connection.send(packet);
+		}
 	}
 
 	private void die(ServerLevel level) {
@@ -269,6 +328,15 @@ public class AlphaWolfEntity extends Monster {
 			return killer.getEntity().getUUID();
 		}
 		return killerId;
+	}
+
+	@Override
+	public void remove(@NonNull RemovalReason reason) {
+		if (level() instanceof ServerLevel level && reason.shouldDestroy() && !getStolenItem().isEmpty()) {
+			dropStolenItem(level, getStolenItem(), position());
+			setStolenItem(ItemStack.EMPTY);
+		}
+		super.remove(reason);
 	}
 
 	@Override
@@ -326,10 +394,59 @@ public class AlphaWolfEntity extends Monster {
 		retarget();
 	}
 
+	private List<AlphaWolfMinionEntity> minions() {
+		return level().getEntitiesOfClass(AlphaWolfMinionEntity.class, getBoundingBox().inflate(MINION_SEARCH_RADIUS),
+				minion -> minion.isAlive() && minion.isLedBy(this));
+	}
+
 	private void dropMask(ServerLevel level) {
 		ItemEntity mask = spawnAtLocation(level, new ItemStack(CustomItems.ALPHA_WOLF_MASK),
 				releasePosition(MASK_DROP_OFFSET).subtract(position()));
 		if (mask != null) mask.setExtendedLifetime();
+	}
+
+	/**
+	 * Puts the item taken by {@link StealItemGoal} into an item frame lying on the ground in front of the wolf.
+	 * Item frames only hold a single item, so the rest of the stack is dropped on top of the frame.
+	 */
+	public void placeStolenItem(ServerLevel level) {
+		ItemStack stolen = getStolenItem();
+		if (stolen.isEmpty()) return;
+		setStolenItem(ItemStack.EMPTY);
+
+		Vec3 spot = releasePosition(STOLEN_ITEM_OFFSET);
+		ItemFrame frame = findFrameSpot(level, BlockPos.containing(spot));
+		if (frame == null) {
+			dropStolenItem(level, stolen, spot);
+			return;
+		}
+
+		ItemStack framed = stolen.split(1);
+		framed.set(DataComponents.CUSTOM_NAME, Component.translatable("entity.informejtycy.alpha_wolf_boss.stolen_item"));
+		frame.setItem(framed, false);
+		level.addFreshEntity(frame);
+		frame.playPlacementSound();
+		if (!stolen.isEmpty()) dropStolenItem(level, stolen, frame.position());
+	}
+
+	private @Nullable ItemFrame findFrameSpot(ServerLevel level, BlockPos origin) {
+		for (int radius = 0; radius <= FRAME_SEARCH_RADIUS; radius++) {
+			for (int dx = -radius; dx <= radius; dx++) {
+				for (int dz = -radius; dz <= radius; dz++) {
+					if (Math.max(Math.abs(dx), Math.abs(dz)) != radius) continue;
+					for (int dy : FRAME_SEARCH_HEIGHTS) {
+						ItemFrame frame = new ItemFrame(level, origin.offset(dx, dy, dz), Direction.UP);
+						if (frame.survives()) return frame;
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private void dropStolenItem(ServerLevel level, ItemStack stack, Vec3 at) {
+		ItemEntity item = spawnAtLocation(level, stack, at.subtract(position()));
+		if (item != null) item.setExtendedLifetime();
 	}
 
 	@Override
@@ -363,6 +480,23 @@ public class AlphaWolfEntity extends Monster {
 
 	public void setPhase(AlphaWolfPhase phase) {
 		entityData.set(PHASE, phase.ordinal());
+	}
+
+	public boolean isShielded() {
+		return entityData.get(SHIELDED);
+	}
+
+	public void setShielded(boolean shielded) {
+		entityData.set(SHIELDED, shielded);
+	}
+
+	public ItemStack getStolenItem() {
+		return entityData.get(STOLEN_ITEM);
+	}
+
+	public void setStolenItem(ItemStack stack) {
+		carryingStolenItem = !stack.isEmpty();
+		entityData.set(STOLEN_ITEM, stack);
 	}
 
 	public int getPhaseTicks() {

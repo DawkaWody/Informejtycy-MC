@@ -9,7 +9,8 @@
     "MixinTitleScreen",
     "MixinMusicTracker",
     "MixinPaintingRenderer",
-    "MixinVapeAnimation"
+    "MixinVapeAnimation",
+    "MixinArmorBar"
   ],
   "injectors": {
     "defaultRequire": 1

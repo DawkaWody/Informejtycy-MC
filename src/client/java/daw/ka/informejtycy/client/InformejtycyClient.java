@@ -31,6 +31,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.WolfRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -43,17 +44,10 @@ public class InformejtycyClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		Informejtycy.LOGGER.info("Initializing Informejtycy Client");
 
-        ModelLayerRegistry.registerModelLayer(ZmysioEntityModel.ZMYSIO, ZmysioEntityModel::getTexturedModelData);
-		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK, ZarzykEntityModel::getTexturedModelData);
-		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK_BABY, ZarzykEntityModel::getBabyTexturedModelData);
+        registerEntityModels();
         registerEntityRenderers();
-
-        ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_PARTICLE, StinkParticle.Factory::new);
-        ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_AREA_PARTICLE, StinkAreaParticle.Factory::new);
-
-		MenuScreens.register(InformejtycyScreenHandlers.THEORY_FORGE_SCREEN_HANDLER, TheoryForgeScreen::new);
-		MenuScreens.register(InformejtycyScreenHandlers.BRAINROT_TABLE_SCREEN_HANDLER, BrainrotTableScreen::new);
-		MenuScreens.register(InformejtycyScreenHandlers.RECYCLER_SCREEN_HANDLER, RecyclerScreen::new);
+		registerParticleTypes();
+		registerScreenHandlers();
 
 		ClientTooltipComponentCallback.EVENT.register(component ->
 				component instanceof VapeContents contents ? new ClientVapeTooltip(contents) : null);
@@ -155,11 +149,29 @@ public class InformejtycyClient implements ClientModInitializer {
 	private static void registerEntityRenderers() {
 		EntityRenderers.register(CustomEntities.ZMYSIO_BOSS, ZmysioEntityRenderer::new);
 		EntityRenderers.register(CustomEntities.ALPHA_WOLF_BOSS, AlphaWolfRenderer::new);
+		EntityRenderers.register(CustomEntities.ALPHA_WOLF_MINION, WolfRenderer::new);
 		EntityRenderers.register(CustomEntities.ZARZYK, ZarzykEntityRenderer::new);
 		EntityRenderers.register(CustomEntities.MILK_PROJECTILE, MilkProjectileRenderer::new);
 		EntityRenderers.register(CustomEntities.ROCK_PROJECTILE, RockProjectileRenderer::new);
 		EntityRenderers.register(CustomEntities.CIGARETTE_PROJECTILE, CigaretteProjectileRenderer::new);
 		EntityRenderers.register(CustomEntities.METEOR_PROJECTILE, MeteorProjectileRenderer::new);
+	}
+
+	private static void registerEntityModels() {
+		ModelLayerRegistry.registerModelLayer(ZmysioEntityModel.ZMYSIO, ZmysioEntityModel::getTexturedModelData);
+		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK, ZarzykEntityModel::getTexturedModelData);
+		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK_BABY, ZarzykEntityModel::getBabyTexturedModelData);
+	}
+
+	private static void registerScreenHandlers() {
+		MenuScreens.register(InformejtycyScreenHandlers.THEORY_FORGE_SCREEN_HANDLER, TheoryForgeScreen::new);
+		MenuScreens.register(InformejtycyScreenHandlers.BRAINROT_TABLE_SCREEN_HANDLER, BrainrotTableScreen::new);
+		MenuScreens.register(InformejtycyScreenHandlers.RECYCLER_SCREEN_HANDLER, RecyclerScreen::new);
+	}
+
+	private static void registerParticleTypes() {
+		ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_PARTICLE, StinkParticle.Factory::new);
+		ParticleProviderRegistry.getInstance().register(CustomParticles.STINK_AREA_PARTICLE, StinkAreaParticle.Factory::new);
 	}
 
 	private static void initializeDiscord() {

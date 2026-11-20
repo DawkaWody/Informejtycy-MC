@@ -87,5 +87,57 @@
         "stream": true
       }
     ]
+  },
+  "wolf_voice": {
+    "sounds": [
+      {
+        "name": "informejtycy:wolf1",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf2",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf3",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf4",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf5",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf6",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf7",
+        "stream": false
+      },
+      {
+        "name": "informejtycy:wolf8",
+        "stream": false
+      }
+    ]
+  },
+  "wolf_unmask": {
+    "sounds": [
+      {
+        "name": "informejtycy:wolf_unmask",
+        "stream": false
+      }
+    ]
+  },
+  "wolf_die": {
+    "sounds": [
+      {
+        "name": "informejtycy:wolf_die",
+        "stream": false
+      }
+    ]
   }
 }

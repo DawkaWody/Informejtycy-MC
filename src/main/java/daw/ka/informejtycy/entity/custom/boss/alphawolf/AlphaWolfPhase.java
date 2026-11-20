@@ -9,7 +9,7 @@ public enum AlphaWolfPhase {
 	STANDING(0, false, Sizes.STANDING_SCALE, 0.9f, 1.9f),
 	MASK_OFF(60, true, Sizes.STANDING_SCALE, 0.9f, 1.9f),
 	UNMASKED(0, false, Sizes.STANDING_SCALE, 0.9f, 1.9f),
-	DEAD(80, true, Sizes.STANDING_SCALE, 0.9f, 0.7f);
+	DEAD(124, true, Sizes.STANDING_SCALE, 0.9f, 0.7f);
 
 	public final int ticks;
 	public final boolean invulnerable;

@@ -9,6 +9,7 @@ public enum AlphaWolfAction {
 	ROAR(64, 18),
 	THROW_ROCK(34, 16),
 	THROW_SHURIKEN(22, 8),
+	STEAL_ITEM(32, 8),
 	MASK_OFF(60, 20),
 	DEATH(0, 0);
 

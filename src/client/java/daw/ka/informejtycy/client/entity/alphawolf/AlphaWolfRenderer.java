@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemDisplayContext;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
@@ -28,6 +29,7 @@ public class AlphaWolfRenderer extends MobRenderer<AlphaWolfEntity, AlphaWolfRen
 			AlphaWolfAction.ROAR, AlphaWolfAnim.ROAR,
 			AlphaWolfAction.THROW_ROCK, AlphaWolfAnim.THROW_ROCK,
 			AlphaWolfAction.THROW_SHURIKEN, AlphaWolfAnim.THROW_SHURIKEN,
+			AlphaWolfAction.STEAL_ITEM, AlphaWolfAnim.STEAL_ITEM,
 			AlphaWolfAction.DEATH, AlphaWolfAnim.DEATH);
 
 	private final AlphaWolfModel sitting;
@@ -50,6 +52,8 @@ public class AlphaWolfRenderer extends MobRenderer<AlphaWolfEntity, AlphaWolfRen
 		this.maskOff = new AlphaWolfModel(AlphaWolfMesh.load("mask_off"), Map.of(AlphaWolfAction.MASK_OFF, AlphaWolfAnim.MASK_OFF));
 		this.unmasked = new AlphaWolfModel(AlphaWolfMesh.load("unmasked"), FIGHT_ANIMATIONS);
 		addLayer(new AlphaWolfHeldProjectileLayer(this));
+		addLayer(new AlphaWolfShieldLayer(this));
+		addLayer(new AlphaWolfStolenItemLayer(this));
 	}
 
 	private AlphaWolfModel modelFor(AlphaWolfPhase phase) {
@@ -96,6 +100,8 @@ public class AlphaWolfRenderer extends MobRenderer<AlphaWolfEntity, AlphaWolfRen
 		super.extractRenderState(entity, state, partialTick);
 		state.phase = entity.getPhase();
 		state.phaseTicks = entity.getPhaseTicks();
+		state.shielded = entity.isShielded();
+		itemModelResolver.updateForLiving(state.stolenItem, entity.getStolenItem(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, entity);
 		state.animationStates.forEach((action, animationState) -> animationState.copyFrom(entity.animationState(action)));
 		state.deathTime = 0;
 	}

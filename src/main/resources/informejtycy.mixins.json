@@ -8,7 +8,9 @@
     "MixinShriekPrevent",
     "MixinVillagerSound",
     "MixinElytraBuff",
-    "StructurePoolAccessor"
+    "StructurePoolAccessor",
+    "MixinArmorCap",
+    "MixinArmorProtection"
   ],
   "injectors": {
     "defaultRequire": 1

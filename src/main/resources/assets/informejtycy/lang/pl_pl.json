@@ -159,6 +159,8 @@
 
   "entity.informejtycy.zmysio_boss": "Zmysio",
   "entity.informejtycy.alpha_wolf_boss": "Wilk Alfa",
+  "entity.informejtycy.alpha_wolf_boss.stolen_item": "\"Weź odłóż w końcu ten telefon\"",
+  "entity.informejtycy.alpha_wolf_minion": "Zaleś",
   "entity.informejtycy.zarzyk": "Zarzyk",
 
   "painting.informejtycy.zmysio.title": "Zmysio",
