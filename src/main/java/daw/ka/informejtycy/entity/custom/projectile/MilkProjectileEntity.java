@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 
 public class MilkProjectileEntity extends Projectile {
     private static final float DAMAGE = 5.0f;
+    private boolean ignoresInvulnerability = false;
 
     public MilkProjectileEntity(EntityType<? extends Projectile> entityType, Level world) {
         super(entityType, world);
@@ -62,10 +63,17 @@ public class MilkProjectileEntity extends Projectile {
         if (this.getOwner() instanceof LivingEntity livingEntity) {
             Entity entity = entityHitResult.getEntity();
             DamageSource damageSource = this.damageSources().spit(this, livingEntity);
+            int regen = entity.getInvulnerableTime();
+            if (this.ignoresInvulnerability) entity.setInvulnerableTime(0);
             if (this.level() instanceof ServerLevel serverWorld && entity.hurtServer(serverWorld, damageSource, DAMAGE)) {
                 EnchantmentHelper.doPostAttackEffects(serverWorld, livingEntity, damageSource);
             }
+            if (this.ignoresInvulnerability) entity.setInvulnerableTime(regen);
         }
+    }
+
+    public void setIgnoresInvulnerability(boolean ignoresInvulnerability) {
+        this.ignoresInvulnerability = ignoresInvulnerability;
     }
 
     @Override

@@ -40,6 +40,29 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
                 .add(key(CustomBlocks.CHIMPANZINI_BANANINI));
         tag(BlockTags.MINEABLE_WITH_HOE)
                 .add(key(CustomBlocks.TRALALERO_TRALALA));
+		tag(BlockTags.MINEABLE_WITH_SHOVEL)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+
+		tag(BlockTags.SAND)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+		tag(BlockTags.ENDERMAN_HOLDABLE)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+		tag(BlockTags.SCULK_REPLACEABLE)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+		tag(BlockTags.TRIGGERS_AMBIENT_DESERT_SAND_BLOCK_SOUNDS)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+		tag(BlockTags.TRIGGERS_AMBIENT_DESERT_DRY_VEGETATION_BLOCK_SOUNDS)
+				.add(key(CustomBlocks.REGINA_SAND))
+				.add(key(CustomBlocks.RED_REGINA_SAND));
+		tag(BlockTags.RABBITS_SPAWNABLE_ON)
+				.add(key(CustomBlocks.REGINA_SAND));
+		tag(BlockTags.ARMADILLO_SPAWNABLE_ON)
+				.add(key(CustomBlocks.RED_REGINA_SAND));
 
 		tag(BlockTags.NEEDS_DIAMOND_TOOL)
 				.add(key(CustomBlocks.SILVER_WOLF_ORE))

@@ -88,7 +88,6 @@ public class AlphaWolfEntity extends Monster {
 
 	private static final byte EVENT_ACTION_BASE = 70;
 
-	// Longer than the longest voice line, so they never overlap
 	private static final int VOICE_COOLDOWN = 140;
 	private static final int VOICE_CHANCE = 60;
 
@@ -404,11 +403,7 @@ public class AlphaWolfEntity extends Monster {
 				releasePosition(MASK_DROP_OFFSET).subtract(position()));
 		if (mask != null) mask.setExtendedLifetime();
 	}
-
-	/**
-	 * Puts the item taken by {@link StealItemGoal} into an item frame lying on the ground in front of the wolf.
-	 * Item frames only hold a single item, so the rest of the stack is dropped on top of the frame.
-	 */
+	
 	public void placeStolenItem(ServerLevel level) {
 		ItemStack stolen = getStolenItem();
 		if (stolen.isEmpty()) return;

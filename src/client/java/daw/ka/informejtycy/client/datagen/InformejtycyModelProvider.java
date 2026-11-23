@@ -16,6 +16,8 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import java.util.Map;
@@ -45,6 +47,8 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 	public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_ORE);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.DARK_GLOWSTONE);
+		createFacingCube(blockStateModelGenerator, CustomBlocks.REGINA_SAND);
+		createFacingCube(blockStateModelGenerator, CustomBlocks.RED_REGINA_SAND);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.SILVER_WOLF_BLOCK);
 		blockStateModelGenerator.createTrivialCube(CustomBlocks.GOLDEN_WOLF_BLOCK);
 		blockStateModelGenerator.createTrivialBlock(CustomBlocks.BIDON_BLOCK, TexturedModel.COLUMN);
@@ -99,6 +103,12 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 						.select(Direction.WEST, BlockModelGenerators.NOP)));
 	}
 
+	private static void createFacingCube(BlockModelGenerators generators, Block block) {
+		Identifier model = ModelTemplates.CUBE_ALL.create(block, TextureMapping.cube(block), generators.modelOutput);
+		generators.blockStateOutput.accept(MultiVariantGenerator.dispatch(block, BlockModelGenerators.plainVariant(model))
+				.with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING_ALT));
+	}
+
 	@Override
 	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 		itemModelGenerator.generateFlatItem(CustomItems.SILVER_WOLF, ModelTemplates.FLAT_ITEM);
@@ -123,6 +133,7 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 		itemModelGenerator.generateFlatItem(CustomItems.STELLA_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(CustomItems.MEGAMIKSKLASA2_MUSIC_DISC, ModelTemplates.FLAT_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_ELYTRA, ModelTemplates.FLAT_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_CHESTPLATE, ModelTemplates.FLAT_ITEM);
 
         itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.INFORMEJTYCY_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
@@ -134,7 +145,7 @@ public class InformejtycyModelProvider extends FabricModelProvider {
         itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
         itemModelGenerator.generateFlatItem(CustomItems.REINFORCED_INFORMEJTYCY_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
-        itemModelGenerator.generateFlatItem(CustomItems.ZMYSIO_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+        itemModelGenerator.generateFlatItem(CustomItems.DRUMSTICK_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
 
 		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_HELMET, ItemModelGenerators.TRIM_PREFIX_HELMET, false, Map.of());
 		itemModelGenerator.generateTrimmableItem(CustomItems.INFORMEJTYCY_CHESTPLATE, ItemModelGenerators.TRIM_PREFIX_CHESTPLATE, false, Map.of());

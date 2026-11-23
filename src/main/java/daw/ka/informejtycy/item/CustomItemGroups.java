@@ -96,9 +96,10 @@ public class CustomItemGroups {
 				entries.accept(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE);
 				entries.accept(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS);
 				entries.accept(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS);
-                entries.accept(CustomItems.ZMYSIO_SWORD);
+                entries.accept(CustomItems.DRUMSTICK_SWORD);
                 entries.accept(CustomItems.ZMYSIO_ELYTRA);
 				entries.accept(CustomItems.PRESIDENT_HELMET);
+				entries.accept(CustomItems.ZMYSIO_CHESTPLATE);
 			}).build();
 
 	public static void registerAll() {

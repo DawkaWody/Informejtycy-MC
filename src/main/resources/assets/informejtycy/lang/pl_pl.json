@@ -1,6 +1,8 @@
 {
   "block.informejtycy.silver_wolf_ore": "Ruda Srebrnego Wilka",
   "block.informejtycy.dark_glowstone": "Ciemny Jasnogłaz",
+  "block.informejtycy.regina_sand": "Piasek Reginny",
+  "block.informejtycy.red_regina_sand": "Czerwony Piasek Reginny",
   "block.informejtycy.theory_forge": "Kuźnia Teorii",
   "block.informejtycy.brainrot_table": "Stół Brainrotu",
   "block.informejtycy.recycler": "Kaucjomat",
@@ -49,6 +51,8 @@
 
   "item.informejtycy.silver_wolf_ore": "Ruda Srebrnego Wilka",
   "item.informejtycy.dark_glowstone": "Ciemny Jasnogłaz",
+  "item.informejtycy.regina_sand": "Piasek Reginny",
+  "item.informejtycy.red_regina_sand": "Czerwony Piasek Reginny",
   "item.informejtycy.theory_forge_block": "Kuźnia Teorii",
   "item.informejtycy.brainrot_table_block": "Stół Brainrotu",
   "item.informejtycy.recycler_block": "Kaucjomat",
@@ -143,9 +147,10 @@
   "item.informejtycy.reinforced_informejtycy_axe": "Wzmocniona Siekiera Informejtycy",
   "item.informejtycy.reinforced_informejtycy_shovel": "Wzmocniona Łopata Informejtycy",
   "item.informejtycy.reinforced_informejtycy_hoe": "Wzmocniona Motyka Informejtycy",
-  "item.informejtycy.zmysio_sword": "Miecz Zmysia",
+  "item.informejtycy.drumstick_sword": "Pałka Zielińskiego",
   "item.informejtycy.zmysio_elytra": "Elytra Zmysia",
   "item.informejtycy.president_helmet": "Hełm Prezydenta",
+  "item.informejtycy.zmysio_chestplate": "Na-pierśnik Zmysia",
 
   "item.minecraft.potion.effect.Aura": "Mikstura Aury",
   "item.minecraft.splash_potion.effect.Aura": "Miotana Mikstura Aury",

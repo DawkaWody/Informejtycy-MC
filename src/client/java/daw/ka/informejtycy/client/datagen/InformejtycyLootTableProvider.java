@@ -36,8 +36,10 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		add(CustomBlocks.SILVER_WOLF_ORE, multipleOreDrops(CustomBlocks.SILVER_WOLF_ORE, CustomItems.SILVER_WOLF, 1.0f, 2.0f));
 		add(CustomBlocks.DARK_GLOWSTONE, glowstoneDrops(CustomBlocks.DARK_GLOWSTONE, CustomItems.DARK_GLOWSTONE_DUST));
 		add(CustomBlocks.ISTANBUL_LEAVES, block -> createLeavesDrops(block, CustomBlocks.ISTANBUL_SAPLING, NORMAL_LEAVES_SAPLING_CHANCES));
-		add(CustomBlocks.POTTED_ISTANBUL_SAPLING, block -> createPotFlowerItemTable(CustomBlocks.ISTANBUL_SAPLING));
-		add(CustomBlocks.POTTED_ZARZYK_SAPLING, block -> createPotFlowerItemTable(CustomBlocks.ZARZYK_SAPLING));
+		add(CustomBlocks.POTTED_ISTANBUL_SAPLING, _ -> createPotFlowerItemTable(CustomBlocks.ISTANBUL_SAPLING));
+		add(CustomBlocks.POTTED_ZARZYK_SAPLING, _ -> createPotFlowerItemTable(CustomBlocks.ZARZYK_SAPLING));
+		dropSelf(CustomBlocks.REGINA_SAND);
+		dropSelf(CustomBlocks.RED_REGINA_SAND);
 		dropSelf(CustomBlocks.THEORY_FORGE_BLOCK);
 		dropSelf(CustomBlocks.BRAINROT_TABLE_BLOCK);
 		dropSelf(CustomBlocks.SILVER_WOLF_BLOCK);

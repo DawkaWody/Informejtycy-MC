@@ -71,9 +71,10 @@ public class CustomItems {
 	public static Item REINFORCED_INFORMEJTYCY_BOOTS;
 
 	// Custom armor upgrades
-    public static Item ZMYSIO_SWORD;
+    public static Item DRUMSTICK_SWORD;
     public static Item ZMYSIO_ELYTRA;
 	public static Item PRESIDENT_HELMET;
+	public static Item ZMYSIO_CHESTPLATE;
 
 	public static final Item.Properties SILVER_WOLF_SETTINGS = new Item.Properties().stacksTo(64);
 	public static final Item.Properties GOLDEN_WOLF_SETTINGS = new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON);
@@ -122,7 +123,7 @@ public class CustomItems {
 	public static final Item.Properties REINFORCED_INFORMEJTYCY_LEGGINGS_SETTINGS = new Item.Properties().humanoidArmor(CustomArmorMaterials.REINFORCED_INFORMEJTYCY, ArmorType.LEGGINGS);
 	public static final Item.Properties REINFORCED_INFORMEJTYCY_BOOTS_SETTINGS = new Item.Properties().humanoidArmor(CustomArmorMaterials.REINFORCED_INFORMEJTYCY, ArmorType.BOOTS);
 
-    public static final Item.Properties ZMYSIO_SWORD_SETTINGS = new Item.Properties().sword(CustomToolMaterials.ZMYSIO, 3, -2.4F).rarity(Rarity.RARE);
+    public static final Item.Properties DRUMSTICK_SWORD_SETTINGS = new Item.Properties().sword(CustomToolMaterials.DRUMSTICK, 3, -2.4F).rarity(Rarity.RARE);
     public static final Item.Properties ZMYSIO_ELYTRA_SETTINGS = new Item.Properties().durability(676).rarity(Rarity.EPIC)
             .component(DataComponents.GLIDER, Unit.INSTANCE)
             .component(
@@ -139,6 +140,7 @@ public class CustomItems {
 					.setDamageOnHurt(false)
 					.build());
 	public static final Item.Properties PRESIDENT_HELMET_SETTINGS = new Item.Properties().humanoidArmor(CustomArmorMaterials.PRESIDENT_HELMET, ArmorType.HELMET);
+	public static final Item.Properties ZMYSIO_CHESTPLATE_SETTINGS = new Item.Properties().humanoidArmor(CustomArmorMaterials.ZMYSIO_CHESTPLATE, ArmorType.CHESTPLATE).rarity(Rarity.EPIC);
 
 	public static void registerAll() {
 		SILVER_WOLF = InformejtycyRegistry.registerItem("silver_wolf", SILVER_WOLF_SETTINGS, CreativeModeTabs.INGREDIENTS);
@@ -188,8 +190,9 @@ public class CustomItems {
 		REINFORCED_INFORMEJTYCY_LEGGINGS = InformejtycyRegistry.registerItem("reinforced_informejtycy_leggings", REINFORCED_INFORMEJTYCY_LEGGINGS_SETTINGS, CreativeModeTabs.COMBAT);
 		REINFORCED_INFORMEJTYCY_BOOTS = InformejtycyRegistry.registerItem("reinforced_informejtycy_boots", REINFORCED_INFORMEJTYCY_BOOTS_SETTINGS, CreativeModeTabs.COMBAT);
 
-        ZMYSIO_SWORD = InformejtycyRegistry.registerCustomItem("zmysio_sword", ZMYSIO_SWORD_SETTINGS, CreativeModeTabs.COMBAT, ZmysioSwordItem.class);
+        DRUMSTICK_SWORD = InformejtycyRegistry.registerCustomItem("drumstick_sword", DRUMSTICK_SWORD_SETTINGS, CreativeModeTabs.COMBAT, DrumstickSwordItem.class);
         ZMYSIO_ELYTRA = InformejtycyRegistry.registerCustomItem("zmysio_elytra", ZMYSIO_ELYTRA_SETTINGS.repairable(ZMYSIO_MILK_BUCKET), CreativeModeTabs.TOOLS_AND_UTILITIES, ZmysioElytraItem.class);
 		PRESIDENT_HELMET = InformejtycyRegistry.registerCustomItem("president_helmet", PRESIDENT_HELMET_SETTINGS, CreativeModeTabs.COMBAT, PresidentHelmetItem.class);
+		ZMYSIO_CHESTPLATE = InformejtycyRegistry.registerCustomItem("zmysio_chestplate", ZMYSIO_CHESTPLATE_SETTINGS, CreativeModeTabs.COMBAT, ZmysioChestplateItem.class);
 	}
 }

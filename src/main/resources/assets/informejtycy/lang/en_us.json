@@ -1,6 +1,8 @@
 {
   "block.informejtycy.silver_wolf_ore": "Silver Wolf Ore",
   "block.informejtycy.dark_glowstone": "Dark Glowstone",
+  "block.informejtycy.regina_sand": "Regina Sand",
+  "block.informejtycy.red_regina_sand": "Red Regina Sand",
   "block.informejtycy.theory_forge": "Theory Forge",
   "block.informejtycy.brainrot_table": "Brainrot Table",
   "block.informejtycy.recycler": "Recycler",
@@ -86,6 +88,8 @@
   "item.informejtycy.trash_can": "Trash Can",
   "item.informejtycy.silver_wolf_block": "Silver Wolf Block",
   "item.informejtycy.golden_wolf_block": "Golden Wolf Block",
+  "item.informejtycy.regina_sand": "Regina Sand",
+  "item.informejtycy.red_regina_sand": "Red Regina Sand",
   "item.informejtycy.bidon_block": "Bidon Block",
   "item.informejtycy.bidon_cap_block": "Bidon Cap",
 
@@ -143,9 +147,10 @@
   "item.informejtycy.reinforced_informejtycy_axe": "Reinforced Informejtycy Axe",
   "item.informejtycy.reinforced_informejtycy_shovel": "Reinforced Informejtycy Shovel",
   "item.informejtycy.reinforced_informejtycy_hoe": "Reinforced Informejtycy Hoe",
-  "item.informejtycy.zmysio_sword": "Zmysio Sword",
+  "item.informejtycy.drumstick_sword": "Zei-linsky's Drumstick",
   "item.informejtycy.zmysio_elytra": "Zmysio Elytra",
   "item.informejtycy.president_helmet": "President Helmet",
+  "item.informejtycy.zmysio_chestplate": "Zmysio Chest-plate",
 
   "item.minecraft.potion.effect.Aura": "Aura Potion",
   "item.minecraft.splash_potion.effect.Aura": "Splash Aura Potion",

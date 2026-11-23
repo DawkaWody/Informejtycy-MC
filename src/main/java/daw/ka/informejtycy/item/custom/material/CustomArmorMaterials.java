@@ -19,6 +19,7 @@ public class CustomArmorMaterials {
 	public static final ResourceKey<EquipmentAsset> REINFORCED_INFORMEJTYCY_KEY = ResourceKey.create(REGISTRY_KEY, InformejtycyRegistry.id("reinforced_informejtycy"));
     public static final ResourceKey<EquipmentAsset> ZMYSIO_ELYTRA_KEY = ResourceKey.create(REGISTRY_KEY, InformejtycyRegistry.id("zmysio_elytra"));
 	public static final ResourceKey<EquipmentAsset> PRESIDENT_HELMET_KEY = ResourceKey.create(REGISTRY_KEY, InformejtycyRegistry.id("president_helmet"));
+	public static final ResourceKey<EquipmentAsset> ZMYSIO_CHESTPLATE_KEY = ResourceKey.create(REGISTRY_KEY, InformejtycyRegistry.id("zmysio_chestplate"));
 
 	public static final ArmorMaterial INFORMEJTYCY = new ArmorMaterial(33,
 			Util.make(new EnumMap<>(ArmorType.class), map -> {
@@ -40,4 +41,8 @@ public class CustomArmorMaterials {
 			Util.make(new EnumMap<>(ArmorType.class), map -> {
 				map.put(ArmorType.HELMET, 5);
 	}), 20, SoundEvents.ARMOR_EQUIP_LEATHER, 6, 0.2f, CustomTags.Items.ZMYSIO_REPAIR, PRESIDENT_HELMET_KEY);
+	public static final ArmorMaterial ZMYSIO_CHESTPLATE = new ArmorMaterial(50,
+			Util.make(new EnumMap<>(ArmorType.class), map -> {
+				map.put(ArmorType.CHESTPLATE, 10);
+	}), 20, SoundEvents.ARMOR_EQUIP_LEATHER, 5, 0.2f, CustomTags.Items.ZMYSIO_REPAIR, ZMYSIO_CHESTPLATE_KEY);
 }

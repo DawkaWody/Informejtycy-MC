@@ -155,17 +155,6 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
                         .unlockedBy(getHasName(Items.IRON_INGOT), has(Items.IRON_INGOT))
                         .save(this.output, "trash_can");
 
-                shaped(RecipeCategory.COMBAT, CustomItems.ZMYSIO_SWORD, 1)
-                        .pattern(" P ")
-                        .pattern("MSM")
-                        .pattern(" T ")
-                        .define('T', Items.GHAST_TEAR)
-                        .define('M', CustomItems.ZMYSIO_MILK_BUCKET)
-                        .define('S', CustomItems.REINFORCED_INFORMEJTYCY_SWORD)
-                        .define('P', CustomItems.PLUS)
-                        .unlockedBy(getHasName(CustomItems.PLUS), has(CustomItems.PLUS))
-                        .save(this.output, "zmysio_sword");
-
                 shaped(RecipeCategory.TRANSPORTATION, CustomItems.ZMYSIO_ELYTRA, 1)
                         .pattern("S S")
                         .pattern("PEP")

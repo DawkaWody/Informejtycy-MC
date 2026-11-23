@@ -7,10 +7,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 
-public class ZmysioSwordItem extends AlwaysGlintItem {
+public class DrumstickSwordItem extends AlwaysGlintItem {
     private static final float ARMOR_IGNORE_PERCENTAGE = 0.3f;
 
-    public ZmysioSwordItem(Properties settings) {
+    public DrumstickSwordItem(Properties settings) {
         super(settings);
     }
 

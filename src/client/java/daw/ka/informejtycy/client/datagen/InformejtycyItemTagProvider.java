@@ -31,7 +31,7 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 		tag(ItemTags.SWORDS)
 				.add(key(CustomItems.INFORMEJTYCY_SWORD))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_SWORD))
-                .add(key(CustomItems.ZMYSIO_SWORD));
+                .add(key(CustomItems.DRUMSTICK_SWORD));
 		tag(ItemTags.PICKAXES)
 				.add(key(CustomItems.INFORMEJTYCY_PICKAXE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_PICKAXE));
@@ -56,13 +56,21 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS))
 				.add(key(CustomItems.PRESIDENT_HELMET));
 
+		tag(ItemTags.SAND)
+				.add(key(CustomBlocks.REGINA_SAND.asItem()))
+				.add(key(CustomBlocks.RED_REGINA_SAND.asItem()));
+		tag(ItemTags.SMELTS_TO_GLASS)
+				.add(key(CustomBlocks.REGINA_SAND.asItem()))
+				.add(key(CustomBlocks.RED_REGINA_SAND.asItem()));
+
 		tag(ItemTags.HEAD_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_HELMET))
 				.add(key(CustomItems.PRESIDENT_HELMET));
 		tag(ItemTags.CHEST_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_CHESTPLATE))
-				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE));
+				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE))
+				.add(key(CustomItems.ZMYSIO_CHESTPLATE));
 		tag(ItemTags.LEG_ARMOR_ENCHANTABLE)
 				.add(key(CustomItems.INFORMEJTYCY_LEGGINGS))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS));
@@ -78,7 +86,8 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_CHESTPLATE))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_LEGGINGS))
 				.add(key(CustomItems.REINFORCED_INFORMEJTYCY_BOOTS))
-				.add(key(CustomItems.PRESIDENT_HELMET));
+				.add(key(CustomItems.PRESIDENT_HELMET))
+				.add(key(CustomItems.ZMYSIO_CHESTPLATE));
 
 		tag(CustomTags.Items.ISTANBUL_LOGS)
 				.add(key(CustomBlocks.ISTANBUL_LOG.asItem()))

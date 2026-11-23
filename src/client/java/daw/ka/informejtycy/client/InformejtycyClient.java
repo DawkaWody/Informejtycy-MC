@@ -9,6 +9,8 @@ import daw.ka.informejtycy.client.entity.projectile.milk.MilkProjectileRenderer;
 import daw.ka.informejtycy.client.entity.projectile.rock.RockProjectileRenderer;
 import daw.ka.informejtycy.client.entity.zarzyk.ZarzykEntityModel;
 import daw.ka.informejtycy.client.entity.zarzyk.ZarzykEntityRenderer;
+import daw.ka.informejtycy.client.entity.armor.zmysio.ZmysioChestplateModel;
+import daw.ka.informejtycy.client.entity.armor.zmysio.ZmysioChestplateRenderer;
 import daw.ka.informejtycy.client.entity.zmysio.ZmysioEntityModel;
 import daw.ka.informejtycy.client.entity.zmysio.ZmysioEntityRenderer;
 import daw.ka.informejtycy.client.gui.TitleScreenVideo;
@@ -19,6 +21,7 @@ import daw.ka.informejtycy.client.particle.StinkAreaParticle;
 import daw.ka.informejtycy.client.particle.StinkParticle;
 import daw.ka.informejtycy.client.gui.tooltip.ClientVapeTooltip;
 import daw.ka.informejtycy.entity.CustomEntities;
+import daw.ka.informejtycy.item.CustomItems;
 import daw.ka.informejtycy.item.component.custom.VapeContents;
 import daw.ka.informejtycy.particle.CustomParticles;
 import daw.ka.informejtycy.screen.InformejtycyScreenHandlers;
@@ -26,6 +29,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.Minecraft;
@@ -46,6 +50,7 @@ public class InformejtycyClient implements ClientModInitializer {
 
         registerEntityModels();
         registerEntityRenderers();
+        registerArmorRenderers();
 		registerParticleTypes();
 		registerScreenHandlers();
 
@@ -161,6 +166,11 @@ public class InformejtycyClient implements ClientModInitializer {
 		ModelLayerRegistry.registerModelLayer(ZmysioEntityModel.ZMYSIO, ZmysioEntityModel::getTexturedModelData);
 		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK, ZarzykEntityModel::getTexturedModelData);
 		ModelLayerRegistry.registerModelLayer(ZarzykEntityModel.ZARZYK_BABY, ZarzykEntityModel::getBabyTexturedModelData);
+		ModelLayerRegistry.registerModelLayer(ZmysioChestplateModel.ZMYSIO_CHESTPLATE, ZmysioChestplateModel::getTexturedModelData);
+	}
+
+	private static void registerArmorRenderers() {
+		ArmorRenderer.register(ZmysioChestplateRenderer::new, CustomItems.ZMYSIO_CHESTPLATE);
 	}
 
 	private static void registerScreenHandlers() {

@@ -3,6 +3,7 @@ package daw.ka.informejtycy.block;
 import daw.ka.informejtycy.InformejtycyRegistry;
 import daw.ka.informejtycy.block.custom.BrainrotTableBlock;
 import daw.ka.informejtycy.block.custom.FacingBlock;
+import daw.ka.informejtycy.block.custom.FacingSandBlock;
 import daw.ka.informejtycy.block.custom.RecyclerBlock;
 import daw.ka.informejtycy.block.custom.ShapedBlock;
 import daw.ka.informejtycy.block.custom.TheoryForgeBlock;
@@ -11,6 +12,7 @@ import daw.ka.informejtycy.world.gen.tree.CustomTreeGrowers;
 import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -25,6 +27,8 @@ import net.minecraft.world.level.material.PushReaction;
 public class CustomBlocks {
 	public static Block SILVER_WOLF_ORE;
 	public static Block DARK_GLOWSTONE;
+	public static Block REGINA_SAND;
+	public static Block RED_REGINA_SAND;
 	public static Block THEORY_FORGE_BLOCK;
 	public static Block BRAINROT_TABLE_BLOCK;
 	public static Block RECYCLER_BLOCK;
@@ -84,6 +88,16 @@ public class CustomBlocks {
 			.sound(SoundType.GLASS)
 			.lightLevel(_ -> 10)
 			.isRedstoneConductor(Blocks::never);
+	public static final BlockBehaviour.Properties REGINA_SAND_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.SAND)
+			.instrument(NoteBlockInstrument.SNARE)
+			.strength(0.5F)
+			.sound(SoundType.SAND);
+	public static final BlockBehaviour.Properties RED_REGINA_SAND_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_ORANGE)
+			.instrument(NoteBlockInstrument.SNARE)
+			.strength(0.5F)
+			.sound(SoundType.SAND);
 	public static final BlockBehaviour.Properties THEORY_FORGE_BLOCK_SETTINGS = BlockBehaviour.Properties.of()
 			.strength(3.5f, 3.0f)
 			.requiresCorrectToolForDrops()
@@ -339,6 +353,18 @@ public class CustomBlocks {
 				DARK_GLOWSTONE_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
 				CreativeModeTabs.NATURAL_BLOCKS
+		);
+		REGINA_SAND = InformejtycyRegistry.registerCustomBlock("regina_sand",
+				REGINA_SAND_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				CreativeModeTabs.NATURAL_BLOCKS,
+				properties -> new FacingSandBlock(new ColorRGBA(14406560), properties)
+		);
+		RED_REGINA_SAND = InformejtycyRegistry.registerCustomBlock("red_regina_sand",
+				RED_REGINA_SAND_SETTINGS,
+				DEFAULT_ITEM_SETTINGS,
+				CreativeModeTabs.NATURAL_BLOCKS,
+				properties -> new FacingSandBlock(new ColorRGBA(11098145), properties)
 		);
 		THEORY_FORGE_BLOCK = InformejtycyRegistry.registerCustomBlock("theory_forge_block",
 				THEORY_FORGE_BLOCK_SETTINGS,
