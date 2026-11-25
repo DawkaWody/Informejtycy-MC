@@ -16,6 +16,7 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.core.Direction;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -60,14 +61,24 @@ public class InformejtycyModelProvider extends FabricModelProvider {
 				.fence(CustomBlocks.ISTANBUL_FENCE)
 				.fenceGate(CustomBlocks.ISTANBUL_FENCE_GATE)
 				.pressurePlate(CustomBlocks.ISTANBUL_PRESSURE_PLATE)
-				.button(CustomBlocks.ISTANBUL_BUTTON);
+				.button(CustomBlocks.ISTANBUL_BUTTON)
+				.generateFor(new BlockFamily.Builder(CustomBlocks.ISTANBUL_PLANKS)
+						.sign(CustomBlocks.ISTANBUL_SIGN, CustomBlocks.ISTANBUL_WALL_SIGN)
+						.hangingSign(CustomBlocks.ISTANBUL_HANGING_SIGN, CustomBlocks.ISTANBUL_WALL_HANGING_SIGN)
+						.strippedLog(CustomBlocks.STRIPPED_ISTANBUL_LOG)
+						.getFamily());
 		blockStateModelGenerator.family(CustomBlocks.ZARZYK_PLANKS)
 				.stairs(CustomBlocks.ZARZYK_STAIRS)
 				.slab(CustomBlocks.ZARZYK_SLAB)
 				.fence(CustomBlocks.ZARZYK_FENCE)
 				.fenceGate(CustomBlocks.ZARZYK_FENCE_GATE)
 				.pressurePlate(CustomBlocks.ZARZYK_PRESSURE_PLATE)
-				.button(CustomBlocks.ZARZYK_BUTTON);
+				.button(CustomBlocks.ZARZYK_BUTTON)
+				.generateFor(new BlockFamily.Builder(CustomBlocks.ZARZYK_PLANKS)
+						.sign(CustomBlocks.ZARZYK_SIGN, CustomBlocks.ZARZYK_WALL_SIGN)
+						.hangingSign(CustomBlocks.ZARZYK_HANGING_SIGN, CustomBlocks.ZARZYK_WALL_HANGING_SIGN)
+						.strippedLog(CustomBlocks.STRIPPED_ZARZYK_LOG)
+						.getFamily());
 
 		blockStateModelGenerator.createOrientableTrapdoor(CustomBlocks.ISTANBUL_TRAPDOOR);
 		blockStateModelGenerator.createOrientableTrapdoor(CustomBlocks.ZARZYK_TRAPDOOR);

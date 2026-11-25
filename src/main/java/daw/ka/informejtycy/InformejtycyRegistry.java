@@ -123,6 +123,22 @@ public class InformejtycyRegistry {
 		Registry.register(BuiltInRegistries.ITEM, key, new BlockItem(block, settings));
 	}
 
+	/** For block items that are not a plain {@link BlockItem}, e.g. signs placing a standing or wall variant. */
+	public static <T extends BlockItem> Item registerCustomBlockItem(
+			String name,
+			Item.Properties blockItemSettings,
+			ResourceKey<CreativeModeTab> tab,
+			Function<Item.Properties, T> customBlockItem
+	) {
+		Identifier id = id(name);
+		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
+		Item.Properties settings = blockItemSettings.setId(key);
+
+		Item item = customBlockItem.apply(settings);
+		if (tab != null) registerMenuItem(tab, item);
+		return Registry.register(BuiltInRegistries.ITEM, key, item);
+	}
+
 	public static Item registerItem(String name, Item.Properties itemSettings, ResourceKey<CreativeModeTab> tab) {
 		Identifier id = id(name);
 		ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);

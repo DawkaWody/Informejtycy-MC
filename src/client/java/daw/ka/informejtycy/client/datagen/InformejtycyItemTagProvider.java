@@ -129,6 +129,12 @@ public class InformejtycyItemTagProvider extends FabricTagsProvider.ItemTagsProv
 		tag(ItemTags.WOODEN_DOORS)
 				.add(key(CustomBlocks.ISTANBUL_DOOR.asItem()))
 				.add(key(CustomBlocks.ZARZYK_DOOR.asItem()));
+		tag(ItemTags.SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_SIGN.asItem()))
+				.add(key(CustomBlocks.ZARZYK_SIGN.asItem()));
+		tag(ItemTags.HANGING_SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_HANGING_SIGN.asItem()))
+				.add(key(CustomBlocks.ZARZYK_HANGING_SIGN.asItem()));
 		tag(ItemTags.LEAVES)
 				.add(key(CustomBlocks.ISTANBUL_LEAVES.asItem()))
 				.add(key(CustomBlocks.ZARZYK_LEAVES.asItem()));

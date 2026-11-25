@@ -66,6 +66,8 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.ISTANBUL_BUTTON);
 		dropSelf(CustomBlocks.ISTANBUL_TRAPDOOR);
 		add(CustomBlocks.ISTANBUL_DOOR, createDoorTable(CustomBlocks.ISTANBUL_DOOR));
+		dropSelf(CustomBlocks.ISTANBUL_SIGN);
+		dropSelf(CustomBlocks.ISTANBUL_HANGING_SIGN);
 		dropSelf(CustomBlocks.ISTANBUL_SAPLING);
 		dropSelf(CustomBlocks.ZARZYK_LOG);
 		dropSelf(CustomBlocks.STRIPPED_ZARZYK_LOG);
@@ -80,6 +82,8 @@ public class InformejtycyLootTableProvider extends FabricBlockLootSubProvider {
 		dropSelf(CustomBlocks.ZARZYK_BUTTON);
 		dropSelf(CustomBlocks.ZARZYK_TRAPDOOR);
 		add(CustomBlocks.ZARZYK_DOOR, createDoorTable(CustomBlocks.ZARZYK_DOOR));
+		dropSelf(CustomBlocks.ZARZYK_SIGN);
+		dropSelf(CustomBlocks.ZARZYK_HANGING_SIGN);
 		dropSelf(CustomBlocks.ZARZYK_SAPLING);
 	}
 

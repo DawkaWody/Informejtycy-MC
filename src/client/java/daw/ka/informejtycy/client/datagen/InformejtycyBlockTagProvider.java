@@ -126,6 +126,18 @@ public class InformejtycyBlockTagProvider extends FabricTagsProvider.BlockTagsPr
 		tag(BlockTags.WOODEN_DOORS)
 				.add(key(CustomBlocks.ISTANBUL_DOOR))
 				.add(key(CustomBlocks.ZARZYK_DOOR));
+		tag(BlockTags.STANDING_SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_SIGN))
+				.add(key(CustomBlocks.ZARZYK_SIGN));
+		tag(BlockTags.WALL_SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_WALL_SIGN))
+				.add(key(CustomBlocks.ZARZYK_WALL_SIGN));
+		tag(BlockTags.CEILING_HANGING_SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_HANGING_SIGN))
+				.add(key(CustomBlocks.ZARZYK_HANGING_SIGN));
+		tag(BlockTags.WALL_HANGING_SIGNS)
+				.add(key(CustomBlocks.ISTANBUL_WALL_HANGING_SIGN))
+				.add(key(CustomBlocks.ZARZYK_WALL_HANGING_SIGN));
 	}
 
 	private static ResourceKey<Block> key(Block block) {

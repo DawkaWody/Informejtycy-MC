@@ -41,6 +41,8 @@ public class CustomItemGroups {
 				entries.accept(CustomBlocks.ISTANBUL_BUTTON);
 				entries.accept(CustomBlocks.ISTANBUL_TRAPDOOR);
 				entries.accept(CustomBlocks.ISTANBUL_DOOR);
+				entries.accept(CustomBlocks.ISTANBUL_SIGN);
+				entries.accept(CustomBlocks.ISTANBUL_HANGING_SIGN);
 				entries.accept(CustomBlocks.ZARZYK_LOG);
 				entries.accept(CustomBlocks.STRIPPED_ZARZYK_LOG);
 				entries.accept(CustomBlocks.ZARZYK_WOOD);
@@ -56,6 +58,8 @@ public class CustomItemGroups {
 				entries.accept(CustomBlocks.ZARZYK_BUTTON);
 				entries.accept(CustomBlocks.ZARZYK_TRAPDOOR);
 				entries.accept(CustomBlocks.ZARZYK_DOOR);
+				entries.accept(CustomBlocks.ZARZYK_SIGN);
+				entries.accept(CustomBlocks.ZARZYK_HANGING_SIGN);
 				// Items
 				entries.accept(CustomItems.SILVER_WOLF);
 				entries.accept(CustomItems.GOLDEN_WOLF);

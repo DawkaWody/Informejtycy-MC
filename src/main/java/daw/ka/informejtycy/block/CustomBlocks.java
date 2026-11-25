@@ -11,6 +11,7 @@ import daw.ka.informejtycy.block.custom.ZmysioSummoningBlock;
 import daw.ka.informejtycy.world.gen.tree.CustomTreeGrowers;
 import net.fabricmc.fabric.api.item.v1.BlockTransformerHelper;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.level.block.*;
@@ -22,6 +23,9 @@ import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.HangingSignItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.material.PushReaction;
 
 public class CustomBlocks {
@@ -58,6 +62,10 @@ public class CustomBlocks {
 	public static Block ISTANBUL_BUTTON;
 	public static Block ISTANBUL_TRAPDOOR;
 	public static Block ISTANBUL_DOOR;
+	public static Block ISTANBUL_SIGN;
+	public static Block ISTANBUL_WALL_SIGN;
+	public static Block ISTANBUL_HANGING_SIGN;
+	public static Block ISTANBUL_WALL_HANGING_SIGN;
 	public static Block ISTANBUL_LEAVES;
 	public static Block ISTANBUL_SAPLING;
 	public static Block POTTED_ISTANBUL_SAPLING;
@@ -74,6 +82,10 @@ public class CustomBlocks {
 	public static Block ZARZYK_BUTTON;
 	public static Block ZARZYK_TRAPDOOR;
 	public static Block ZARZYK_DOOR;
+	public static Block ZARZYK_SIGN;
+	public static Block ZARZYK_WALL_SIGN;
+	public static Block ZARZYK_HANGING_SIGN;
+	public static Block ZARZYK_WALL_HANGING_SIGN;
 	public static Block ZARZYK_LEAVES;
 	public static Block ZARZYK_SAPLING;
 	public static Block POTTED_ZARZYK_SAPLING;
@@ -234,6 +246,34 @@ public class CustomBlocks {
 			.noOcclusion()
 			.ignitedByLava()
 			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties ISTANBUL_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ISTANBUL_WALL_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ISTANBUL_HANGING_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ISTANBUL_WALL_HANGING_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
 	public static final BlockBehaviour.Properties ISTANBUL_LEAVES_SETTINGS = Blocks.leavesProperties(SoundType.POPLAR_LEAVES);
 	public static final BlockBehaviour.Properties ISTANBUL_SAPLING_SETTINGS = BlockBehaviour.Properties.of()
 			.mapColor(MapColor.PLANT)
@@ -317,6 +357,34 @@ public class CustomBlocks {
 			.noOcclusion()
 			.ignitedByLava()
 			.pushReaction(PushReaction.POPPED);
+	public static final BlockBehaviour.Properties ZARZYK_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_WALL_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_HANGING_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
+	public static final BlockBehaviour.Properties ZARZYK_WALL_HANGING_SIGN_SETTINGS = BlockBehaviour.Properties.of()
+			.mapColor(MapColor.WOOD)
+			.forceSolidOn()
+			.instrument(NoteBlockInstrument.BASS)
+			.noCollision()
+			.strength(1.0F)
+			.ignitedByLava();
 	public static final BlockBehaviour.Properties ZARZYK_LEAVES_SETTINGS = Blocks.leavesProperties(SoundType.AZALEA_LEAVES);
 	public static final BlockBehaviour.Properties ZARZYK_SAPLING_SETTINGS = BlockBehaviour.Properties.of()
 			.mapColor(MapColor.PLANT)
@@ -342,6 +410,14 @@ public class CustomBlocks {
 
 	public static final Item.Properties DEFAULT_ITEM_SETTINGS = new Item.Properties()
 			.stacksTo(64);
+	public static final Item.Properties SIGN_ITEM_SETTINGS = new Item.Properties()
+			.cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
+			.stacksTo(16)
+			.signText();
+	public static final Item.Properties HANGING_SIGN_ITEM_SETTINGS = new Item.Properties()
+			.cookingFuel(ContextIntProviders.COOKING_TIME_HANGING_SIGNS)
+			.stacksTo(16)
+			.signText();
 
 	public static void registerAll() {
 		SILVER_WOLF_ORE = InformejtycyRegistry.registerBlock("silver_wolf_ore",
@@ -523,7 +599,33 @@ public class CustomBlocks {
 				CreativeModeTabs.BUILDING_BLOCKS,
 				properties -> new DoorBlock(BlockSetType.BAMBOO, properties)
 		);
-		ISTANBUL_LEAVES = InformejtycyRegistry.registerCustomBlock("istanbul_leaves",
+		ISTANBUL_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("istanbul_sign",
+				ISTANBUL_SIGN_SETTINGS,
+				properties -> new StandingSignBlock(CustomWoodTypes.ISTANBUL, properties)
+		);
+		ISTANBUL_WALL_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("istanbul_wall_sign",
+				wallVariant(ISTANBUL_SIGN, ISTANBUL_WALL_SIGN_SETTINGS),
+				properties -> new WallSignBlock(CustomWoodTypes.ISTANBUL, properties)
+		);
+		InformejtycyRegistry.registerCustomBlockItem("istanbul_sign",
+				SIGN_ITEM_SETTINGS,
+				CreativeModeTabs.FUNCTIONAL_BLOCKS,
+				properties -> new StandingAndWallBlockItem(ISTANBUL_SIGN, ISTANBUL_WALL_SIGN, Direction.DOWN, properties)
+		);
+		ISTANBUL_HANGING_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("istanbul_hanging_sign",
+				ISTANBUL_HANGING_SIGN_SETTINGS,
+				properties -> new CeilingHangingSignBlock(CustomWoodTypes.ISTANBUL, properties)
+		);
+		ISTANBUL_WALL_HANGING_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("istanbul_wall_hanging_sign",
+				wallVariant(ISTANBUL_HANGING_SIGN, ISTANBUL_WALL_HANGING_SIGN_SETTINGS),
+				properties -> new WallHangingSignBlock(CustomWoodTypes.ISTANBUL, properties)
+		);
+		InformejtycyRegistry.registerCustomBlockItem("istanbul_hanging_sign",
+				HANGING_SIGN_ITEM_SETTINGS,
+				CreativeModeTabs.FUNCTIONAL_BLOCKS,
+				properties -> new HangingSignItem(ISTANBUL_HANGING_SIGN, ISTANBUL_WALL_HANGING_SIGN, properties)
+		);
+		ISTANBUL_LEAVES =InformejtycyRegistry.registerCustomBlock("istanbul_leaves",
 				ISTANBUL_LEAVES_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
 				CreativeModeTabs.NATURAL_BLOCKS,
@@ -617,6 +719,32 @@ public class CustomBlocks {
 				CreativeModeTabs.BUILDING_BLOCKS,
 				properties -> new DoorBlock(BlockSetType.BAMBOO, properties)
 		);
+		ZARZYK_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("zarzyk_sign",
+				ZARZYK_SIGN_SETTINGS,
+				properties -> new StandingSignBlock(CustomWoodTypes.ZARZYK, properties)
+		);
+		ZARZYK_WALL_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("zarzyk_wall_sign",
+				wallVariant(ZARZYK_SIGN, ZARZYK_WALL_SIGN_SETTINGS),
+				properties -> new WallSignBlock(CustomWoodTypes.ZARZYK, properties)
+		);
+		InformejtycyRegistry.registerCustomBlockItem("zarzyk_sign",
+				SIGN_ITEM_SETTINGS,
+				CreativeModeTabs.FUNCTIONAL_BLOCKS,
+				properties -> new StandingAndWallBlockItem(ZARZYK_SIGN, ZARZYK_WALL_SIGN, Direction.DOWN, properties)
+		);
+		ZARZYK_HANGING_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("zarzyk_hanging_sign",
+				ZARZYK_HANGING_SIGN_SETTINGS,
+				properties -> new CeilingHangingSignBlock(CustomWoodTypes.ZARZYK, properties)
+		);
+		ZARZYK_WALL_HANGING_SIGN = InformejtycyRegistry.registerCustomBlockWithoutItem("zarzyk_wall_hanging_sign",
+				wallVariant(ZARZYK_HANGING_SIGN, ZARZYK_WALL_HANGING_SIGN_SETTINGS),
+				properties -> new WallHangingSignBlock(CustomWoodTypes.ZARZYK, properties)
+		);
+		InformejtycyRegistry.registerCustomBlockItem("zarzyk_hanging_sign",
+				HANGING_SIGN_ITEM_SETTINGS,
+				CreativeModeTabs.FUNCTIONAL_BLOCKS,
+				properties -> new HangingSignItem(ZARZYK_HANGING_SIGN, ZARZYK_WALL_HANGING_SIGN, properties)
+		);
 		ZARZYK_LEAVES =InformejtycyRegistry.registerCustomBlock("zarzyk_leaves",
 				ZARZYK_LEAVES_SETTINGS,
 				DEFAULT_ITEM_SETTINGS,
@@ -650,5 +778,12 @@ public class CustomBlocks {
 		BlockTransformerHelper.registerStripping(ISTANBUL_WOOD, STRIPPED_ISTANBUL_WOOD);
 		BlockTransformerHelper.registerStripping(ZARZYK_LOG, STRIPPED_ZARZYK_LOG);
 		BlockTransformerHelper.registerStripping(ZARZYK_WOOD, STRIPPED_ZARZYK_WOOD);
+	}
+
+	/** Wall signs drop and are named like their standing variant (same as vanilla's Blocks.wallVariant). */
+	private static BlockBehaviour.Properties wallVariant(Block standing, BlockBehaviour.Properties settings) {
+		return settings
+				.overrideLootTable(standing.getLootTable())
+				.overrideDescription(standing.getDescriptionId());
 	}
 }

@@ -7,6 +7,7 @@ import daw.ka.informejtycy.block.entity.custom.RecyclerBlockEntity;
 import daw.ka.informejtycy.block.entity.custom.TheoryForgeBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 
 public class CustomBlockEntities {
 	public static BlockEntityType<TheoryForgeBlockEntity> THEORY_FORGE_BLOCK_ENTITY_TYPE = FabricBlockEntityTypeBuilder
@@ -23,5 +24,14 @@ public class CustomBlockEntities {
 		THEORY_FORGE_BLOCK_ENTITY_TYPE = InformejtycyRegistry.registerCustomBlockEntity("theory_forge_block", THEORY_FORGE_BLOCK_ENTITY_TYPE);
 		BRAINROT_TABLE_BLOCK_ENTITY_TYPE = InformejtycyRegistry.registerCustomBlockEntity("brainrot_table_block", BRAINROT_TABLE_BLOCK_ENTITY_TYPE);
 		RECYCLER_BLOCK_ENTITY_TYPE = InformejtycyRegistry.registerCustomBlockEntity("recycler_block", RECYCLER_BLOCK_ENTITY_TYPE);
+
+		BlockEntityTypes.SIGN.addValidBlock(CustomBlocks.ISTANBUL_SIGN);
+		BlockEntityTypes.SIGN.addValidBlock(CustomBlocks.ISTANBUL_WALL_SIGN);
+		BlockEntityTypes.SIGN.addValidBlock(CustomBlocks.ZARZYK_SIGN);
+		BlockEntityTypes.SIGN.addValidBlock(CustomBlocks.ZARZYK_WALL_SIGN);
+		BlockEntityTypes.HANGING_SIGN.addValidBlock(CustomBlocks.ISTANBUL_HANGING_SIGN);
+		BlockEntityTypes.HANGING_SIGN.addValidBlock(CustomBlocks.ISTANBUL_WALL_HANGING_SIGN);
+		BlockEntityTypes.HANGING_SIGN.addValidBlock(CustomBlocks.ZARZYK_HANGING_SIGN);
+		BlockEntityTypes.HANGING_SIGN.addValidBlock(CustomBlocks.ZARZYK_WALL_HANGING_SIGN);
 	}
 }

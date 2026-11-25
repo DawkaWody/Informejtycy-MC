@@ -188,12 +188,14 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						CustomBlocks.STRIPPED_ISTANBUL_LOG, CustomBlocks.ISTANBUL_PLANKS, CustomBlocks.ISTANBUL_STAIRS,
 						CustomBlocks.ISTANBUL_SLAB, CustomBlocks.ISTANBUL_FENCE, CustomBlocks.ISTANBUL_FENCE_GATE,
 						CustomBlocks.ISTANBUL_PRESSURE_PLATE, CustomBlocks.ISTANBUL_BUTTON,
-						CustomBlocks.ISTANBUL_TRAPDOOR, CustomBlocks.ISTANBUL_DOOR, CustomTags.Items.ISTANBUL_LOGS);
+						CustomBlocks.ISTANBUL_TRAPDOOR, CustomBlocks.ISTANBUL_DOOR, CustomBlocks.ISTANBUL_SIGN,
+						CustomBlocks.ISTANBUL_HANGING_SIGN, CustomTags.Items.ISTANBUL_LOGS);
 				buildWoodSetRecipes(CustomBlocks.ZARZYK_WOOD, CustomBlocks.ZARZYK_LOG, CustomBlocks.STRIPPED_ZARZYK_WOOD,
 						CustomBlocks.STRIPPED_ZARZYK_LOG, CustomBlocks.ZARZYK_PLANKS, CustomBlocks.ZARZYK_STAIRS,
 						CustomBlocks.ZARZYK_SLAB, CustomBlocks.ZARZYK_FENCE, CustomBlocks.ZARZYK_FENCE_GATE,
 						CustomBlocks.ZARZYK_PRESSURE_PLATE, CustomBlocks.ZARZYK_BUTTON,
-						CustomBlocks.ZARZYK_TRAPDOOR, CustomBlocks.ZARZYK_DOOR, CustomTags.Items.ZARZYK_LOGS);
+						CustomBlocks.ZARZYK_TRAPDOOR, CustomBlocks.ZARZYK_DOOR, CustomBlocks.ZARZYK_SIGN,
+						CustomBlocks.ZARZYK_HANGING_SIGN, CustomTags.Items.ZARZYK_LOGS);
 
 				buildArmorRecipes(CustomItems.SILVER_WOLF, CustomItems.INFORMEJTYCY_HELMET,
 						CustomItems.INFORMEJTYCY_CHESTPLATE, CustomItems.INFORMEJTYCY_LEGGINGS,
@@ -336,7 +338,8 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 
 			private void buildWoodSetRecipes(Block wood, Block log, Block strippedWood, Block strippedLog, Block planks,
 			                                 Block stairs, Block slab, Block fence, Block fenceGate, Block pressurePlate,
-			                                 Block button, Block trapdoor, Block door, TagKey<Item> logTag) {
+			                                 Block button, Block trapdoor, Block door, Block sign, Block hangingSign,
+			                                 TagKey<Item> logTag) {
 				woodFromLogs(wood, log);
 				woodFromLogs(strippedWood, strippedLog);
 				planksFromLogs(planks, logTag, 4);
@@ -359,6 +362,12 @@ public class InformejtycyRecipeProvider extends FabricRecipeProvider {
 						.save(this.output);
 				doorBuilder(door, Ingredient.of(planks))
 						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				signBuilder(sign, Ingredient.of(planks))
+						.unlockedBy(getHasName(planks), has(planks))
+						.save(this.output);
+				hangingSignBuilder(hangingSign, Ingredient.of(strippedLog))
+						.unlockedBy(getHasName(strippedLog), has(strippedLog))
 						.save(this.output);
 			}
 		};
